@@ -29,7 +29,7 @@ public class Menu {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public float getPrice() {
+	public int getPrice() {
 		return price;
 	}
 	public void setPrice(int price) {
