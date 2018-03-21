@@ -15,7 +15,7 @@ public class Cs5200GulpItApplication {
 		Restaurant rest = new Restaurant("Qudoba","mexican food ","abc",20,1);
 		RestaurantDao restDao = RestaurantDao.getInstance();
 //		restDao.addRestaurantForOwner(rest, 2);
-		System.out.println(restDao.findAllRestaurantByOwner(2));
+		System.out.println(restDao.findAllRestaurantByName("Chut"));
 		
 	}
 }

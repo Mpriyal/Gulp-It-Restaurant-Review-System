@@ -9,7 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.jpa.models.Restaurant;
-
+/**
+ * 
+ * @author amanrayat
+ *
+ */
 public class RestaurantDao {
 	final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
 	final String DB_URL = "jdbc:mysql://cs5200-spring2018-mittal.c9fddtskt253.us-east-2.rds.amazonaws.com/GulpIt";
@@ -29,7 +33,12 @@ public class RestaurantDao {
 	}
 	private RestaurantDao() {}
 
-
+/**
+ * This function is used to Add a new Restaurant
+ * @param restaurant
+ * @param OwnerId
+ * @return
+ */
 	public int addRestaurantForOwner(Restaurant restaurant,int OwnerId) {
 		int result = -1;
 		try {
@@ -63,7 +72,10 @@ public class RestaurantDao {
 
 		return result;
 	}
-
+/**
+ * This method is used to find all Restaurant 
+ * @return
+ */
 	public List<Restaurant> findAllRestaurant() {
 		List <Restaurant> restaurants = new ArrayList<>();
 		try {
@@ -98,16 +110,21 @@ public class RestaurantDao {
 		return restaurants;
 	}
 	
-	public Restaurant findRestaurantByName(String RestaurantName) {
-		Restaurant restaurant =null;
+/**
+ * This method is used to find Restaurants by Names
+ * @param restaurantName
+ * @return
+ */
+	public List<Restaurant> findAllRestaurantByName(String restaurantName) {
+		List <Restaurant> restaurants = new ArrayList<>();
 		try {
 			Class.forName(JDBC_DRIVER);
 			conn = DriverManager.getConnection(DB_URL,USER,PASS);
-			String RestaurantByName = "SELECT * FROM Restaurant WHERE name = ?";
-			statement= conn.prepareStatement(RestaurantByName);
-			statement.setString(1,RestaurantName);
+			String AllRestaurant = "SELECT * FROM Restaurant WHERE name LIKE ?";
+			statement= conn.prepareStatement(AllRestaurant);
+			statement.setString(1,"%" + restaurantName + "%");
 			resultset = statement.executeQuery();
-			if(resultset.next()){
+			while(resultset.next()) {
 				int id= resultset.getInt("id");
 				String name = resultset.getString("name");
 				String description = resultset.getString("description");
@@ -115,7 +132,9 @@ public class RestaurantDao {
 				float cost_for_two = resultset.getFloat("cost_for_two");
 				int restaurant_owner = resultset.getInt("restaurant_owner");
 				int restaurant_type = resultset.getInt("restaurant_type");
-				restaurant = new Restaurant(id,name,description,image_link,cost_for_two,restaurant_owner,restaurant_type);
+
+				Restaurant restaurant = new Restaurant(id,name,description,image_link,cost_for_two,restaurant_owner,restaurant_type);
+				restaurants.add(restaurant);
 			}
 			statement.close();
 		} catch (SQLException | ClassNotFoundException e) {
@@ -127,9 +146,13 @@ public class RestaurantDao {
 				e.printStackTrace();
 			}
 		}
-		return restaurant;
+		return restaurants;
 	}
-
+	/**
+	 * This method is used to find Restaurant by Id
+	 * @param RestaurantId
+	 * @return
+	 */
 	public Restaurant findRestaurantById(int RestaurantId) {
 		Restaurant restaurant =null;
 		try {
@@ -161,7 +184,11 @@ public class RestaurantDao {
 		}
 		return restaurant;
 	}
-	
+	/**
+	 * This method is used to find Restaurants By Type
+	 * @param restaurantType
+	 * @return
+	 */
 	public List<Restaurant> findAllRestaurantByType(int restaurantType) {
 		List <Restaurant> restaurants = new ArrayList<>();
 		try {
@@ -195,13 +222,17 @@ public class RestaurantDao {
 		}
 		return restaurants;
 	}
-	
+	/**
+	 * This method is used to find Restaurants by Owner
+	 * @param restaurantOwner
+	 * @return
+	 */
 	public List<Restaurant> findAllRestaurantByOwner(int restaurantOwner) {
 		List <Restaurant> restaurants = new ArrayList<>();
 		try {
 			Class.forName(JDBC_DRIVER);
 			conn = DriverManager.getConnection(DB_URL,USER,PASS);
-			String AllRestaurant = "SELECT * FROM Restaurant WHERE restaurant_owner=?";
+			String AllRestaurant = "SELECT * FROM estaurant WHERE restaurant_owner=?";
 			statement= conn.prepareStatement(AllRestaurant);
 			statement.setInt(1, restaurantOwner);
 			resultset = statement.executeQuery();
