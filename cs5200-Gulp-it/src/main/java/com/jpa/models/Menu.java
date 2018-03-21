@@ -3,14 +3,14 @@ package com.jpa.models;
 public class Menu {
 	private int id;
 	private String name;
-	private float price;
+	private int price;
 	private String description;
 	private int restaurant;
 	
 	public Menu() {
 		super();
 	}
-	public Menu(String name, float price, String description) {
+	public Menu(String name, int price, String description) {
 		super();
 		this.name = name;
 		this.price = price;
@@ -32,7 +32,7 @@ public class Menu {
 	public float getPrice() {
 		return price;
 	}
-	public void setPrice(float price) {
+	public void setPrice(int price) {
 		this.price = price;
 	}
 	public String getDescription() {
