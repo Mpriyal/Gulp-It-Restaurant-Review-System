@@ -21,8 +21,9 @@ public class User {
 		return id +" "+ firstName +" "+lastName+" "+username;
 	}
 
-	public User(String firstName, String lastName, String username, String password) {
+	public User(int id, String firstName, String lastName, String username, String password) {
 		super();
+		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.username = username;
