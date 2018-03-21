@@ -33,22 +33,22 @@ public class RestaurantDao {
 	}
 	private RestaurantDao() {}
 
-/**
- * This function is used to Add a new Restaurant
- * @param restaurant
- * @param OwnerId
- * @return
- */
+	/**
+	 * This function is used to Add a new Restaurant
+	 * @param restaurant
+	 * @param OwnerId
+	 * @return
+	 */
 	public int addRestaurantForOwner(Restaurant restaurant,int OwnerId) {
 		int result = -1;
 		try {
 
 			Class.forName(JDBC_DRIVER);
 			conn = DriverManager.getConnection(DB_URL,USER,PASS);
-			String AllRestaurant = "INSERT INTO Restaurant "
+			String addRestaurant = "INSERT INTO Restaurant "
 					+ "(`name`,`description`,`image_link`,`cost_for_two`,`restaurant_owner`,`restaurant_type`) "
 					+ "VALUES (?,?,?,?,?,?)";
-			statement= conn.prepareStatement(AllRestaurant);
+			statement= conn.prepareStatement(addRestaurant);
 
 			statement.setString(1, restaurant.getName());
 			statement.setString(2, restaurant.getDescription());
@@ -72,10 +72,10 @@ public class RestaurantDao {
 
 		return result;
 	}
-/**
- * This method is used to find all Restaurant 
- * @return
- */
+	/**
+	 * This method is used to find all Restaurant 
+	 * @return
+	 */
 	public List<Restaurant> findAllRestaurant() {
 		List <Restaurant> restaurants = new ArrayList<>();
 		try {
@@ -109,19 +109,19 @@ public class RestaurantDao {
 
 		return restaurants;
 	}
-	
-/**
- * This method is used to find Restaurants by Names
- * @param restaurantName
- * @return
- */
+
+	/**
+	 * This method is used to find Restaurants by Names
+	 * @param restaurantName
+	 * @return
+	 */
 	public List<Restaurant> findAllRestaurantByName(String restaurantName) {
 		List <Restaurant> restaurants = new ArrayList<>();
 		try {
 			Class.forName(JDBC_DRIVER);
 			conn = DriverManager.getConnection(DB_URL,USER,PASS);
-			String AllRestaurant = "SELECT * FROM Restaurant WHERE name LIKE ?";
-			statement= conn.prepareStatement(AllRestaurant);
+			String RestaurantName = "SELECT * FROM Restaurant WHERE name LIKE ?";
+			statement= conn.prepareStatement(RestaurantName);
 			statement.setString(1,"%" + restaurantName + "%");
 			resultset = statement.executeQuery();
 			while(resultset.next()) {

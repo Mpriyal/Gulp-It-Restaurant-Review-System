@@ -3,7 +3,9 @@ package com.jpa;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import com.jpa.dao.MenuDao;
 import com.jpa.dao.RestaurantDao;
+import com.jpa.models.Menu;
 import com.jpa.models.Restaurant;
 
 @SpringBootApplication
@@ -16,6 +18,11 @@ public class Cs5200GulpItApplication {
 		RestaurantDao restDao = RestaurantDao.getInstance();
 //		restDao.addRestaurantForOwner(rest, 2);
 		System.out.println(restDao.findAllRestaurantByName("Chut"));
+		Menu menu = new Menu("Paneer Makhani",20,"cheese");
+		MenuDao menuDao = MenuDao.getInstance();
+		System.out.println(menuDao.addMenuForRestaurant(menu, 1));
+		
+		
 		
 	}
 }
