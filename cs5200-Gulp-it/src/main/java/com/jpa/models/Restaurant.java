@@ -30,6 +30,11 @@ public class Restaurant {
 	}
 	
 	
+	@Override
+	public String toString() {
+		return "Restaurant [name=" + name + "]";
+	}
+
 	public Restaurant(int id, String name, String description, String image_link, float cost_for_two, int restaurant_owner, int restaurant_type) {
 		super();
 		this.id = id;
