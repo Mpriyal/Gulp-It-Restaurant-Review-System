@@ -5,8 +5,11 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.jpa.models.Menu;
+import com.jpa.models.Restaurant;
 
 public class MenuDao {
 	final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
@@ -27,30 +30,63 @@ public class MenuDao {
 	}
 	private MenuDao() {}
 
-	public int addMenuForRestaurant(Menu menu,int restId) {
-int result = -1;
+	public Menu findMenuById(int MenuId) {
+		Menu menu =null;
 		try {
 			Class.forName(JDBC_DRIVER);
 			conn = DriverManager.getConnection(DB_URL,USER,PASS);
-			String CreatePerson = "INSERT INTO Menu (name,price,description,Restaurant) VALUES (?,?,?,?)";
-			statement=conn.prepareStatement(CreatePerson);
-			statement.setString(1, menu.getName());
-			statement.setFloat(2, menu.getPrice());
-			statement.setString(3, menu.getDescription());
-			statement.setInt(4,restId);
-			result=statement.executeUpdate();
-			conn.close();
-			
+			String MenuById = "SELECT * FROM Menu WHERE id = ?";
+			statement= conn.prepareStatement(MenuById);
+			statement.setInt(1,MenuId);
+			resultset = statement.executeQuery();
+			if(resultset.next()){
+				int id= resultset.getInt("id");
+				String name = resultset.getString("name");
+				int price = resultset.getInt("price");
+				String description = resultset.getString("description");
+				int restaurant1 = resultset.getInt("Restaurant");
+				menu = new Menu(id,name,price,description,restaurant1);
+			}
+			statement.close();
 		} catch (SQLException | ClassNotFoundException e) {
-			
 			e.printStackTrace();
-		}finally {
+		} finally {
 			try {
 				conn.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
-		return result;
+		return menu;
+	}
+	public List<Menu> findAllMenuByName (int menuName) {
+		List <Menu> menus = new ArrayList<>();
+		try {
+			Class.forName(JDBC_DRIVER);
+			conn = DriverManager.getConnection(DB_URL,USER,PASS);
+			String AllMenus = "SELECT * FROM Menu WHERE name=?";
+			statement= conn.prepareStatement(AllMenus);
+			statement.setInt(1, menuName);
+			resultset = statement.executeQuery();
+			while(resultset.next()) {
+				int id= resultset.getInt("id");
+				String name = resultset.getString("name");
+				int price = resultset.getInt("price");
+				String description = resultset.getString("description");
+				int restaurant1 = resultset.getInt("Restaurant");
+				Menu menu = new Menu(id,name,price,description,restaurant1);
+				menus.add(menu);
+			}
+			statement.close();
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return menus;
 	}
 }

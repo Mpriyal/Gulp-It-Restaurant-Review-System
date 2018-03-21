@@ -5,11 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.jpa.models.Food;
-import com.jpa.models.Restaurant;
 
 public class FoodDao {
 	final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
