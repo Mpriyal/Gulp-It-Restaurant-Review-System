@@ -37,6 +37,12 @@ public class RestaurantService {
 		RestaurantDao dao = RestaurantDao.getInstance();
 		return dao.findAllRestaurantByType(restauranttype);
 	}
+	
+	@RequestMapping("api/restaurant/owner/{OwnerId}")
+	public List<Restaurant> findAllRestaurantByOwner(@PathVariable(name="OwnerId") int OwnerId) {
+		RestaurantDao dao = RestaurantDao.getInstance();
+		return dao.findAllRestaurantByOwner(OwnerId);
+	}
 
 	@RequestMapping(value="/api/owner/{OwnerId}/restaurant", method=RequestMethod.POST)
 	public int addRestaurantForOwner(@RequestBody Restaurant restaurant,@PathVariable(name="OwnerId") int OwnerId) {

@@ -232,7 +232,7 @@ public class RestaurantDao {
 		try {
 			Class.forName(JDBC_DRIVER);
 			conn = DriverManager.getConnection(DB_URL,USER,PASS);
-			String AllRestaurant = "SELECT * FROM estaurant WHERE restaurant_owner=?";
+			String AllRestaurant = "SELECT * FROM Restaurant WHERE restaurant_owner=?";
 			statement= conn.prepareStatement(AllRestaurant);
 			statement.setInt(1, restaurantOwner);
 			resultset = statement.executeQuery();
