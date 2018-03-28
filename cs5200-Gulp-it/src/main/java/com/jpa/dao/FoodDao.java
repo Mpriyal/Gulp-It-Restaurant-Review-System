@@ -86,4 +86,36 @@ public class FoodDao {
 		}
 		return food;
 	}
+	public int deleteFoodForRestaurant(int id,int restId) {
+		int result = -1;
+		try {
+			Class.forName(JDBC_DRIVER);
+			conn = DriverManager.getConnection(DB_URL,USER,PASS);
+			String CreateMenu = "DELETE FROM Menu (name,price,description,Restaurant) VALUES (?,?,?,?)";
+			statement=conn.prepareStatement(deleteFood);
+			statement.setString(1, food.getName());
+			statement.setFloat(2, food.getPrice());
+			statement.setString(3, food.getDescription());
+			statement.setInt(4,restId);
+			result=statement.executeUpdate();
+
+			String createFood = "INSERT INTO Food (Vegetarian,Menu) VALUES (?,LAST_INSERT_ID())";
+			statement=conn.prepareStatement(createFood);
+			statement.setBoolean(1, food.isVegetarian());
+			result=statement.executeUpdate();
+
+			conn.close();
+
+		} catch (SQLException | ClassNotFoundException e) {
+
+			e.printStackTrace();
+		}finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
 }
