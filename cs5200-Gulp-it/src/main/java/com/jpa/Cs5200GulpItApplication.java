@@ -3,10 +3,12 @@ package com.jpa;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import com.jpa.dao.DrinksDao;
 import com.jpa.dao.FoodDao;
 //import com.jpa.dao.FoodDao;
 import com.jpa.dao.MenuDao;
 import com.jpa.dao.RestaurantDao;
+import com.jpa.models.Drinks;
 import com.jpa.models.Food;
 import com.jpa.models.Menu;
 import com.jpa.models.Restaurant;
@@ -25,11 +27,15 @@ public class Cs5200GulpItApplication {
 //		MenuDao menuDao = MenuDao.getInstance();
 //		System.out.println(menuDao.addMenuForRestaurant(menu, 1));
 //		Food food = new Food(true , "rajma" ,2, "tasty");
-		FoodDao fooddao = FoodDao.getInstance();
+//		DrinksDao fooddao = DrinksDao.getInstance();
 //		fooddao.addFoodForRestaurant(food, 1);
 //				boolean vegetarian, int menu ,String name, Float price, String description)
 //		fooddao.deleteFoodForRestaurant(1);
-		System.out.println(fooddao.findFoodByNameForRestaurant("rajma", 1));
+//		Boolean liquor, String name ,int price, String description
+//		Drinks drinks = new Drinks(true,"Mojito",23,"Sasti sharab");
+//	fooddao.addDrinksForRestaurant(drinks, 1);
+//	System.out.println(fooddao.findDrinksByNameForRestaurant("Mojito", 1));
+//		System.out.println(fooddao.findFoodByNameForRestaurant("rajma", 1));
 
 	}
 }

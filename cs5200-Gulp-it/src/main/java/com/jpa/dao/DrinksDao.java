@@ -41,7 +41,7 @@ public class DrinksDao {
 			statement.setInt(4,restId);
 			result=statement.executeUpdate();
 
-			String createDrinks = "INSERT INTO Drinks (Vegetarian,Menu) VALUES (?,LAST_INSERT_ID())";
+			String createDrinks = "INSERT INTO Drinks (Liquor,Menu) VALUES (?,LAST_INSERT_ID())";
 			statement=conn.prepareStatement(createDrinks);
 			statement.setBoolean(1, Drinks.getLiquor());
 			result=statement.executeUpdate();
@@ -76,11 +76,11 @@ public class DrinksDao {
 			resultset = statement.executeQuery();
 			while(resultset.next()){
 				String name = resultset.getString("name");
-				Boolean Vegetarian = resultset.getBoolean("Vegetarian");
+				Boolean Liquor = resultset.getBoolean("Liquor");
 				int price = resultset.getInt("price");
 				String description = resultset.getString("description");
 
-				Drinks Drinks = new Drinks(Vegetarian,name,price,description);
+				Drinks Drinks = new Drinks(Liquor,name,price,description);
 				Drinkss.add(Drinks);
 			}
 			statement.close();
@@ -101,7 +101,7 @@ public class DrinksDao {
 		try {
 			Class.forName(JDBC_DRIVER);
 			conn = DriverManager.getConnection(DB_URL,USER,PASS);
-			String DrinksById = "SELECT * FROM Drinks,Menu WHERE Drinks.Menu =Menu.id and Drinks.Vegetarian= ? and Menu.restaurant = ?";
+			String DrinksById = "SELECT * FROM Drinks,Menu WHERE Drinks.Menu =Menu.id and Drinks.Liquor= ? and Menu.restaurant = ?";
 
 			statement= conn.prepareStatement(DrinksById);
 			statement.setBoolean(1,Type);
@@ -110,10 +110,10 @@ public class DrinksDao {
 			resultset = statement.executeQuery();
 			while(resultset.next()){
 				String name = resultset.getString("name");
-				Boolean Vegetarian = resultset.getBoolean("Vegetarian");
+				Boolean Liquor = resultset.getBoolean("Liquor");
 				int price = resultset.getInt("price");
 				String description = resultset.getString("description");
-				Drinks Drinks = new Drinks(Vegetarian,name,price,description);
+				Drinks Drinks = new Drinks(Liquor,name,price,description);
 				Drinkss.add(Drinks);
 			}
 			statement.close();
@@ -130,7 +130,7 @@ public class DrinksDao {
 	}
 
 	public List <Drinks> findAllDrinksByRestaurant(int RestaurantId) {
-		List <Drinks> Drinkss =new ArrayList<>();
+		List <Drinks> Drinks =new ArrayList<>();
 		try {
 			Class.forName(JDBC_DRIVER);
 			conn = DriverManager.getConnection(DB_URL,USER,PASS);
@@ -142,12 +142,12 @@ public class DrinksDao {
 			resultset = statement.executeQuery();
 			while(resultset.next()){
 				String name = resultset.getString("name");
-				Boolean Vegetarian = resultset.getBoolean("Vegetarian");
+				Boolean Liquor = resultset.getBoolean("Liquor");
 				int price = resultset.getInt("price");
 				String description = resultset.getString("description");
 
-				Drinks Drinks = new Drinks(Vegetarian,name,price,description);
-				Drinkss.add(Drinks);
+				Drinks Drink = new Drinks(Liquor,name,price,description);
+				Drinks.add(Drink);
 			}
 			statement.close();
 		} catch (SQLException | ClassNotFoundException e) {
@@ -159,9 +159,9 @@ public class DrinksDao {
 				e.printStackTrace();
 			}
 		}
-		return Drinkss;
+		return Drinks;
 	}
-	
+
 	public int deleteDrinksForRestaurant(int id) {
 		int result = -1;
 		try {

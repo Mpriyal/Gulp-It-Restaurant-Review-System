@@ -6,6 +6,13 @@ public class Drinks extends Menu{
 	 */
 	private int id; 
 	private Boolean liquor; 
+	@Override
+	public String toString() {
+		return "Drinks [id=" + this.id + ", liquor=" + liquor + ", Menu=" + Menu + ", getId()=" + getId() + ", getLiquor()="
+				+ getLiquor() + ", getMenu()=" + getMenu() + ", getName()=" + getName() + ", getPrice()=" + getPrice()
+				+ ", getDescription()=" + getDescription() + ", getRestaurant()=" + getRestaurant() + ", getClass()="
+				+ getClass() + ", hashCode()=" + hashCode() + ", toString()=" + super.toString() + "]";
+	}
 	private int Menu;
 	public int getId() {
 		return id;
