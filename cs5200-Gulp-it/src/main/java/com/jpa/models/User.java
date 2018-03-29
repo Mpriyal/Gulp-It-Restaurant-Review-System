@@ -7,7 +7,8 @@ import com.jpa.models.Address;
 import com.jpa.models.Phone;
 
 public class User {
-	private int id;
+	
+	private int Id;
 	private String firstName;
 	private String lastName;
 	private String username;
@@ -18,19 +19,21 @@ public class User {
 	private List<Address> addressList;
 	
 	public String toString() {
-		return id +" "+ firstName +" "+lastName+" "+username;
+		return Id +" "+ firstName +" "+lastName+" "+username;
 	}
 
-	public User(int id, String firstName, String lastName, String username, String password) {
+	public User(String firstName, String lastName, String username, String password, String email, Date dob) {
 		super();
-		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.username = username;
 		this.password = password;
+		this.email = email;
+		this.DOB = dob;
 	}
-	public User(String firstName, String lastName, String username, String password, String email, Date DOB) {
+	public User(int id, String firstName, String lastName, String username, String password, String email, Date DOB) {
 		super();
+		Id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.username = username;
@@ -40,11 +43,11 @@ public class User {
 	}
 
 	public int getId() {
-		return id;
+		return Id;
 	}
 
 	public void setId(int id) {
-		this.id = id;
+		this.Id = id;
 	}
 
 	public String getFirstName() {

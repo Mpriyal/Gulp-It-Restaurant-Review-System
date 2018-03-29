@@ -1,22 +1,21 @@
 package com.jpa.models;
 
+import java.sql.Date;
+
 public class RestaurantOwner extends User {
 	
-	private int id;
 	private String ownerKey;
-	private int Person;
 	
-	public RestaurantOwner(int id, String firstName, String lastName, String username, String password, String ownerKey) {
-		super(id, firstName, lastName, username, password);
+	public RestaurantOwner(int id, String firstName, String lastName, String username, String password, String email, Date dob, String ownerKey) {
+		super(id,firstName, lastName, username, password, email, dob);
 		this.ownerKey = ownerKey;
+		// TODO Auto-generated constructor stub
 	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
+	
+	public RestaurantOwner(String firstName, String lastName, String username, String password, String email, Date dob, String ownerKey) {
+		super(firstName, lastName, username, password, email, dob);
+		this.ownerKey = ownerKey;
+		// TODO Auto-generated constructor stub
 	}
 
 	public String getOwnerKey() {
@@ -25,14 +24,6 @@ public class RestaurantOwner extends User {
 
 	public void setOwnerKey(String ownerKey) {
 		this.ownerKey = ownerKey;
-	}
-
-	public int getPerson() {
-		return Person;
-	}
-
-	public void setPerson(int person) {
-		Person = person;
 	}
 
 }

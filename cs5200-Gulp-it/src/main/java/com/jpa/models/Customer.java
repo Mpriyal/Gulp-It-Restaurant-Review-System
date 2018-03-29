@@ -4,22 +4,18 @@ import java.sql.Date;
 
 public class Customer extends User{
 
-	private int id;
 	private String customerKey;
-	private int Person;
 	
-	public Customer(int id, String firstName, String lastName, String username, String password, String customerKey) {
-		super(id, firstName, lastName, username, password);
+	public Customer(int id, String firstName, String lastName, String username, String password, String email, Date dob, String customerKey) {
+		super(id, firstName, lastName, username, password, email, dob);
 		this.customerKey = customerKey;
 		// TODO Auto-generated constructor stub
 	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
+	
+	public Customer(String firstName, String lastName, String username, String password, String email, Date dob, String customerKey) {
+		super(firstName, lastName, username, password, email, dob);
+		this.customerKey = customerKey;
+		// TODO Auto-generated constructor stub
 	}
 
 	public String getCustomerKey() {
@@ -28,14 +24,6 @@ public class Customer extends User{
 
 	public void setCustomerKey(String customerKey) {
 		this.customerKey = customerKey;
-	}
-
-	public int getPerson() {
-		return Person;
-	}
-
-	public void setPerson(int person) {
-		Person = person;
 	}
 
 
