@@ -9,7 +9,6 @@ public class RestaurantOwner extends User {
 	public RestaurantOwner(int id, String firstName, String lastName, String username, String password, String ownerKey) {
 		super(id, firstName, lastName, username, password);
 		this.ownerKey = ownerKey;
-		// TODO Auto-generated constructor stub
 	}
 
 	public int getId() {

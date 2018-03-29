@@ -7,6 +7,9 @@ public class Menu {
 	private String description;
 	private int restaurant;
 	
+	/**
+	 * @author amanrayat	
+	 */
 	public Menu() {
 		super();
 	}

@@ -1,7 +1,15 @@
 package com.jpa.models;
 
 public class Food extends Menu{
+	/**
+	 * @author amanrayat
+	 */
 	private int id; 
+	
+	@Override
+	public String toString() {
+		return this.getName();
+	}
 	private boolean vegetarian;
 	private int menuItem;
 	public Food(boolean vegetarian, String name, int price, String description) {

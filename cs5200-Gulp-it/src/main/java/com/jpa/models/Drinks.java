@@ -1,6 +1,9 @@
 package com.jpa.models;
 
 public class Drinks extends Menu{
+	/**
+	 * @author amanrayat
+	 */
 	private int id; 
 	private Boolean liquor; 
 	private int Menu;

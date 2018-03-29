@@ -3,6 +3,7 @@ package com.jpa;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import com.jpa.dao.FoodDao;
 //import com.jpa.dao.FoodDao;
 import com.jpa.dao.MenuDao;
 import com.jpa.dao.RestaurantDao;
@@ -24,10 +25,11 @@ public class Cs5200GulpItApplication {
 //		MenuDao menuDao = MenuDao.getInstance();
 //		System.out.println(menuDao.addMenuForRestaurant(menu, 1));
 //		Food food = new Food(true , "rajma" ,2, "tasty");
-//		FoodDao fooddao = FoodDao.getInstance();
+		FoodDao fooddao = FoodDao.getInstance();
 //		fooddao.addFoodForRestaurant(food, 1);
 //				boolean vegetarian, int menu ,String name, Float price, String description)
-		
-		
+//		fooddao.deleteFoodForRestaurant(1);
+		System.out.println(fooddao.findFoodById(7));
+
 	}
 }

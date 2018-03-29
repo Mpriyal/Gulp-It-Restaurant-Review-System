@@ -10,6 +10,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.jpa.dao.RestaurantDao;
 import com.jpa.models.Restaurant;
 
+/**
+ * 
+ * @author amanrayat
+ *
+ */
 @RestController
 public class RestaurantService {
 

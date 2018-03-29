@@ -10,6 +10,11 @@ import java.util.List;
 
 import com.jpa.models.Menu;
 
+/**
+ * 
+ * @author amanrayat
+ *
+ */
 public class MenuDao {
 	final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
 	final String DB_URL = "jdbc:mysql://cs5200-spring2018-mittal.c9fddtskt253.us-east-2.rds.amazonaws.com/GulpIt";
@@ -18,9 +23,9 @@ public class MenuDao {
 	static Connection conn = null;
 	static PreparedStatement statement = null;
 	static ResultSet resultset = null;
-	
+
 	public static MenuDao instance = null;
-	
+
 	public static MenuDao getInstance() {
 		if (instance == null) {
 			instance = new MenuDao();
@@ -88,7 +93,7 @@ public class MenuDao {
 		}
 		return menus;
 	}
-	
+
 	public List<Menu> findAllMenuByRestaurant (int RestaurantId) {
 		List <Menu> menus = new ArrayList<>();
 		try {
@@ -118,5 +123,29 @@ public class MenuDao {
 			}
 		}
 		return menus;
+	}
+
+	public int deleteMenuForRestaurant(int id) {
+		int result = -1;
+		try {
+			Class.forName(JDBC_DRIVER);
+			conn = DriverManager.getConnection(DB_URL,USER,PASS);
+			String deleteMenu = "DELETE FROM Menu where id = ?";
+			statement=conn.prepareStatement(deleteMenu);
+			statement.setInt(1,id);
+			result=statement.executeUpdate();
+			conn.close();
+
+		} catch (SQLException | ClassNotFoundException e) {
+
+			e.printStackTrace();
+		}finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
 	}
 }
