@@ -5,7 +5,11 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.jpa.models.Food;
+import com.jpa.models.Menu;
 
 public class FoodDao {
 	final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
@@ -58,27 +62,28 @@ public class FoodDao {
 		}
 		return result;
 	}
-	public Food findFoodById(int MenuId) {
-		Food food =null;
+
+	public List <Food> findFoodByNameForRestaurant(String Name,int RestaurantId) {
+		List <Food> foods =new ArrayList<>();
 		try {
 			Class.forName(JDBC_DRIVER);
 			conn = DriverManager.getConnection(DB_URL,USER,PASS);
-			String FoodName = "SELECT * FROM Food,Menu WHERE Food.Menu=Menu.id and Menu.id = ?";
-			statement= conn.prepareStatement(FoodName);
-			statement.setInt(1,MenuId);
+			String FoodById = "SELECT * FROM \n" + 
+					"Food,Menu WHERE Food.Menu =Menu.id and Menu.name= ? and Menu.restaurant = ?";
+			statement= conn.prepareStatement(FoodById);
+
+			statement.setString(1,Name);
+			statement.setInt(2,RestaurantId);
+
 			resultset = statement.executeQuery();
-			if(resultset.next()) {
-				int id= resultset.getInt("menu");
+			while(resultset.next()){
+				String name = resultset.getString("name");
 				Boolean Vegetarian = resultset.getBoolean("Vegetarian");
-				int menu = resultset.getInt("Menu");
-				food = new Food(id,Vegetarian,menu);
-				
-				String name = resultset.getString ("name");
 				int price = resultset.getInt("price");
-				String description = resultset.getString ("description");
-				int restaurant = resultset.getInt("Restaurant");
-				
-				rest
+				String description = resultset.getString("description");
+
+				Food food = new Food(Vegetarian,name,price,description);
+				foods.add(food);
 			}
 			statement.close();
 		} catch (SQLException | ClassNotFoundException e) {
@@ -90,8 +95,75 @@ public class FoodDao {
 				e.printStackTrace();
 			}
 		}
-		return food;
+		return foods;
 	}
+
+	public List <Food> findFoodByTypeForRestaurant(Boolean Type,int RestaurantId) {
+		List <Food> foods =new ArrayList<>();
+		try {
+			Class.forName(JDBC_DRIVER);
+			conn = DriverManager.getConnection(DB_URL,USER,PASS);
+			String FoodById = "SELECT * FROM Food,Menu WHERE Food.Menu =Menu.id and Food.Vegetarian= ? and Menu.restaurant = ?";
+
+			statement= conn.prepareStatement(FoodById);
+			statement.setBoolean(1,Type);
+			statement.setInt(2,RestaurantId);
+
+			resultset = statement.executeQuery();
+			while(resultset.next()){
+				String name = resultset.getString("name");
+				Boolean Vegetarian = resultset.getBoolean("Vegetarian");
+				int price = resultset.getInt("price");
+				String description = resultset.getString("description");
+				Food food = new Food(Vegetarian,name,price,description);
+				foods.add(food);
+			}
+			statement.close();
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return foods;
+	}
+
+	public List <Food> findAllFoodByRestaurant(int RestaurantId) {
+		List <Food> foods =new ArrayList<>();
+		try {
+			Class.forName(JDBC_DRIVER);
+			conn = DriverManager.getConnection(DB_URL,USER,PASS);
+			String FoodById = "SELECT * FROM \n" + 
+					"Food,Menu WHERE Food.Menu =Menu.id and Menu.restaurant = ?";
+			statement= conn.prepareStatement(FoodById);
+			statement.setInt(1,RestaurantId);
+
+			resultset = statement.executeQuery();
+			while(resultset.next()){
+				String name = resultset.getString("name");
+				Boolean Vegetarian = resultset.getBoolean("Vegetarian");
+				int price = resultset.getInt("price");
+				String description = resultset.getString("description");
+
+				Food food = new Food(Vegetarian,name,price,description);
+				foods.add(food);
+			}
+			statement.close();
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return foods;
+	}
+	
 	public int deleteFoodForRestaurant(int id) {
 		int result = -1;
 		try {
@@ -101,12 +173,6 @@ public class FoodDao {
 			statement=conn.prepareStatement(deleteMenu);
 			statement.setInt(1,id);
 			result=statement.executeUpdate();
-//
-//			String createFood = "INSERT INTO Food (Vegetarian,Menu) VALUES (?,LAST_INSERT_ID())";
-//			statement=conn.prepareStatement(createFood);
-//			statement.setBoolean(1, food.isVegetarian());
-//			result=statement.executeUpdate();
-
 			conn.close();
 
 		} catch (SQLException | ClassNotFoundException e) {

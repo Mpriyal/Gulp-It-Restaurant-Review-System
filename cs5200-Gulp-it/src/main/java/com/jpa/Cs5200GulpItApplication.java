@@ -29,7 +29,7 @@ public class Cs5200GulpItApplication {
 //		fooddao.addFoodForRestaurant(food, 1);
 //				boolean vegetarian, int menu ,String name, Float price, String description)
 //		fooddao.deleteFoodForRestaurant(1);
-		System.out.println(fooddao.findFoodById(7));
+		System.out.println(fooddao.findFoodByNameForRestaurant("rajma", 1));
 
 	}
 }
