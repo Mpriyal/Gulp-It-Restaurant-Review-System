@@ -10,15 +10,15 @@ export default class FetchDemo extends React.Component {
         };
     }
 
+
     componentDidMount() {
-        axios.get('api/restaurant')
-            .then(function (response) {
-                console.log(response);
-            })
-            .catch(function (error) {
-                console.log(error);
+        axios.get(`http://www.reddit.com/r/${this.props.subreddit}.json`)
+            .then(res => {
+                const posts = res.data.data.children.map(obj => obj.data);
+                this.setState({ posts });
             });
     }
+
 
     render() {
         return (

@@ -22,10 +22,10 @@ public class Cs5200GulpItApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(Cs5200GulpItApplication.class, args);
-		Restaurant rest = new Restaurant("Chutneys","Indian food ","xyz",20,1);
+//		Restaurant rest = new Restaurant("Chutneys","Indian food ","xyz",20,1);
 //		Restaurant rest = new Restaurant("Qudoba","mexican food ","abc",20,1);
-		RestaurantDao restDao = RestaurantDao.getInstance();
-		restDao.addRestaurantForOwner(rest, 2);
+//		RestaurantDao restDao = RestaurantDao.getInstance();
+//		restDao.addRestaurantForOwner(rest, 2);
 //		System.out.println(restDao.findAllRestaurantByName("Chut"));
 //		Menu menu = new Menu("Paneer Makhani",20,"cheese");
 //		MenuDao menuDao = MenuDao.getInstance();
@@ -43,12 +43,12 @@ public class Cs5200GulpItApplication {
 		
 //		String firstName, String lastName, String username, String password, String email, Date dob, String ownerKey
 		
-		
-		RestaurantOwner rachna = new RestaurantOwner(455,"Rachna","Tondare","rachna","tondare","r@gml",null,"asd");
-		
-		RestaurantOwnerDao dao = RestaurantOwnerDao.getInstance();
-//		dao.createRestaurantOwner(rachna);
-		System.out.println(rachna.getId());
-		System.out.println(dao.findRestaurantOwnerById(455));
+//		
+//		RestaurantOwner rachna = new RestaurantOwner(455,"Rachna","Tondare","rachna","tondare","r@gml",null,"asd");
+//		
+//		RestaurantOwnerDao dao = RestaurantOwnerDao.getInstance();
+////		dao.createRestaurantOwner(rachna);
+//		System.out.println(rachna.getId());
+//		System.out.println(dao.findRestaurantOwnerById(455));
 	}
 }
