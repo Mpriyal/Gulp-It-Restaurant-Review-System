@@ -2,10 +2,20 @@ package com.jpa.models;
 
 public class Feedback {
 
+	private int id;
+
 	private String comment;
 	private boolean favourite;
 	private int Restaurant;
 	private int Customer;
+	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	
 	public String getComment() {
 		return comment;
 	}
@@ -44,6 +54,15 @@ public class Feedback {
 		this.favourite = favourite;
 		Restaurant = restaurant;
 		Customer = customer;
-	} 
+	}
+	public Feedback(int id, String comment, boolean favourite, int restaurant, int customer) {
+		super();
+		this.id = id;
+		this.comment = comment;
+		this.favourite = favourite;
+		Restaurant = restaurant;
+		Customer = customer;
+	}
+
 
 }
