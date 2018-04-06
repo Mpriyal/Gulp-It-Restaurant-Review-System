@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.jpa.models.Feedback;
 import com.jpa.models.Food;
 import com.jpa.models.Menu;
 
@@ -187,4 +188,30 @@ public class FoodDao {
 		}
 		return result;
 	}
+	
+	public int updateFood(int RestaurantId, Food food){
+		int result = 0;
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			conn = DriverManager.getConnection(DB_URL,USER,PASS);
+			String FeedbackUpdate = "UPDATE Feedback SET comments =?, favourite =? WHERE id =? AND Customer=?";
+			statement = conn.prepareStatement(FeedbackUpdate);
+			statement.setString(1, feedback.getComment());
+			statement.setBoolean(2, feedback.isFavourite());
+			statement.setInt(3, feedback.getId());
+			statement.setInt(4, CustomerId);
+			result = statement.executeUpdate();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+		}
 }

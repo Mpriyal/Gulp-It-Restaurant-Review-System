@@ -41,7 +41,7 @@ public class FeedbackDao {
 	 * @param CustomerId
 	 * @return
 	 */
-	
+
 	public List<Feedback> getAllFeedbackForRestaurantByaCustomer(int RestaurantId, int CustomerId) {
 		List<Feedback> feedbacks = new ArrayList<Feedback>();
 		try {
@@ -167,14 +167,12 @@ public class FeedbackDao {
 	}
 
 	public int deleteFeedbackById(int FeedbackId) {
-		Connection connection = null;
-		PreparedStatement statement = null;
 		int result = 0;
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			conn = DriverManager.getConnection(DB_URL,USER,PASS);
 			String addFeedBack ="DELETE FROM Feedback WHERE id =?";
-			statement = connection.prepareStatement(addFeedBack);
+			statement= conn.prepareStatement(addFeedBack);
 			statement.setInt(1, FeedbackId);
 			result = statement.executeUpdate();
 		} catch (ClassNotFoundException e) {
@@ -183,12 +181,63 @@ public class FeedbackDao {
 			e.printStackTrace();
 		} finally {
 			try {
-				connection.close();
+				conn.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
 		return result;
 	}
+	
+	public int deleteFeedbackByIdandCustomerId(int FeedbackId,int CustomerId) {
+		int result = 0;
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			conn = DriverManager.getConnection(DB_URL,USER,PASS);
+			String addFeedBack ="DELETE FROM Feedback WHERE id =? and Customer=?";
+			statement= conn.prepareStatement(addFeedBack);
+			statement.setInt(1, FeedbackId);
+			statement.setInt(2, CustomerId);
+
+			result = statement.executeUpdate();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
+	public int updateFeedback(int CustomerId, Feedback feedback){
+		int result = 0;
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			conn = DriverManager.getConnection(DB_URL,USER,PASS);
+			String FeedbackUpdate = "UPDATE Feedback SET comments =?, favourite =? WHERE id =? AND Customer=?";
+			statement = conn.prepareStatement(FeedbackUpdate);
+			statement.setString(1, feedback.getComment());
+			statement.setBoolean(2, feedback.isFavourite());
+			statement.setInt(3, feedback.getId());
+			statement.setInt(4, CustomerId);
+			result = statement.executeUpdate();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+		}
 }
+
 
