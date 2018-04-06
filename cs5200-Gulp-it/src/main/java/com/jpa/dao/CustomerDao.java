@@ -28,7 +28,7 @@ public class CustomerDao {
 			+ "Person.username =?";
 	private static final String FIND_CUSTOMER_CREDENTIALS = "SELECT * FROM Customer, Person WHERE Customer.Person = Person.Id AND"
 			+ " Person.username =? AND Person.password =?";
-	private static final String UPDATE_CUSTOMER = "UPDATE Person, Customer SET Person.Id =?, firstName =?, lastName =?, username =?, password =?, email =?, dob =? "
+	private static final String UPDATE_CUSTOMER = "UPDATE Person, Customer SET Person.Id =?, firstName =?, lastName =?, username =?, password =?, email =?, dob =?, "
 			+ "customer_key =? WHERE Customer.Person = Person.Id AND Person.Id =?";
 	private static final String DELETE_CUSTOMER = "DELETE FROM Customer WHERE Customer.Id =?";
 

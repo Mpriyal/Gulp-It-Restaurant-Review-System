@@ -19,7 +19,11 @@ public class User {
 	private List<Address> addressList;
 	
 	public String toString() {
-		return Id +" "+ firstName +" "+lastName+" "+username;
+		return Id +" "+ firstName +" "+lastName+" "+username+" "+password;
+	}
+	
+	public User(int Id, String username, String password, String email, Date dob) {
+		this(Id, "", "", username, password, email,dob);
 	}
 
 	public User(String firstName, String lastName, String username, String password, String email, Date dob) {

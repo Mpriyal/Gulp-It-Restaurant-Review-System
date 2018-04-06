@@ -23,12 +23,12 @@ public class RestaurantOwnerDao {
 	private static final String CREATE_RESTAURANT_OWNER = "INSERT INTO restaurant_owner (owner_key, Person) VALUES (?,LAST_INSERT_ID())";
 	private static final String FIND_ALL_RESTAURANT_OWNERS = "SELECT * FROM restaurant_owner, Person WHERE restaurant_owner.Person = Person.Id";
 	private static final String FIND_RESTAURANT_OWNER_ID = "SELECT * FROM restaurant_owner, Person WHERE restaurant_owner.Person = Person.id AND "
-			+ "restaurant_owner.id =?";
+			+ "Person.id =?";
 	private static final String FIND_RESTAURANT_OWNER_USERNAME = "SELECT * FROM restaurant_owner, Person WHERE restaurant_owner.Person = Person.id AND "
 			+ "Person.username =?";
 	private static final String FIND_RESTAURANT_OWNER_CREDENTIALS = "SELECT * FROM restaurant_owner, Person WHERE restaurant_owner.Person = Person.id AND"
 			+ " Person.username =? AND Person.password =?";
-	private static final String UPDATE_RESTAURANT_OWNER = "UPDATE Person, restaurant_owner SET Person.id =?, firstName =?, lastName =?, username =?, password =?, email =?, dob =? "
+	private static final String UPDATE_RESTAURANT_OWNER = "UPDATE Person, restaurant_owner SET Person.id =?, firstName =?, lastName =?, username =?, password =?, email =?, dob =?, "
 			+ "owner_key =? WHERE restaurant_owner.Person = Person.id AND Person.id =?";
 	private static final String DELETE_RESTAURANT_OWNER = "DELETE FROM restaurant_owner WHERE restaurant_owner.id =?";
 
@@ -125,7 +125,6 @@ public class RestaurantOwnerDao {
 			statement.setInt(1, RestaurantOwnerId);
 			result = statement.executeQuery();
 			if(result.next()) {
-				int id = result.getInt("id");
 				String firstName = result.getString("firstName");
 				String lastName = result.getString("lastName");
 				String username = result.getString("username");
@@ -134,9 +133,7 @@ public class RestaurantOwnerDao {
 				Date dob = result.getDate("dob");
 				String owner_key = result.getString("owner_key");
 				int Person = result.getInt("Person");
-				System.out.println(id);
-				System.out.println(Person);
-				RestaurantOwner = new RestaurantOwner(id, firstName, lastName, username, password,email, dob, owner_key);
+				RestaurantOwner = new RestaurantOwner(Person, firstName, lastName, username, password,email, dob, owner_key);
 			}
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
