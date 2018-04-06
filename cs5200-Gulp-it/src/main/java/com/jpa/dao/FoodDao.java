@@ -194,12 +194,16 @@ public class FoodDao {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			conn = DriverManager.getConnection(DB_URL,USER,PASS);
-			String FeedbackUpdate = "UPDATE Feedback SET comments =?, favourite =? WHERE id =? AND Customer=?";
+			String FeedbackUpdate = "UPDATE Menu,Food SET Menu.name =?, Menu.price =?, Menu.description =? ,\n" + 
+					"Food.Vegetarian =?  WHERE \n" + 
+					"Menu.id=Food.Menu\n" + 
+					"and Menu.Restaurant=?";
 			statement = conn.prepareStatement(FeedbackUpdate);
-			statement.setString(1, feedback.getComment());
-			statement.setBoolean(2, feedback.isFavourite());
-			statement.setInt(3, feedback.getId());
-			statement.setInt(4, CustomerId);
+			statement.setString(1, food.getName());
+			statement.setInt(2, food.getPrice());
+			statement.setString(3, food.getDescription());
+			statement.setBoolean(4, food.isVegetarian());
+			statement.setInt(5, RestaurantId);
 			result = statement.executeUpdate();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
