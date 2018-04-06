@@ -194,11 +194,11 @@ public class FoodDao {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			conn = DriverManager.getConnection(DB_URL,USER,PASS);
-			String FeedbackUpdate = "UPDATE Menu,Food SET Menu.name =?, Menu.price =?, Menu.description =? ,\n" + 
+			String FoodUpdate = "UPDATE Menu,Food SET Menu.name =?, Menu.price =?, Menu.description =? ,\n" + 
 					"Food.Vegetarian =?  WHERE \n" + 
 					"Menu.id=Food.Menu\n" + 
 					"and Menu.Restaurant=?";
-			statement = conn.prepareStatement(FeedbackUpdate);
+			statement = conn.prepareStatement(FoodUpdate);
 			statement.setString(1, food.getName());
 			statement.setInt(2, food.getPrice());
 			statement.setString(3, food.getDescription());

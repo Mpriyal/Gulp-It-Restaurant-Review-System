@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import com.jpa.models.Drinks;
+import com.jpa.models.Food;
 
 public class DrinksDao {
 	final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
@@ -185,4 +186,34 @@ public class DrinksDao {
 		}
 		return result;
 	}
+	
+	public int updateDrink(int RestaurantId, Drinks drink){
+		int result = 0;
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			conn = DriverManager.getConnection(DB_URL,USER,PASS);
+			String DrinkUpdate = "UPDATE Menu,Drinks SET Menu.name =?, Menu.price =?, Menu.description =? ,\n" + 
+					"Drinks.Vegetarian =?  WHERE \n" + 
+					"Menu.id=Drinks.Menu\n" + 
+					"and Menu.Restaurant=?";
+			statement = conn.prepareStatement(DrinkUpdate);
+			statement.setString(1, drink.getName());
+			statement.setInt(2, drink.getPrice());
+			statement.setString(3, drink.getDescription());
+			statement.setBoolean(4, drink.getLiquor());
+			statement.setInt(5, RestaurantId);
+			result = statement.executeUpdate();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+		}
 }
