@@ -27,7 +27,22 @@ export default class Navbar extends React.Component{
                                 <a className="nav-link disabled" href="#">Disabled</a>
                             </li>
                         </ul>
-
+                        <form>
+                            <div className="row">
+                                <div className="col">
+                                    <input type="text" className="form-control" placeholder="User name"/>
+                                </div>
+                                <div className="col">
+                                    <input type="text" className="form-control" placeholder="Password"/>
+                                </div>
+                                <div>
+                                    <button type="submit" className="btn btn-primary btn-sm">Sign In</button>
+                                </div>
+                                <div className="col">
+                                    <button type="register" className="btn btn-success btn-sm">Register</button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </nav>
             </div>
