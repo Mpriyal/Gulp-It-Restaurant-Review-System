@@ -50,12 +50,12 @@ public class Cs5200GulpItApplication {
 ////		dao.createRestaurantOwner(rachna);
 //		System.out.println(rachna.getId());
 //		System.out.println(dao.findRestaurantOwnerById(455));
-				Customer rahul = new Customer("Rahul", "Verma", "rahul", "rahul","rahul@neu.com",null,"123rahul");
-		Customer priyal = new Customer("Priyal", "Mittal","priyal","priyal","priyal@neu.com",null,"123priyal");
-		Customer extra = new Customer("Extra","Delete","extra","extra","extra@abc.com",null,"123extra");
-		Customer nitika = new Customer("Nitika","Malhotra","nonu","nonu","nonu@abc.com",null,"123nonu");
-		Customer aashna = new Customer("Aashna","Gupta","aashu","aashu","aashu@abc.com",null,"123aashu");
-		Customer aashna2 = new Customer(30,"Aashna","Gupta","aashuGu","aashuGu","aashu@abc.com",null,"1234aashu");
+//				Customer rahul = new Customer("Rahul", "Verma", "rahul", "rahul","rahul@neu.com",null,"123rahul");
+//		Customer priyal = new Customer("Priyal", "Mittal","priyal","priyal","priyal@neu.com",null,"123priyal");
+//		Customer extra = new Customer("Extra","Delete","extra","extra","extra@abc.com",null,"123extra");
+//		Customer nitika = new Customer("Nitika","Malhotra","nonu","nonu","nonu@abc.com",null,"123nonu");
+//		Customer aashna = new Customer("Aashna","Gupta","aashu","aashu","aashu@abc.com",null,"123aashu");
+//		Customer aashna2 = new Customer(30,"Aashna","Gupta","aashuGu","aashuGu","aashu@abc.com",null,"1234aashu");
 //		CustomerDao.getInstance().createCustomer(rahul);
 //		CustomerDao.getInstance().createCustomer(priyal);
 //		CustomerDao.getInstance().createCustomer(extra);
@@ -67,10 +67,10 @@ public class Cs5200GulpItApplication {
 //		System.out.println(CustomerDao.getInstance().updateCustomer(30, aashna2));
 //		System.out.println(CustomerDao.getInstance().deleteCustomer(11));
 		
-		RestaurantOwner aman = new RestaurantOwner("Aman","Rayat","aman","aman","aman@neu.com",null,"123aman");
-		RestaurantOwner ankur = new RestaurantOwner("Ankur","Bhambo","ankur","ankur","ankur@neu.com",null,"123ankur");
-		RestaurantOwner neha = new RestaurantOwner("Neha","Shevani","neha","neha","neha@neu.com",null,"123neha");
-		RestaurantOwner viha = new RestaurantOwner("Viha","Blah","viha","viha","viha@neu.com",null,"123viha");
+//		RestaurantOwner aman = new RestaurantOwner("Aman","Rayat","aman","aman","aman@neu.com",null,"123aman");
+//		RestaurantOwner ankur = new RestaurantOwner("Ankur","Bhambo","ankur","ankur","ankur@neu.com",null,"123ankur");
+//		RestaurantOwner neha = new RestaurantOwner("Neha","Shevani","neha","neha","neha@neu.com",null,"123neha");
+//		RestaurantOwner viha = new RestaurantOwner("Viha","Blah","viha","viha","viha@neu.com",null,"123viha");
 		
 //		RestaurantOwnerDao.getInstance().createRestaurantOwner(aman);
 //		RestaurantOwnerDao.getInstance().createRestaurantOwner(ankur);
@@ -86,10 +86,10 @@ public class Cs5200GulpItApplication {
 //		RestaurantOwnerDao dao = RestaurantOwnerDao.getInstance();
 //		System.out.println(dao.findRestaurantOwnerById(6));
 		//System.out.println(RestaurantOwnerDao.getInstance().deleteRestaurantOwner(aman.getId()));
-		Customer sumit = new Customer(39,"Sumit","Bhanwala","sumit","sumit","sumit@abc.com",null,"123sumit");
-		Customer sumit2 = new Customer(39,"Sumit","Bhanwala","sum","sum","sum@abc.com",null,"123sum");
-		RestaurantOwner disha = new RestaurantOwner(40,"Disha","Sule","dish","dish","disha@neu.com",null,"123disha");
-		RestaurantOwner disha2 = new RestaurantOwner(40,"Disha","Sule","disha","disha","disha@neu.com",null,"123disha2");
+//		Customer sumit = new Customer(39,"Sumit","Bhanwala","sumit","sumit","sumit@abc.com",null,"123sumit");
+//		Customer sumit2 = new Customer(39,"Sumit","Bhanwala","sum","sum","sum@abc.com",null,"123sum");
+//		RestaurantOwner disha = new RestaurantOwner(40,"Disha","Sule","dish","dish","disha@neu.com",null,"123disha");
+//		RestaurantOwner disha2 = new RestaurantOwner(40,"Disha","Sule","disha","disha","disha@neu.com",null,"123disha2");
 //		CustomerDao.getInstance().createCustomer(sumit);
 //		RestaurantOwnerDao.getInstance().createRestaurantOwner(disha);
 //		System.out.println(RestaurantOwnerDao.getInstance().findAllRestaurantOwners());
@@ -99,9 +99,9 @@ public class Cs5200GulpItApplication {
 //		System.out.println(RestaurantOwnerDao.getInstance().updateRestaurantOwner(40, disha2));
 //		System.out.println(RestaurantOwnerDao.getInstance().deleteRestaurantOwner(15));
 		
-		Admin rajmohan = new Admin(41,"Rajmohan","Raj","raj","raj","raj@abc.com",null,"123raj");
-		Admin jose = new Admin(42,"Jose","Annunziato","jannunzi","jannunzi","jose@abc.com",null,"123jose");
-		Admin rajmohan2 = new Admin(43,"Rajmohan","Rajaram","raj2","raj2","raj@abc.com",null,"123raj2");
+//		Admin rajmohan = new Admin(41,"Rajmohan","Raj","raj","raj","raj@abc.com",null,"123raj");
+//		Admin jose = new Admin(42,"Jose","Annunziato","jannunzi","jannunzi","jose@abc.com",null,"123jose");
+//		Admin rajmohan2 = new Admin(43,"Rajmohan","Rajaram","raj2","raj2","raj@abc.com",null,"123raj2");
 //		AdminDao.getInstance().createAdmin(rajmohan);
 //		AdminDao.getInstance().createAdmin(jose);
 //		AdminDao.getInstance().createAdmin(rajmohan2);

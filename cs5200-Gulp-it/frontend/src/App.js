@@ -1,19 +1,15 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+
 import './App.css';
-import FetchDemo from  './components/FetchDemo'
+import SearchHome from './components/SearchHome';
+import Navbar from "./components/Navbar";
+
 class App extends Component {
   render() {
     return (
       <div className="App">
-          <FetchDemo/>;
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome Aman Rayat </h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+          <Navbar/>
+          <SearchHome/>
       </div>
     );
   }

@@ -7,6 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.jpa.models.Customer;
+import com.jpa.models.RestaurantOwner;
 import com.jpa.models.User;
 
 public class AdminDao {
@@ -39,7 +42,11 @@ public class AdminDao {
 		return users;
 	
 	}
-	
+	/**
+	 * @author amanrayat
+	 * @param UserId
+	 * @return
+	 */
 	public int deleteUserById(int UserId) {
 		
 			Connection connection = null;
@@ -64,5 +71,17 @@ public class AdminDao {
 			}
 			return result;
 			}
+	
+	public void createRestaurantOwner(RestaurantOwner restaurantOwner) {
+		RestaurantOwnerDao dao = RestaurantOwnerDao.getInstance();
+		dao.createRestaurantOwner(restaurantOwner);
 	}
+	public void CreateCustomer (Customer customer) {
+		CustomerDao dao = CustomerDao.getInstance();
+		dao.createCustomer(customer);
+	}
+//	public void updateUser(User user) {
+//		if(user.)
+//	}
+}
 

@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.jpa.models.Food;
 import com.jpa.models.Restaurant;
 /**
  * 
@@ -260,6 +261,44 @@ public class RestaurantDao {
 		}
 		return restaurants;
 	}
+	
+	/**
+	 * This function is used for updating the information about the restaurant 
+	 * @param RestaurantOwnerId
+	 * @param restaurant
+	 * @return
+	 */
+	public int updateRestaurant (int RestaurantOwnerId, Restaurant restaurant){
+		int result = 0;
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			conn = DriverManager.getConnection(DB_URL,USER,PASS);
+			String RestaurantUpdate = "UPDATE Restaurant SET name =?, description =? ,\n" + 
+					"image_link =?,cost_for_two =?,restaurant_type=?  WHERE \n" + 
+					"id = ? and restaurant_owner=?";
+			statement = conn.prepareStatement(RestaurantUpdate);
+			statement.setString(1, restaurant.getName());
+			statement.setString(2, restaurant.getDescription());
+			statement.setString(3, restaurant.getImage_link());
+			statement.setFloat(4, restaurant.getCost_for_two());
+			statement.setInt(5, restaurant.getRestaurant_type());
+			statement.setInt(6, restaurant.getId());
+			statement.setInt(7, RestaurantOwnerId);
+
+			result = statement.executeUpdate();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+		}
 }
 
 
