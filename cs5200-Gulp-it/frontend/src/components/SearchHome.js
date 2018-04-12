@@ -1,12 +1,12 @@
 import React from 'react';
+import RestaurantList from './RestaurantList'
 import axios from 'axios';
 
 export default class SearchHome extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            restaurants:{
-            },
+            restaurants:[],
             selectedOption:'name'
         };
         this.submitHandler = this.submitHandler.bind(this);
@@ -25,11 +25,10 @@ export default class SearchHome extends React.Component{
                         name:textValue
                     }
                 })
-                    .then(function (response) {
-                        this.setState({
-                            restaurants:response.data.restaurants
-                        })
-                        console.log(this.state.restaurants)
+                    .then(res=>{
+                        console.log(res)
+                        const restaurants = res.data.restaurants;
+                        this.setState({restaurants});
                     })
                 break;
             case 'city':
@@ -38,24 +37,22 @@ export default class SearchHome extends React.Component{
                         city:textValue
                     }
                 })
-                    .then(function (response) {
-                        this.setState({
-                            restaurants:response.data.restaurants
-                        })
-                        console.log(this.state.restaurants)
+                    .then(res=>{
+                        console.log(res)
+                        const restaurants = res.data.restaurants;
+                        this.setState({restaurants});
                     })
                 break;
             case 'zipcode':
                 axios.get('http://opentable.herokuapp.com/api/restaurants',{
                     params:{
-                        zipcode:textValue
+                        zip:textValue
                     }
                 })
-                    .then(function (response) {
-                        this.setState({
-                            restaurants:response.data.restaurants
-                        })
-                        console.log(this.state.restaurants)
+                    .then(res=>{
+                        console.log(res)
+                        const restaurants = res.data.restaurants;
+                        this.setState({restaurants});
                     })
                 break;
             case 'country':
@@ -64,16 +61,12 @@ export default class SearchHome extends React.Component{
                         country:textValue
                     }
                 })
-                    .then(function (response) {
-                        this.setState({
-                            restaurants:response.data.restaurants
-                        })
-                        console.log(this.state.restaurants)
+                    .then(res=>{
+                        console.log(res)
+                        const restaurants = res.data.restaurants;
+                        this.setState({restaurants});
                     })
         }
-        //
-        // console.log(this.refs.searchValue.value)
-        // console.log(this.state.selectedOption);
 
     }
 
@@ -86,6 +79,7 @@ export default class SearchHome extends React.Component{
     render(){
         return(
             <div className={'container text-center p-5'}>
+
                 <h1 id={'homeHeader'}>
                     GULP IT
                 </h1>
@@ -140,8 +134,11 @@ export default class SearchHome extends React.Component{
                         <label className="form-check-label"
                                htmlFor="inlineRadio3">Country</label>
                     </div>
+
                 </div>
+                <RestaurantList data={this.state.restaurants}/>
             </div>
         );
     }
 }
+

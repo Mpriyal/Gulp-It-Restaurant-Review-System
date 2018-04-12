@@ -36,9 +36,26 @@ body {
 }
 .navbarComponents{
     font-size: large;
-    background-color: red;
+    /*background-color: red;*/
 }
 
 .radioSelector{
+    color: whitesmoke;
+}
 
+.card{
+    height:80%;
+    width:100%;
+}
+
+.registerClass {
+    margin: 150px auto;
+    width: 30%;
+    background-color:rgba(255, 255, 255, 0.6);
+    padding: 10px;
+
+
+}
+h3{
+    font-weight: 100;
 }
