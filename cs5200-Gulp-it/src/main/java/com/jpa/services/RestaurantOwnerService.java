@@ -40,6 +40,11 @@ public class RestaurantOwnerService {
 		else
 		return dao.findRestaurantOwnerByCredentials(username, password);
 	}
+	@RequestMapping(value="api/owner/{ownerId}", method=RequestMethod.DELETE)
+	public int deleteOwnerById(@PathVariable (name="ownerId") int ownerId) {
+		int result=dao.deleteRestaurantOwner(ownerId);
+		return result;
+	}
 	
 	}
 
