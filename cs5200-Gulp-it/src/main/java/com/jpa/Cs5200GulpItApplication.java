@@ -5,6 +5,7 @@ import java.sql.Date;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import com.jpa.dao.CustomerDao;
 import com.jpa.dao.DrinksDao;
 import com.jpa.dao.FoodDao;
 //import com.jpa.dao.FoodDao;
@@ -21,7 +22,11 @@ import com.jpa.models.RestaurantOwner;
 public class Cs5200GulpItApplication {
 
 	public static void main(String[] args) {
+		
 		SpringApplication.run(Cs5200GulpItApplication.class, args);
+		
+		CustomerDao cust = CustomerDao.getInstance();
+		System.out.println(cust.findCustomerById(28));
 //		Restaurant rest = new Restaurant("Chutneys","Indian food ","xyz",20,1);
 //		Restaurant rest = new Restaurant("Qudoba","mexican food ","abc",20,1);
 //		RestaurantDao restDao = RestaurantDao.getInstance();

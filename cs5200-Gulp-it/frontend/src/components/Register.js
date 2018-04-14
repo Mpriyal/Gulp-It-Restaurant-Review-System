@@ -11,24 +11,54 @@ export default class Register extends React.Component{
             email:null,
             password:null,
             dateOfBirth: null,
-            role:null
+            role:null,
+            successMessage:''
         }
     }
     update(){
         this.setState({
             firstName: this.refs.FirstName.value,
-            univID: this.refs.LastName.value,
-            name: this.refs.name.value,
-            password: this.refs.password.value,
-            email: this.refs.email.value
+            lastName: this.refs.LastName.value,
+            username: this.refs.username.value,
+            email:this.refs.Email.value,
+            password:this.refs.Password.value,
+            dateOfBirth: this.refs.dateOfBirth.value,
+            role:null
         })
     }
+
+        handleClick() {
+            console.log("Success from RegisterPage!")
+
+            fetch('http://localhost:8080/api/admin/users/28', {
+                method: '',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userId: this.state.univID,
+                    name: this.state.name,
+                    userRole: this.state.userRole,
+                    password: this.state.password,
+                    email: this.state.email,
+                })
+            }).then(function(response) {
+                return response.json();
+            }).then(j =>
+                // console.log(Object.values(j)[1].name);
+                this.setState({
+                    successMessage: "Saved! Click Home to Login."
+                })
+            );
+        }
+
 
     render(){
         return(
             <div className={"container-fluid registerClass"}>
                 <div>
-                    <h3 className={'text-center'}>Registeration</h3>
+                    <h3 className={'text-center'}>Registration</h3>
                     <div className={'container text-center'} >
 
                         <form className={'m-5'}>
@@ -95,7 +125,7 @@ export default class Register extends React.Component{
                             <div className="form-group">
                                 <input
                                     ref="dateOfBirth"
-                                    type="password"
+                                    type="text"
                                     className="form-control"
                                     id="DateOfBith"
                                     placeholder="Date Of Birth"
@@ -104,17 +134,23 @@ export default class Register extends React.Component{
                             </div>
 
                             <div className="form-check form-check-inline">
-                                <input className="form-check-input float-left" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"  onChange={this.update.bind(this)}/>
+                                <input className="form-check-input float-left" type="radio"
+                                       name="inlineRadioOptions" id="inlineRadio1" value="option1"
+                                       onChange={this.update.bind(this)}/>
                                 <label className="form-check-label" htmlFor={'inlineRadio2'}>Customer</label>
                             </div>
                             <div className="form-check form-check-inline">
-                                <input className="form-check-input float-right" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"  onChange={this.update.bind(this)} />
-                                <label className="form-check-label" htmlFor={'inlineRadio2'}>Restaurant Owner</label>
+                                <input className="form-check-input float-right" type="radio"
+                                       name="inlineRadioOptions" id="inlineRadio2" value="option2"
+                                       onChange={this.update.bind(this)} />
+                                <label className="form-check-label"
+                                       htmlFor={'inlineRadio2'}>Restaurant Owner</label>
                             </div>
                             <div>
                                 <button
                                     type="submit"
                                     className="btn btn-primary m-5"
+                                    onClick={this.handleClick.bind(this)}
                                 >SUBMIT
                                 </button>
                             </div>

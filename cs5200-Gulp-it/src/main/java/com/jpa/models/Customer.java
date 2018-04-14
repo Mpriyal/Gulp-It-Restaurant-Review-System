@@ -6,6 +6,13 @@ public class Customer extends User{
 
 	private String customerKey;
 	
+	public Customer() {
+		super();
+	}
+	public Customer(int Id, String username, String password, String email, Date dob) {
+		super(Id, username, password, email, dob);
+	}
+
 	public Customer(int id, String firstName, String lastName, String username, String password, String email, Date dob, String customerKey) {
 		super(id, firstName, lastName, username, password, email, dob);
 		this.customerKey = customerKey;

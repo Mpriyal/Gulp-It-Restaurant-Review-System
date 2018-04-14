@@ -22,6 +22,7 @@ public class User {
 		return Id +" "+ firstName +" "+lastName+" "+username+" "+password;
 	}
 	
+	public User() {}
 	public User(int Id, String username, String password, String email, Date dob) {
 		this(Id, "", "", username, password, email,dob);
 	}

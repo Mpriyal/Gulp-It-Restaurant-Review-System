@@ -187,7 +187,8 @@ public class CustomerDao {
 			}
 		
 		//this function is to find a customer, given its credentials (username, password)
-		public Customer findCustomerByCredentials(String username, String password){
+		public List<Customer> findCustomerByCredentials(String username, String password){
+			List<Customer> customers=new ArrayList<Customer>();
 			Customer customer = null;
 			Connection connection = null;
 			PreparedStatement statement = null;
@@ -209,6 +210,7 @@ public class CustomerDao {
 					Date dob = result.getDate("dob");
 					String customer_key = result.getString("customer_key");
 					customer = new Customer(Id, firstName, lastName, username1, password1, email, dob, customer_key);
+					customers.add(customer);
 				}
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
@@ -221,7 +223,7 @@ public class CustomerDao {
 					e.printStackTrace();
 				}
 			}
-			return customer;
+			return customers;
 			}
 	
 

@@ -1,6 +1,7 @@
 package com.jpa.dao;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -42,6 +43,42 @@ public class AdminDao {
 		return users;
 	
 	}
+	
+	public Customer findCustomerById(int customerId){
+		Customer customer = null;
+		Connection connection = null;
+		PreparedStatement statement = null;
+		ResultSet result = null;
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			connection = DriverManager.getConnection(DB_URL, USER, PASS);
+			statement = connection.prepareStatement("Select * from Person where id=?");
+			statement.setInt(1, customerId);
+			result = statement.executeQuery();
+			if(result.next()) {
+				String firstName = result.getString("firstName");
+				String lastName = result.getString("lastName");
+				String username = result.getString("username");
+				String password = result.getString("password");
+				String email = result.getString("email");
+				Date dob = result.getDate("dob");
+				String customer_key = result.getString("customer_key");
+				int Person = result.getInt("Person");
+				customer = new Customer(Person, firstName, lastName, username, password,email, dob, customer_key);
+			}
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return customer;
+		}
 	/**
 	 * @author amanrayat
 	 * @param UserId
