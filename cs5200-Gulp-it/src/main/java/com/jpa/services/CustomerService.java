@@ -21,11 +21,7 @@ public class CustomerService {
 		
 		dao.createCustomer(customer);
 	}
-//	@RequestMapping(value="api/customer", method=RequestMethod.GET)
-//		public List<Customer> findAllCustomer(){
-//			return dao.findAllCustomers();
-//		}
-	
+
 	@RequestMapping(value="api/customer/{custId}", method=RequestMethod.GET)
 	public Customer findCustomerById(@PathVariable(name="custId") int custId) {
 		return dao.findCustomerById(custId);

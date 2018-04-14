@@ -187,7 +187,8 @@ public class RestaurantOwnerDao {
 			}
 		
 		//this function is to find a customer, given its credentials (username, password)
-		public RestaurantOwner findRestaurantOwnerByCredentials(String username, String password){
+		public List<RestaurantOwner> findRestaurantOwnerByCredentials(String username, String password){
+			List<RestaurantOwner> restaurantList = new ArrayList<RestaurantOwner>();
 			RestaurantOwner RestaurantOwner = null;
 			Connection connection = null;
 			PreparedStatement statement = null;
@@ -209,6 +210,7 @@ public class RestaurantOwnerDao {
 					Date dob = result.getDate("dob");
 					String owner_key = result.getString("owner_key");
 					RestaurantOwner = new RestaurantOwner(Id, firstName, lastName, username1, password1, email, dob, owner_key);
+					restaurantList.add(RestaurantOwner);
 				}
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
@@ -221,7 +223,7 @@ public class RestaurantOwnerDao {
 					e.printStackTrace();
 				}
 			}
-			return RestaurantOwner;
+			return restaurantList;
 			}
 	
 

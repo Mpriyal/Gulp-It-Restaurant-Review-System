@@ -6,6 +6,9 @@ public class RestaurantOwner extends User {
 	
 	private String ownerKey;
 	
+	public RestaurantOwner() {
+		super();
+	}
 	public RestaurantOwner(int id, String firstName, String lastName, String username, String password, String email, Date dob, String ownerKey) {
 		super(id,firstName, lastName, username, password, email, dob);
 		this.ownerKey = ownerKey;
