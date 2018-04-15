@@ -12,49 +12,86 @@ export default class Register extends React.Component{
             password:null,
             dateOfBirth: null,
             role:null,
-            successMessage:''
+            successMessage:null,
+            selectedOption:'customer'
         }
+
+        this.handleOptionChange = this.handleOptionChange.bind(this);
     }
-    update(){
+    update(e){
+        console.log(this);
         this.setState({
             firstName: this.refs.FirstName.value,
             lastName: this.refs.LastName.value,
-            username: this.refs.username.value,
+            username: this.refs.Username.value,
             email:this.refs.Email.value,
             password:this.refs.Password.value,
             dateOfBirth: this.refs.dateOfBirth.value,
-            role:null
+            customer:e.target.value,
+            owner: e.target.value,
+
         })
+        // alert(this.state.firstName);
     }
 
-        handleClick() {
+    handleOptionChange (changeEvent){
+        this.setState({
+            selectedOption:changeEvent.target.value
+        });
+    }
+
+        handleClick(e) {
+        if(this.state.selectedOption==='customer'){
+            e.preventDefault();
             console.log("Success from RegisterPage!")
 
-            fetch('http://localhost:8080/api/admin/users/28', {
-                method: '',
+            fetch('http://localhost:8080/api/customer', {
+                method: 'POST',
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    userId: this.state.univID,
-                    name: this.state.name,
-                    userRole: this.state.userRole,
-                    password: this.state.password,
-                    email: this.state.email,
+                    firstName: this.state.firstName,
+                    lastName: this.state.lastName,
+                    username:  this.state.username,
+                    password:  this.state.password,
+                    email:  this.state.email,
+                    dob: this.state.dateOfBirth,
+                    customerKey: "abc"
+
                 })
-            }).then(function(response) {
-                return response.json();
-            }).then(j =>
-                // console.log(Object.values(j)[1].name);
-                this.setState({
-                    successMessage: "Saved! Click Home to Login."
-                })
-            );
+            }).then(console.log("saved to the db"));
+
         }
+        else {
+            e.preventDefault();
+            console.log("Success from RegisterPage!")
+
+            fetch('http://localhost:8080/api/owner', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    firstName: this.state.firstName,
+                    lastName: this.state.lastName,
+                    username:  this.state.username,
+                    password:  this.state.password,
+                    email:  this.state.email,
+                    dob: this.state.dateOfBirth,
+                    ownerKey: "abc"
+
+                })
+            }).then(console.log("saved to the db"));
+
+        }
+    }
 
 
     render(){
+        if(this.state.successMessage==null){
         return(
             <div className={"container-fluid registerClass"}>
                 <div>
@@ -135,17 +172,26 @@ export default class Register extends React.Component{
 
                             <div className="form-check form-check-inline">
                                 <input className="form-check-input float-left" type="radio"
-                                       name="inlineRadioOptions" id="inlineRadio1" value="option1"
-                                       onChange={this.update.bind(this)}/>
+                                       name="inlineRadioOptions" id="inlineRadio1" ref="cs"
+                                       value="customer"
+                                       checked={this.state.selectedOption === 'customer'}
+                                        onChange={this.handleOptionChange}
+                                />
+
                                 <label className="form-check-label" htmlFor={'inlineRadio2'}>Customer</label>
-                            </div>
-                            <div className="form-check form-check-inline">
+
                                 <input className="form-check-input float-right" type="radio"
-                                       name="inlineRadioOptions" id="inlineRadio2" value="option2"
-                                       onChange={this.update.bind(this)} />
+                                       name="inlineRadioOptions" id="inlineRadio2" ref="ow"
+                                       value="owner"
+                                       checked={this.state.selectedOption === 'owner'}
+                                       onChange={this.handleOptionChange}
+                                />
+
                                 <label className="form-check-label"
                                        htmlFor={'inlineRadio2'}>Restaurant Owner</label>
+
                             </div>
+
                             <div>
                                 <button
                                     type="submit"
@@ -160,5 +206,10 @@ export default class Register extends React.Component{
             </div>
         )
     }
-}
+        else return(
+        <p>
+            hello
+        </p>)
+    }
 
+}

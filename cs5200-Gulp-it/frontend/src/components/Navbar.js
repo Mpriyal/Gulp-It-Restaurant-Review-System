@@ -6,7 +6,9 @@ import Register from "./Register";
 export default class Navbar extends React.Component{
     constructor(props) {
         super(props);
-        this.state = {username:'' ,
+        this.state = {
+
+            username:'' ,
             userID: '',
             password: '',
             loggedIn:false,
