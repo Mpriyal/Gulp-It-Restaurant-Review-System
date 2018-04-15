@@ -1,4 +1,5 @@
 import React from 'react';
+import Navbar from './Navbar'
 
 export default class Register extends React.Component{
 
@@ -93,6 +94,9 @@ export default class Register extends React.Component{
     render(){
         if(this.state.successMessage==null){
         return(
+            <div>
+
+            <Navbar/>
             <div className={"container-fluid registerClass"}>
                 <div>
                     <h3 className={'text-center'}>Registration</h3>
@@ -203,6 +207,7 @@ export default class Register extends React.Component{
                         </form>
                     </div>
                 </div>
+            </div>
             </div>
         )
     }
