@@ -178,7 +178,7 @@ export default class ProfileCustomer extends React.Component{
                 <p><button className={"btn btn-primary"} onClick={this.handleUpdate}>Update</button></p>
             </div>)
     }
-    
+
     render(){
         if(this.state.update===false){
         return this.renderProfile();

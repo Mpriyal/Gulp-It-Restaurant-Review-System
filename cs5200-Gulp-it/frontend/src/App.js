@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar";
 import Register from "./components/Register";
 import Homepage from "./components/Homepage";
 import ProfileCustomer from "./components/ProfileCustomer";
+import Moreinfo from "./components/Moreinfo";
 
 class App extends Component {
   render() {
@@ -12,7 +13,8 @@ class App extends Component {
         {/*<Homepage/>*/}
           {/*<Navbar/>*/}
           {/*<Register/>*/}
-          <ProfileCustomer/>
+          {/*<ProfileCustomer/>*/}
+          <Moreinfo/>
       </div>
     );
   }
