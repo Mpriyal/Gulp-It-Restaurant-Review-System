@@ -2,21 +2,30 @@ package com.jpa.services;
 
 import java.util.List;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jpa.dao.FeedbackDao;
 import com.jpa.models.Feedback;
 
 @RestController
+@CrossOrigin
 public class FeedbackService {
 
 	FeedbackDao dao = FeedbackDao.getInstance();
 
-	public List<Feedback> getAllFeedbackForRestaurantByaCustomer(int RestaurantId,int CustomerId){
+	@RequestMapping("api/feedback/{restId}/{CustId}")
+	public List<Feedback> getAllFeedbackForRestaurantByaCustomer(@PathVariable(name="restId")int RestaurantId,
+																@PathVariable(name="CustId")int CustomerId){
 		return dao.getAllFeedbackForRestaurantByaCustomer(RestaurantId, CustomerId);
 	}
 
-	public List<Feedback> getAllFeedbackForRestaurantId(int RestaurantId){
+	@RequestMapping("api/feedback/{restId}")
+	public List<Feedback> getAllFeedbackForRestaurantId(@PathVariable(name="restId")int RestaurantId){
 		return dao.getAllFeedbackForRestaurantId(RestaurantId);
 	}
 
@@ -24,7 +33,9 @@ public class FeedbackService {
 		return dao.getAllFeedbackByCustomerId(CustomerId);
 	}
 
-	public int addFeedbackForRestaurantByCustomer(Feedback feedback, int Restaurant, int Customer) {
+	@RequestMapping(value="api/feedback/{restId}/{CustId}", method=RequestMethod.POST)
+	public int addFeedbackForRestaurantByCustomer(@RequestBody Feedback feedback, 
+												@PathVariable(name="restId")int Restaurant,@PathVariable(name="CustId") int Customer) {
 		return dao.addFeedbackForRestaurantByCustomer(feedback, Restaurant, Customer);
 	}
 

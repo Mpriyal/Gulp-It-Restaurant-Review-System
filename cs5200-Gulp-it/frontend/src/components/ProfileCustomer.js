@@ -1,4 +1,6 @@
 import React from 'react'
+import RestaurantList from './RestaurantList'
+import axios from "axios/index";
 
 export default class ProfileCustomer extends React.Component{
     constructor(props){
@@ -24,6 +26,25 @@ export default class ProfileCustomer extends React.Component{
             update:true
         })
     }
+    componentDidMount() {
+        const string = 'http://localhost:8080/api/restaurant/2';
+        axios.get(string)
+            .then(res => {
+                console.log(res);
+                this.setState({
+                    favRestaurants:res.data
+                })
+            }).then(console.log(this));
+
+        const string2 = 'http://localhost:8080/api/feedback/1';
+        axios.get(string2)
+            .then(result => {
+                console.log(result);
+                this.setState({
+                    commentedRestaurants: result.data
+                })
+            }).then(console.log(this));
+    }
 
     update() {
             this.setState(
@@ -38,8 +59,9 @@ export default class ProfileCustomer extends React.Component{
                       address:this.refs.newaddress.value,
                       dob:this.refs.newdob.value,
                       customerKey:this.refs.newck.value,
-                      update: false
-
+                      update: false,
+                      favRestaurants:null,
+                      commentedRestaurants:null
                   });
           }
 
@@ -166,6 +188,7 @@ export default class ProfileCustomer extends React.Component{
 
     renderProfile(){
         return(
+            <div className={"row"}>
             <div className="profile col-3">
                 <h1>{this.state.firstname} {this.state.lastname}</h1>
                 <p>Email: {this.state.email}</p>
@@ -176,12 +199,27 @@ export default class ProfileCustomer extends React.Component{
                 <p>Date of Birth: {this.state.dob}</p>
                 <p>Customer Key: {this.state.customerKey}</p>
                 <p><button className={"btn btn-primary"} onClick={this.handleUpdate}>Update</button></p>
-            </div>)
+            </div>
+                <div className="col-9">
+                    <h1>
+                        Restaurants you have commented
+                         <RestaurantList data={this.state.favRestaurants}/>
+                    </h1>
+                    <h1>
+                        <RestaurantList data={this.state.commentedRestaurants}/>
+                    </h1>
+                </div>
+            </div>
+                )
+
     }
+
 
     render(){
         if(this.state.update===false){
-        return this.renderProfile();
+        return (
+            this.renderProfile()
+            )
             }
             else {
               return this.renderUpdate();

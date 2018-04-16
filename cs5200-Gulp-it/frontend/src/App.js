@@ -13,8 +13,8 @@ class App extends Component {
         {/*<Homepage/>*/}
           {/*<Navbar/>*/}
           {/*<Register/>*/}
-          {/*<ProfileCustomer/>*/}
-          <Moreinfo/>
+          <ProfileCustomer/>
+          {/*<Moreinfo/>*/}
       </div>
     );
   }

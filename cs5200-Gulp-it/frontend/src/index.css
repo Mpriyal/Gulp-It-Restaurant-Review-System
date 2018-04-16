@@ -66,3 +66,6 @@ h3{
 .h1{
     font-weight: 100;
 }
+.comment{
+    background-color:rgba(255,255,255,0.5);;
+}

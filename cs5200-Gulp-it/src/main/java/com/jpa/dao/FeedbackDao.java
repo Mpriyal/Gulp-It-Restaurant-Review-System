@@ -47,7 +47,7 @@ public class FeedbackDao {
 		try {
 			Class.forName(JDBC_DRIVER);
 			conn = DriverManager.getConnection(DB_URL,USER,PASS);
-			String feedbackRestaurantByCustomer = "SELECT * FROM Feeedback WHERE Feedback.Restaurant=? and Feeback.Customer= ?";
+			String feedbackRestaurantByCustomer = "SELECT * FROM Feedback WHERE Feedback.Restaurant=? and Feedback.Customer= ?";
 			statement= conn.prepareStatement(feedbackRestaurantByCustomer);
 			statement.setInt(1,RestaurantId);
 			statement.setInt(2,CustomerId);
@@ -79,7 +79,7 @@ public class FeedbackDao {
 		try {
 			Class.forName(JDBC_DRIVER);
 			conn = DriverManager.getConnection(DB_URL,USER,PASS);
-			String feedbackOfRestaurant = "SELECT * FROM Feeedback WHERE Feedback.Restaurant=?";
+			String feedbackOfRestaurant = "SELECT * FROM Feedback WHERE Feedback.Restaurant=?";
 			statement= conn.prepareStatement(feedbackOfRestaurant);
 			statement.setInt(1,RestaurantId);
 			resultset = statement.executeQuery();
@@ -110,7 +110,7 @@ public class FeedbackDao {
 		try {
 			Class.forName(JDBC_DRIVER);
 			conn = DriverManager.getConnection(DB_URL,USER,PASS);
-			String feedbackByCustomer = "SELECT * FROM Feeedback WHERE Feedback.Customer=?";
+			String feedbackByCustomer = "SELECT * FROM Feedback WHERE Feedback.Customer=?";
 			statement= conn.prepareStatement(feedbackByCustomer);
 			statement.setInt(1,CustomerId);
 			resultset = statement.executeQuery();
