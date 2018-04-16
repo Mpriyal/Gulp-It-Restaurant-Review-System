@@ -34,15 +34,16 @@ public class CustomerService {
 		dao.updateCustomer(id, newCustomer);
 	}
 	@RequestMapping(value="api/customer", method=RequestMethod.GET)
-	public List<Customer> getCustomerByCredentials(@RequestParam(value="username",required=false)String username,
+	public Customer getCustomerByCredentials(@RequestParam(value="username",required=false)String username,
 			@RequestParam(value="password",required=false)String password) {
-		if(username==null||password==null) {
-			return dao.findAllCustomers();
-		}
-		else
 			return dao.findCustomerByCredentials(username, password);
 	}
-
+	
+	@RequestMapping(value="api/customers", method=RequestMethod.GET)
+	public List<Customer> findallCustomers() {
+			return dao.findAllCustomers();
+		}
+		
 	@RequestMapping(value="api/customer/{custId}", method=RequestMethod.DELETE)
 	public int deleteCustomerById(@PathVariable (name="custId") int custId) {
 		int result=dao.deleteCustomer(custId);

@@ -1,14 +1,17 @@
 import React from 'react'
-import Moreinfo from './Moreinfo'
+import MoreinfoCustomer from './MoreinfoCustomer'
 
 export default class RestaurantList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            id:null
+            id:null,
+            //role is for owner functionality
+            role:''
         }
     }
 
+    //add more info funcitionality
     handleButton(ret){
         console.log(ret);
         this.setState(
@@ -34,7 +37,8 @@ export default class RestaurantList extends React.Component {
                                     <p className="card-text">{restaurant.address} {restaurant.city} {restaurant.state} </p>
                                     <p className="card-text">Call : {restaurant.phone}</p>
                                     <p className="card-text"><a href={restaurant.reserve_url}>Reserve   </a>
-                                        <button className={"btn btn-primary btn-sm"} onClick={() => this.handleButton(restaurant.id)}>More info</button></p>
+                                        <button className={"btn btn-primary btn-sm"}
+                                                onClick={() => this.handleButton(restaurant.id)}>More info</button></p>
                                 </div>
                             </div>
                         </div>

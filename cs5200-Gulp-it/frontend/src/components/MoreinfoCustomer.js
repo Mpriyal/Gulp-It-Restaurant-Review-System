@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import Navbar from "./Navbar";
 
-export default class Moreinfo extends React.Component{
+export default class MoreinfoCustomer extends React.Component{
     constructor(props){
         super(props);
         this.state={
@@ -55,7 +55,8 @@ export default class Moreinfo extends React.Component{
         var comment=self.state.newComment;
 
         console.log(comment);
-        // console.log(fav);
+        // console.log(fav)
+
         axios.post("http://localhost:8080/api/feedback/1/8",{
             comment:comment
 
@@ -79,10 +80,10 @@ update(e){
 }
 favClick(e){
     var self = this;
-    var fav=self.state.fav;
+
         e.preventDefault();
     axios.post("http://localhost:8080/api/feedback/1/8",{
-        fav:fav
+        fav:true
     });
         this.setState({
             fav:true

@@ -54,15 +54,16 @@ export default class Navbar extends React.Component {
                 username: this.state.username,
                 password: this.state.password
             }
-        }).then(function(response){
+        })
+            .then(function(response){
             self.setState({
-                userID:response.data[0].id,
-                loggedIn: true})
+                userID:response.data.id,
+                loggedIn: true});
                 console.log(self)
             })
             .catch(function (error) {
                 console.log(error);
-            })
+            });
         console.log(this);
     }
 
@@ -166,7 +167,7 @@ export default class Navbar extends React.Component {
                         </form>
                     </div>
                 </nav>
-                <SearchHome/>
+
             </div>
             )
         }
