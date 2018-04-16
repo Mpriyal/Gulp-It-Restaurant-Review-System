@@ -8,21 +8,45 @@ public class Address {
 	private String city;
 	private String state;
 	private String country;
-	private String zip;
+	private int pin_code;
 	private Boolean billing;
 	private int Person;
 	private int Restaurant;
 	
-	public Address(int id, String street1, String street2, String city, String state, String zip, Boolean billing, int Person, int Restaurant) {
+	public String toString() {
+		return id +" "+ street1 +" "+street2+" "+city+" "+state;
+	}
+	
+	public Address(int id, String street1, String street2, String city, String state, String country, int pin_code, Boolean billing, int Person) {
 		this.id = id;
 		this.street1 = street1;
 		this.street2 = street2;
 		this.city = city;
 		this.state = state;
-		this.zip = zip;
+		this.country = country;
+		this.pin_code = pin_code;
 		this.billing = billing;
 		this.Person = Person;
+	}
+	
+	public Address(int id, String street1, String street2, String city, String state, String country, int pin_code, int Restaurant, Boolean billing) {
+		this.id = id;
+		this.street1 = street1;
+		this.street2 = street2;
+		this.city = city;
+		this.state = state;
+		this.country = country;
+		this.pin_code = pin_code;
+		this.billing = billing;
 		this.Restaurant = Restaurant;
+	}
+
+	public int getPin_code() {
+		return pin_code;
+	}
+
+	public void setPin_code(int pin_code) {
+		this.pin_code = pin_code;
 	}
 
 	public int getId() {
@@ -71,14 +95,6 @@ public class Address {
 
 	public void setCountry(String country) {
 		this.country = country;
-	}
-
-	public String getZip() {
-		return zip;
-	}
-
-	public void setZip(String zip) {
-		this.zip = zip;
 	}
 
 	public Boolean getBilling() {
