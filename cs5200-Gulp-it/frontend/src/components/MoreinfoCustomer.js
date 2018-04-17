@@ -6,29 +6,53 @@ export default class MoreinfoCustomer extends React.Component{
     constructor(props){
         super(props);
         this.state={
-            feedbacks:[]
+            feedbacks:[],
+            userid:localStorage.getItem("userid"),
+            btnclass:"btn btn-primary"
         }
+
     }
 
-    componentDidMount() {
-        const string = 'http://localhost:8080/api/restaurant/2';
-        axios.get(string)
+    componentWillMount() {
+        let restId = this.props.restid;
+        let url = "http://localhost:8080/api/restaurant/"+restId;
+        let url2="http://opentable.herokuapp.com/api/restaurants/"+restId;
+        axios.get(url)
             .then(res => {
+                console.log(res);
+                if(res.data.length!==0){
+                    this.setState({
+                        id: res.data.id,
+                        name: res.data.name,
+                        description: res.data.description,
+                        image_link: res.data.image_link,
+                        cost_for_two: res.data.cost_for_two,
+                        restaurant_owner: res.data.restaurant_owner,
+                        restaurant_type: res.data.restaurant_type,
+                        newComment:'',
+                        fav:false
+                    })
+                }
+            })
+
+        axios.get(url2)
+            .then(res => {
+                console.log("api data")
                 console.log(res);
                 this.setState({
                     id: res.data.id,
                     name: res.data.name,
                     description: res.data.description,
-                    image_link: res.data.image_link,
-                    cost_for_two: res.data.cost_for_two,
-                    restaurant_owner: res.data.restaurant_owner,
-                    restaurant_type: res.data.restaurant_type,
+                    image_link: res.data.image_url,
+                    cost_for_two: res.data.price,
+                    restaurant_owner: "Not Available",
+                    restaurant_type: "Not Available",
                     newComment:'',
                     fav:false
                 })
-            }).then(console.log(this))
+            })
 
-        const string2 = 'http://localhost:8080/api/feedback/1';
+        const string2 = 'http://localhost:8080/api/feedback/'+this.props.restid;
         axios.get(string2)
             .then(result => {
                 console.log(result)
@@ -36,7 +60,10 @@ export default class MoreinfoCustomer extends React.Component{
                     feedbacks: result.data
                 })
             }).then(console.log(this));
+        console.log("after mounting");
+        console.log(this)
     }
+
     restaurantType(){
         if(this.state.restaurant_type===1){
             return "Fast Food"
@@ -55,11 +82,8 @@ export default class MoreinfoCustomer extends React.Component{
         var comment=self.state.newComment;
 
         console.log(comment);
-        // console.log(fav)
-
-        axios.post("http://localhost:8080/api/feedback/1/8",{
+        axios.post("http://localhost:8080/api/feedback/"+this.state.userid+"/"+this.props.restid,{
             comment:comment
-
         }).then(
             this.render()
         );
@@ -70,65 +94,68 @@ export default class MoreinfoCustomer extends React.Component{
         // );
 
     }
-update(e){
-    console.log(this);
+    update(e){
+        console.log(this);
         this.setState(
             {
                 newComment:this.refs.commentBody.value
             }
         )
-}
-favClick(e){
-    var self = this;
-
+    }
+    favClick(e){
+        let self = this;
+        let userid = localStorage.getItem("userid");
+        let restId = this.props.restid;
+        let url = "http://localhost:8080/api/feedback/"+this.state.userid+"/"+this.props.restid;
+        console.log(url);
         e.preventDefault();
-    axios.post("http://localhost:8080/api/feedback/1/8",{
-        fav:true
-    });
+        axios.post(url,{
+            fav:true
+        });
         this.setState({
+            btnclass:"btn btn-success",
             fav:true
         })
-}
+    }
 
     render(){
+        console.log("before main")
         console.log(this);
         return(
             <div className={"row"}>
 
-            <div className="profile col-3">
-                <h1>{this.state.name}</h1>
-                <img src={this.state.image_link} alt={"restaurant pic not available"}/>
-                <br/>
-                <br/>
-                <p>Id: {this.state.id}</p>
-                <p>Description: {this.state.description}</p>
-                <p>Cost For Two: {this.state.cost_for_two}</p>
-                <p>Restaurant Owner: {this.state.restaurant_owner}</p>
-                <p>Restaurant Type: {this.restaurantType()}</p>
-                <button className={"btn btn-primary"} onClick={this.favClick.bind(this)}>Favourite</button>
-            </div>
+                <div className="profile col-3">
+                    <p className={"head"}>{this.state.name}</p>
+                    <img src={this.state.image_link} alt={"restaurant pic not available"}/>
+                    <br/>
+                    <br/>
+                    <p>Id: {this.state.id}</p>
+                    <p>Description: {this.state.description}</p>
+                    <p>Cost For Two: {this.state.cost_for_two}</p>
+                    <p>Restaurant Owner: {this.state.restaurant_owner}</p>
+                    <p>Restaurant Type: {this.restaurantType()}</p>
+                    <button className={this.state.btnclass} onClick={this.favClick.bind(this)}>Favourite</button>
+                </div>
                 <div className="col-8">
-                    <h1>
+                    <p className={"head"}>
                         Feedback
-                    </h1>
-                        {this.state.feedbacks.map((feedback)=>
-                            <div className={"comment m-2 text-left p-2"}>
-                                    <h4>{feedback.comment}</h4>
-                                    <p>Favourite: {feedback.favourite==0?"False":"true"}</p>
-
-                            </div>
-
-                        )
-                        }
-                    <div className="form-group m-2">
+                    </p>
+                    {this.state.feedbacks.map((feedback,i)=>
+                        <div key={i} className={"comment m-2 text-left p-2"}>
+                            <h4>{feedback.comment}</h4>
+                            <p>Favourite: {feedback.favourite==0?"False":"true"}</p>
+                        </div>
+                    )
+                    }
+                    <div className="form-group m-1">
                         <form className="form-inline">
-                        <input onChange={this.update.bind(this)} ref="commentBody" type="text" className="form-control col-11" id="comment" placeholder="Add New Comment"/>
-                        <button className={"btn btn-primary"} onClick={this.handlePostComment.bind(this)}>Submit</button>
+                            <input onChange={this.update.bind(this)} ref="commentBody" type="text" className="form-control col-10" id="comment" placeholder="Add New Comment"/>
+                            <button className={"btn btn-primary"} onClick={this.handlePostComment.bind(this)}>Submit</button>
                         </form>
                     </div>
 
                 </div>
 
             </div>)
-   }
+    }
 }

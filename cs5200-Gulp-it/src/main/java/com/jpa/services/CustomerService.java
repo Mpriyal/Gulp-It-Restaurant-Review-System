@@ -36,7 +36,9 @@ public class CustomerService {
 	@RequestMapping(value="api/customer", method=RequestMethod.GET)
 	public Customer getCustomerByCredentials(@RequestParam(value="username",required=false)String username,
 			@RequestParam(value="password",required=false)String password) {
+		
 			return dao.findCustomerByCredentials(username, password);
+		
 	}
 	
 	@RequestMapping(value="api/customers", method=RequestMethod.GET)

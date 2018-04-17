@@ -13,6 +13,6 @@ export default class Homepage extends React.Component{
             <Navbar/>
             <SearchHome/>
             </div>
-        )
+       )
     }
 }

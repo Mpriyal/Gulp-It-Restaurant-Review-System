@@ -13,7 +13,7 @@ export default class AddnewRestaurant extends React.Component{
     }
 
     update(){
-        console.log(this)
+        console.log(this);
         this.setState(
             {
                 name: this.refs.name.value,

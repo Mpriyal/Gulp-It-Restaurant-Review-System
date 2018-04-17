@@ -1,5 +1,4 @@
 import React from 'react';
-import SearchHome from "./SearchHome";
 import axios from 'axios'
 import Register from "./Register";
 
@@ -31,8 +30,8 @@ export default class Navbar extends React.Component {
                 userID: '',
                 password: '',
             }
-
-        )
+        );
+        localStorage.removeItem("userid")
         console.log(this)
     }
 
@@ -41,7 +40,6 @@ export default class Navbar extends React.Component {
         this.setState({
             username: this.refs.Username.value,
             password: this.refs.Password.value
-
         })
 
     }
@@ -54,13 +52,16 @@ export default class Navbar extends React.Component {
                 username: this.state.username,
                 password: this.state.password
             }
-        })
-            .then(function(response){
-            self.setState({
-                userID:response.data.id,
-                loggedIn: true});
+        }).then(function(response){
+            console.log(response);
+            if(response.data.password===self.state.password) {
+                self.setState({
+                    userID: response.data.id,
+                    loggedIn: true
+                });
+                localStorage.setItem('userid',response.data.id);
                 console.log(self)
-            })
+            }})
             .catch(function (error) {
                 console.log(error);
             });
