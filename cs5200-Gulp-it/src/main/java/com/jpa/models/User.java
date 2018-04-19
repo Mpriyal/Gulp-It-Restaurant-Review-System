@@ -17,14 +17,16 @@ public class User {
 	private Date DOB;
 	private List<Phone> phoneList;
 	private List<Address> addressList;
+	private String type;
 	
 	public String toString() {
 		return Id +" "+ firstName +" "+lastName+" "+username+" "+password;
 	}
 	
 	public User() {}
-	public User(int Id, String username, String password, String email, Date dob) {
-		this(Id, "", "", username, password, email,dob);
+	
+	public User(int Id, String username, String password, String email, Date dob, String type) {
+		this(Id, "", "", username, password, email,dob, type);
 	}
 
 	public User(String firstName, String lastName, String username, String password, String email, Date dob) {
@@ -36,7 +38,31 @@ public class User {
 		this.email = email;
 		this.DOB = dob;
 	}
-	public User(int id, String firstName, String lastName, String username, String password, String email, Date DOB) {
+	
+	public User(String firstName, String lastName, String username, String password, String email, Date dob, String type) {
+		super();
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.username = username;
+		this.password = password;
+		this.email = email;
+		this.DOB = dob;
+		this.type = type;
+	}
+	
+	public User(String firstName, String lastName, String username, String password, String email, Date dob, String type, int id) {
+		super();
+		this.Id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.username = username;
+		this.password = password;
+		this.email = email;
+		this.DOB = dob;
+		this.type = type;
+	}
+	
+	public User(int id, String firstName, String lastName, String username, String password, String email, Date DOB, String type) {
 		super();
 		Id = id;
 		this.firstName = firstName;
@@ -45,6 +71,7 @@ public class User {
 		this.password = password;
 		this.email = email;
 		this.DOB = DOB;
+		this.type = type;
 	}
 
 	public int getId() {
@@ -118,5 +145,15 @@ public class User {
 	public void setAddressList(List<Address> addressList) {
 		this.addressList = addressList;
 	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+	
+	
 
 }

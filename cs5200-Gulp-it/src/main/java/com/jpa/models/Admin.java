@@ -6,14 +6,14 @@ public class Admin extends User {
 
 	private String adminKey;
 	
-	public Admin(int id, String firstName, String lastName, String username, String password, String email, Date dob, String adminKey) {
-		super(id, firstName, lastName, username, password, email, dob);
+	public Admin(int id, String firstName, String lastName, String username, String password, String email, Date dob,String type, String adminKey) {
+		super(id, firstName, lastName, username, password, email, dob, type);
 		this.adminKey = adminKey;
 		// TODO Auto-generated constructor stub
 	}
 	
-	public Admin(String firstName, String lastName, String username, String password, String email, Date dob, String adminKey) {
-		super(firstName, lastName, username, password, email, dob);
+	public Admin(String firstName, String lastName, String username, String password, String email, Date dob, String type, String adminKey) {
+		super(firstName, lastName, username, password, email, dob, type);
 		this.adminKey = adminKey;
 		// TODO Auto-generated constructor stub
 	}

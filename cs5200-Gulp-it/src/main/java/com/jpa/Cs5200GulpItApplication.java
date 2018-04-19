@@ -26,7 +26,7 @@ public class Cs5200GulpItApplication {
 		SpringApplication.run(Cs5200GulpItApplication.class, args);
 		
 		CustomerDao cust = CustomerDao.getInstance();
-		System.out.println(cust.findCustomerById(28));
+//		System.out.println(cust.findCustomerById(28));
 //		Restaurant rest = new Restaurant("Chutneys","Indian food ","xyz",20,1);
 //		Restaurant rest = new Restaurant("Qudoba","mexican food ","abc",20,1);
 //		RestaurantDao restDao = RestaurantDao.getInstance();
