@@ -87,11 +87,6 @@ export default class MoreinfoCustomer extends React.Component{
         }).then(
             this.render()
         );
-        // self.setState(
-        //     {
-        //         fav:false
-        //     }
-        // );
 
     }
     update(e){
