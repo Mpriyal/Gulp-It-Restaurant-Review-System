@@ -16,7 +16,9 @@ export default class ProfileCustomer extends React.Component{
             dob:'null',
             customerKey:'aman123',
             password:'',
-            update:false
+            update:false,
+            favRest:[],
+            commentedRestaurants:[]
         };
         this.handleUpdate = this.handleUpdate.bind(this);
     }
@@ -26,25 +28,40 @@ export default class ProfileCustomer extends React.Component{
             update:true
         })
     }
+    //PUT THE API TO GET THE RESTAURANTS OF THE CUSTOMERS WHICH HE HAS COMMENTED OR LIKED
     componentDidMount() {
-        const string = 'http://localhost:8080/api/restaurant/2';
-        axios.get(string)
+        axios.get('http://opentable.herokuapp.com/api/restaurants', {
+            params: {
+                name: 'boston'
+            }
+        })
             .then(res => {
                 console.log(res);
-                this.setState({
-                    favRestaurants:res.data
-                })
-            }).then(console.log(this));
+                const favRest = res.data.restaurants;
+                this.setState({favRest});
+            });
 
-        const string2 = 'http://localhost:8080/api/feedback/1';
-        axios.get(string2)
-            .then(result => {
-                console.log(result);
-                this.setState({
-                    commentedRestaurants: result.data
-                })
-            }).then(console.log(this));
+        axios.get('http://opentable.herokuapp.com/api/restaurants', {
+            params: {
+                name: 'boston'
+            }
+        })
+            .then(res => {
+                console.log(res);
+                const commentedRestaurants = res.data.restaurants;
+                this.setState({commentedRestaurants});
+            });
+
     }
+    //     const string2 = 'http://localhost:8080/api/feedback/1';
+    //     axios.get(string2)
+    //         .then(result => {
+    //             console.log(result);
+    //             this.setState({
+    //                 commentedRestaurants: result.data
+    //             })
+    //         }).then(console.log(this));
+    // }
 
     update() {
             this.setState(
@@ -60,10 +77,29 @@ export default class ProfileCustomer extends React.Component{
                       dob:this.refs.newdob.value,
                       customerKey:this.refs.newck.value,
                       update: false,
-                      favRestaurants:null,
-                      commentedRestaurants:null
+
                   });
-          }
+
+
+        //PUT THE PUR REQUEST TO UPDATE THE CUSTOMER
+        fetch('http://localhost:8080/api/customer/', {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                firstName: this.state.firstName,
+                lastName: this.state.lastName,
+                username:  this.state.username,
+                password:  this.state.password,
+                email:  this.state.email,
+                dob: this.state.dateOfBirth,
+                customerKey: "abc"
+            })
+        }).then(console.log("saved to the db"));
+
+    }
 
     renderUpdate(){
         return (
@@ -201,13 +237,10 @@ export default class ProfileCustomer extends React.Component{
                 <p><button className={"btn btn-primary"} onClick={this.handleUpdate}>Update</button></p>
             </div>
                 <div className="col-9">
-                    <h1>
-                        Restaurants you have commented
-                         <RestaurantList data={this.state.favRestaurants}/>
-                    </h1>
-                    <h1>
-                        <RestaurantList data={this.state.commentedRestaurants}/>
-                    </h1>
+                    <p className={"head"}>Your Favourite Restaurant</p>
+                    <RestaurantList data={this.state.commentedRestaurants}/>
+                    <p className={"head"}>Restaurants where you have commented</p>
+                    <RestaurantList data={this.state.favRest}/>
                 </div>
             </div>
                 )

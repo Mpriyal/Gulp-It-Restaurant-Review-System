@@ -61,11 +61,35 @@ h3{
 }
 .profile{
     background-color: whitesmoke;
-    height: 100em;
+    height: 80em;
 }
 .h1{
     font-weight: 100;
 }
 .comment{
-    background-color:rgba(255,255,255,0.5);;
+    background-color:rgba(255,255,255,0.5);
+
+}
+
+.head{
+    font-size: 50px;
+    font-weight: 300;
+
+}
+h2{
+    background-color:rgba(255,255,255,0.5);
+}
+.comment2{
+    margin-left: 10%;
+}
+.menu{
+    background-color: rgba(255, 255, 255, 0.6);
+}
+.card-header{
+    width: 100%;
+    background-color: black;
+    color: white;
+}
+.menu2{
+    background-color: rgba(255, 255, 255, 0.8);
 }

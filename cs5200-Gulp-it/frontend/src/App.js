@@ -4,17 +4,25 @@ import Navbar from "./components/Navbar";
 import Register from "./components/Register";
 import Homepage from "./components/Homepage";
 import ProfileCustomer from "./components/ProfileCustomer";
-import Moreinfo from "./components/Moreinfo";
+import MoreinfoCustomer from "./components/MoreinfoCustomer";
+import OwnerProfile from "./components/OwnerProfile";
+import MoreinfoOwner from "./components/MoreInfoOwner";
+import SearchHome from "./components/SearchHome";
+import RestaurantList from "./components/RestaurantList";
 
 class App extends Component {
   render() {
     return (
       <div className="App">
         {/*<Homepage/>*/}
-          {/*<Navbar/>*/}
+          <Navbar/>
+          <SearchHome/>
           {/*<Register/>*/}
-          <ProfileCustomer/>
-          {/*<Moreinfo/>*/}
+          {/*<ProfileCustomer/>*/}
+          {/*<MoreinfoCustomer/>*/}
+          {/*<OwnerProfile/>*/}
+          {/*<MoreinfoOwner/>*/}
+          {/*<RestaurantList/>*/}
       </div>
     );
   }

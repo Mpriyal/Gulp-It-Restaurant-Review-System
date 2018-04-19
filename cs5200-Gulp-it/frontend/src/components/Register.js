@@ -32,7 +32,7 @@ export default class Register extends React.Component{
             owner: e.target.value,
 
         })
-        // alert(this.state.firstName);
+
     }
 
     handleOptionChange (changeEvent){
