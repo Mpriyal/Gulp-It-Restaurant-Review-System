@@ -18,8 +18,8 @@ public class CustomerDao {
 	private static final String URL = "jdbc:mysql://cs5200-spring2018-mittal.c9fddtskt253.us-east-2.rds.amazonaws.com/GulpIt";
 	private static final String USERNAME = "Mpriyal";
 	private static final String PASSWORD = "Priyaldbms94!";
-	private static final String CREATE_PERSON = "INSERT INTO Person (firstName, lastName, username, password,email,dob)"
-			+ "VALUES (?,?,?,?,?,?)";
+	private static final String CREATE_PERSON = "INSERT INTO Person (firstName, lastName, username, password,email,dob,type)"
+			+ "VALUES (?,?,?,?,?,?,?)";
 	private static final String CREATE_CUSTOMER = "INSERT INTO Customer (customer_key, Person) VALUES (?,LAST_INSERT_ID())";
 	private static final String FIND_ALL_CUSTOMERS = "SELECT * FROM Customer, Person WHERE Customer.Person = Person.Id";
 	private static final String FIND_CUSTOMER_ID = "SELECT * FROM Customer, Person WHERE Customer.Person = Person.Id AND "
@@ -28,11 +28,13 @@ public class CustomerDao {
 			+ "Person.username =?";
 	private static final String FIND_CUSTOMER_CREDENTIALS = "SELECT * FROM Customer, Person WHERE Customer.Person = Person.Id AND"
 			+ " Person.username =? AND Person.password =?";
-	private static final String UPDATE_CUSTOMER = "UPDATE Person, Customer SET Person.Id =?, firstName =?, lastName =?, username =?, password =?, email =?, dob =?, "
-			+ "customer_key =? WHERE Customer.Person = Person.Id AND Person.Id =?";
-	private static final String DELETE_CUSTOMER = "DELETE FROM Customer WHERE Customer.Id =?";
+	private static final String UPDATE_CUSTOMER = "UPDATE Person, Customer SET firstName =?, lastName =?, password =?,dob =?"
+			+ " WHERE Customer.Person = Person.Id AND Person.Id =?";
+	private static final String DELETE_CUSTOMER = "DELETE p.*, c.* FROM Person p LEFT JOIN Customer c ON c.Person = p.id WHERE p.id =?";
+	private static final String FIND_CUSTOMER_ID_BY_USERNAME = "SELECT c.Person FROM Customer c, Person p WHERE c.Person = p.id AND username =?";
 
 	public static CustomerDao instance = null;
+	
 	public static CustomerDao getInstance() {
 		if(instance==null) {
 			instance = new CustomerDao();
@@ -57,6 +59,7 @@ public class CustomerDao {
 			statement.setString(4, Customer.getPassword());
 			statement.setString(5, Customer.getEmail());
 			statement.setDate(6, Customer.getDOB());
+			statement.setString(7, Customer.getType());
 			result = statement.executeUpdate();
 			statement = connection.prepareStatement(CREATE_CUSTOMER);
 			statement.setString(1, Customer.getCustomerKey());
@@ -93,9 +96,10 @@ public class CustomerDao {
 				String password = result.getString("password");
 				String email = result.getString("email");
 				Date dob = result.getDate("dob");
+				String type = result.getString("type");
 				String customer_key = result.getString("customer_key");
 				int Person = result.getInt("Person");
-				Customer Customer = new Customer(Person, firstName, lastName, username, password, email, dob, customer_key);
+				Customer Customer = new Customer(Person, firstName, lastName, username, password, email, dob, type, customer_key);
 				customers.add(Customer);
 			}
 		} catch (ClassNotFoundException e) {
@@ -131,9 +135,10 @@ public class CustomerDao {
 				String password = result.getString("password");
 				String email = result.getString("email");
 				Date dob = result.getDate("dob");
+				String type = result.getString("type");
 				String customer_key = result.getString("customer_key");
 				int Person = result.getInt("Person");
-				customer = new Customer(Person, firstName, lastName, username, password,email, dob, customer_key);
+				customer = new Customer(Person, firstName, lastName, username, password,email, dob,type, customer_key);
 			}
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
@@ -162,15 +167,16 @@ public class CustomerDao {
 				statement.setString(1, username);
 				result = statement.executeQuery();
 				if(result.next()) {
-					int Id = result.getInt("Id");
 					String firstName = result.getString("firstName");
 					String lastName = result.getString("lastName");
 					String username1 = result.getString("username");
 					String password = result.getString("password");
 					String email = result.getString("email");
 					Date dob = result.getDate("dob");
+					String type = result.getString("type");
+					int Person = result.getInt("Person");
 					String customer_key = result.getString("customer_key");
-					customer = new Customer(Id, firstName, lastName, username1, password,email, dob, customer_key);
+					customer = new Customer(Person, firstName, lastName, username1, password,email, dob,type, customer_key);
 				}
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
@@ -184,6 +190,37 @@ public class CustomerDao {
 				}
 			}
 			return customer;
+			}
+		
+		//this function is to to find a customer id, given its username
+		//returns person id instead of customer id
+		public int findCustomerIdByUsername(String user){
+			int customer_id = 0;
+			Connection connection = null;
+			PreparedStatement statement = null;
+			ResultSet result = null;
+			try {
+				Class.forName("com.mysql.jdbc.Driver");
+				connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+				statement = connection.prepareStatement(FIND_CUSTOMER_ID_BY_USERNAME);
+				statement.setString(1, user);
+				result = statement.executeQuery();
+				if(result.next()) {
+				int Person = result.getInt("Person");
+				customer_id = Person;
+				}
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			return customer_id;
 			}
 		
 		//this function is to find a customer, given its credentials (username, password)
@@ -200,15 +237,16 @@ public class CustomerDao {
 				statement.setString(2, password);
 				result = statement.executeQuery();
 				if(result.next()) {
-					int Id = result.getInt("Id");
 					String firstName = result.getString("firstName");
 					String lastName = result.getString("lastName");
 					String username1 = result.getString("username");
 					String password1 = result.getString("password");
 					String email = result.getString("email");
 					Date dob = result.getDate("dob");
+					String type = result.getString("type");
+					int Person = result.getInt("Person");
 					String customer_key = result.getString("customer_key");
-					customer = new Customer(Id, firstName, lastName, username1, password1, email, dob, customer_key);
+					customer = new Customer(Person, firstName, lastName, username1, password1, email, dob,type, customer_key);
 				}
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
@@ -226,6 +264,7 @@ public class CustomerDao {
 	
 
 		//this function is to update data of a customer
+		//given customerId indicates PersonId
 		public int updateCustomer(int customerId, Customer customer){
 			Connection connection = null;
 			PreparedStatement statement = null;
@@ -234,15 +273,11 @@ public class CustomerDao {
 				Class.forName("com.mysql.jdbc.Driver");
 				connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
 				statement = connection.prepareStatement(UPDATE_CUSTOMER);
-				statement.setInt(1, customer.getId());
-				statement.setString(2, customer.getFirstName());
-				statement.setString(3, customer.getLastName());
-				statement.setString(4, customer.getUsername());
-				statement.setString(5, customer.getPassword());
-				statement.setString(6, customer.getEmail());
-				statement.setDate(7, customer.getDOB());
-				statement.setString(8, customer.getCustomerKey());
-				statement.setInt(9, customerId);
+				statement.setString(1, customer.getFirstName());
+				statement.setString(2, customer.getLastName());
+				statement.setString(3, customer.getPassword());
+				statement.setDate(4, customer.getDOB());
+				statement.setInt(5, customerId);
 				result = statement.executeUpdate();
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
@@ -259,6 +294,7 @@ public class CustomerDao {
 			}
 		
 		//this function is to delete a customer
+		//given customerId indicates PersonId
 		public int deleteCustomer(int customerId){
 			Connection connection = null;
 			PreparedStatement statement = null;
@@ -282,4 +318,22 @@ public class CustomerDao {
 			}
 			return result;
 			}
+		
+		public static void main(String[] args) {
+			
+			CustomerDao cDao = new CustomerDao();
+			Customer rubi = new Customer("Rubi","Coffee","rub","rub","rubi@neu.edu",null,"Customer","rub123");
+			Customer rubi_new = new Customer("RubiNew","Coffee","rub","rub12","rubi@neu.edu",null,"Customer","rub1234");
+//			cDao.createCustomer(rubi);
+			Customer delete_me = new Customer("Delete","Karo","d","me","delete@neu.edu",null,"Customer","del123");
+////			cDao.createCustomer(delete_me);
+//			System.out.println(cDao.findAllCustomers());
+//			System.out.println(cDao.findCustomerByCredentials(rubi.getUsername(), rubi.getPassword()));
+//			System.out.println(cDao.findCustomerById(cDao.findCustomerIdByUsername("priyal")));
+//			cDao.updateCustomer(cDao.findCustomerIdByUsername(rubi.getUsername()), rubi_new);
+//			System.out.println(cDao.findAllCustomers());
+//			cDao.deleteCustomer(cDao.findCustomerIdByUsername(delete_me.getUsername()));
+//			System.out.println(cDao.findAllCustomers());
+			
+		}
 }

@@ -39,7 +39,7 @@ public class AdminDao {
 		CustomerDao custumer = CustomerDao.getInstance();
 		RestaurantOwnerDao restaurantOwner = RestaurantOwnerDao.getInstance();
 		users.addAll(custumer.findAllCustomers());
-		users.addAll(restaurantOwner.findAllRestaurantOwners());
+		users.addAll(restaurantOwner.findAllOwners());
 		return users;
 	
 	}
@@ -56,15 +56,17 @@ public class AdminDao {
 			statement.setInt(1, customerId);
 			result = statement.executeQuery();
 			if(result.next()) {
+				int id = result.getInt("id");
 				String firstName = result.getString("firstName");
 				String lastName = result.getString("lastName");
 				String username = result.getString("username");
 				String password = result.getString("password");
 				String email = result.getString("email");
+				String type = result.getString("type");
 				Date dob = result.getDate("dob");
 				String customer_key = result.getString("customer_key");
 				int Person = result.getInt("Person");
-				customer = new Customer(Person, firstName, lastName, username, password,email, dob, customer_key);
+				customer = new Customer(id, firstName, lastName, username, password,email,dob,type, customer_key);
 			}
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
@@ -111,7 +113,7 @@ public class AdminDao {
 	
 	public void createRestaurantOwner(RestaurantOwner restaurantOwner) {
 		RestaurantOwnerDao dao = RestaurantOwnerDao.getInstance();
-		dao.createRestaurantOwner(restaurantOwner);
+		dao.createOwner(restaurantOwner);
 	}
 	public void CreateCustomer (Customer customer) {
 		CustomerDao dao = CustomerDao.getInstance();

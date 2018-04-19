@@ -7,10 +7,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jpa.dao.FeedbackDao;
 import com.jpa.models.Feedback;
+import com.jpa.models.User;
 
 @RestController
 @CrossOrigin
@@ -24,10 +26,20 @@ public class FeedbackService {
 		return dao.getAllFeedbackForRestaurantByaCustomer(RestaurantId, CustomerId);
 	}
 
-	@RequestMapping("api/feedback/{restId}")
-	public List<Feedback> getAllFeedbackForRestaurantId(@PathVariable(name="restId")int RestaurantId){
-		return dao.getAllFeedbackForRestaurantId(RestaurantId);
-	}
+//	@RequestMapping("api/feedback/{restId}")
+//	public List<Feedback> getAllFeedbackForRestaurantId(@PathVariable(name="restId")int RestaurantId){
+//		return dao.getAllFeedbackForRestaurantId(RestaurantId);
+//	}
+	
+//	@RequestMapping("api/feedback/{restId}")
+//	public List<Feedback> getAllFeedbackForRestaurantId(@QueryParam(value="restId")int RestaurantId){
+//		return dao.getAllFeedbackForRestaurantId(RestaurantId);
+//	}
+	
+//	@RequestMapping("/api/admin/users")
+//	public List<User> findAllUsers(@RequestParam(value="usertype",required=false)String usertype) {
+//		return admindao.UserfindAllUsers();
+//	}
 
 	public List<Feedback> getAllFeedbackByCustomerId(int CustomerId) {
 		return dao.getAllFeedbackByCustomerId(CustomerId);
@@ -39,6 +51,7 @@ public class FeedbackService {
 		return dao.addFeedbackForRestaurantByCustomer(feedback, Restaurant, Customer);
 	}
 
+	
 	public int deleteFeedbackById(int FeedbackId) {
 		return dao.deleteFeedbackById(FeedbackId);
 	}

@@ -43,7 +43,7 @@ public class AdminService {
 			return dao.findCustomerById(UserId);
 		}
 		return 
-				ODao.findRestaurantOwnerById(UserId);
+				ODao.findOwnerById(UserId);
 
 	}
 
