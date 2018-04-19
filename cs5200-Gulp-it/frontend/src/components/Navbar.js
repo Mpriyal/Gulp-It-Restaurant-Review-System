@@ -44,6 +44,8 @@ export default class Navbar extends React.Component {
 
     }
 
+
+
     OnSignin(e){
         var self = this;
         e.preventDefault();
@@ -54,7 +56,10 @@ export default class Navbar extends React.Component {
             }
         }).then(function(response){
             console.log(response);
-            if(response.data.password===self.state.password) {
+            if(response.data.length===0){
+                alert("Sorry Wring credentials.!! Try Again");
+            }
+            else if(response.data.password===self.state.password) {
                 self.setState({
                     userID: response.data.id,
                     loggedIn: true

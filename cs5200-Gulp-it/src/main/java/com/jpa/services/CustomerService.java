@@ -34,7 +34,6 @@ public class CustomerService {
 	public Customer getCustomerByCredentials(@RequestParam(value="username",required=false)String username,
 			@RequestParam(value="password",required=false)String password) {
 
-
 		if(password==null) {
 			Customer cust = dao.findCustomerByUsername(username);
 			return cust;
@@ -43,6 +42,7 @@ public class CustomerService {
 			Customer cust1 = dao.findCustomerByCredentials(username, password);
 			return cust1;
 		}
+	
 	}
 
 	@RequestMapping(value="api/customer/{custId}", method=RequestMethod.PUT)
