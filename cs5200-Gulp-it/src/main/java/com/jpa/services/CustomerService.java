@@ -29,41 +29,32 @@ public class CustomerService {
 	public Customer findCustomerById(@PathVariable(name="custId") int custId) {
 		return dao.findCustomerById(custId);
 	}
-	
+
 	@RequestMapping(value="api/customer", method=RequestMethod.GET)
 	public Customer getCustomerByCredentials(@RequestParam(value="username",required=false)String username,
 			@RequestParam(value="password",required=false)String password) {
 
-			if(username==null&&password==null) {
-				return dao.findAllCustomers();
-			}
-			else if(password==null) {
-				List<Customer> customer_list = new ArrayList<>();
-				Customer cust = dao.findCustomerByUsername(username);
-				customer_list.add(cust);
-				return customer_list;
-			}
-			else {
-				List<Customer> customer_list1 = new ArrayList<>();
+
+		if(password==null) {
+			Customer cust = dao.findCustomerByUsername(username);
+			return cust;
+		}
+		else {
 			Customer cust1 = dao.findCustomerByCredentials(username, password);
-			customer_list1.add(cust1);
-			return customer_list1;
-			}
+			return cust1;
+		}
 	}
-	
+
 	@RequestMapping(value="api/customer/{custId}", method=RequestMethod.PUT)
 	public void updateCustomer(@PathVariable(name="custId")int id,@RequestBody Customer newCustomer) {
 		dao.updateCustomer(id, newCustomer);
-
-			return dao.findCustomerByCredentials(username, password);
-
 	}
-	
+
 	@RequestMapping(value="api/customers", method=RequestMethod.GET)
 	public List<Customer> findallCustomers() {
-			return dao.findAllCustomers();
-		}
-		
+		return dao.findAllCustomers();
+	}
+
 	@RequestMapping(value="api/customer/{custId}", method=RequestMethod.DELETE)
 	public int deleteCustomerById(@PathVariable (name="custId") int custId) {
 		int result=dao.deleteCustomer(custId);
