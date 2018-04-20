@@ -12,6 +12,8 @@ import RestaurantList from "./components/RestaurantList";
 import Main from "./components/Main"
 import AdminCustomer from './components/AdminCustomer'
 import AdminOwner from './components/AdminOwner'
+import OwnerCard from './components/OwnerCard'
+
 
 class App extends Component {
   render() {
@@ -19,8 +21,9 @@ class App extends Component {
       <div className="App">
 
           <Navbar/>
+
       <AdminOwner/>
-          // <Main />
+
       </div>
     );
   }

@@ -1,5 +1,7 @@
 import React from 'react'
 import axios from 'axios';
+import OwnerCard from './OwnerCard'
+import AdminSingle from './AdminSingle'
 
 
 export default class AdminOwner extends React.Component {
@@ -15,7 +17,11 @@ export default class AdminOwner extends React.Component {
       role:null,
       successMessage:null,
       deleteId:null,
-      findById:null
+      findById:null,
+      FindByUsername:null,
+      owner:[],
+      showcard:false,
+      singlecard:false
     }
   }
 
@@ -37,36 +43,70 @@ export default class AdminOwner extends React.Component {
               password:  this.state.password,
               email:  this.state.email,
               dob: this.state.dateOfBirth,
-              customerKey: "abc"
+              customerKey: "",
+              type:'Restaurant Owner'
           })
-      }).then(console.log("saved to the db"));
+      }).then(
+        console.log("saved to the db"));
   }
 
   update(){
       console.log(this);
       this.setState({
+          id:this.refs.Id.value,
+          idupdated:this.refs.newId.value,
           firstName: this.refs.FirstName.value,
           lastName: this.refs.LastName.value,
           username: this.refs.Username.value,
           email:this.refs.Email.value,
           password:this.refs.Password.value,
           dateOfBirth: this.refs.dateOfBirth.value,
+          newfirstName: this.refs.newFirstName.value,
+          newlastName: this.refs.newLastName.value,
+          newusername: this.refs.newUsername.value,
+          newemail:this.refs.newEmail.value,
+          newpassword:this.refs.newPassword.value,
+          newdateOfBirth: this.refs.newdateOfBirth.value,
           deleteId:this.refs.deleteId.value,
-          findById:this.refs.findById.value
-
+          findById:this.refs.findById.value,
+          FindByUsername:this.refs.FindByUsername.value,
+          findByCredentialspass:this.refs.findByCredentialspass.value,
+          findByCredentials:this.refs.findByCredentials.value
       })
 
   }
 
-  handleCreate(){
+  handleCreate(e){
+    e.preventDefault();
+    console.log("Success from createPage!")
+    fetch('http://localhost:8080/api/owner', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            firstName: this.state.firstName,
+            lastName: this.state.lastName,
+            username:  this.state.username,
+            password:  this.state.password,
+            email:  this.state.email,
+            dob: this.state.dateOfBirth,
+            ownerKey: ""
+
+        })
+    }).then(console.log("saved to the db"));
 
   }
+
+
+  //api not available
   handleDeleteByName(){
 
   }
 
   handleDeleteById(){
-    let url='http://localhost:8080/api/customer/'+this.state.deleteId
+    let url='http://localhost:8080/api/owner/'+this.state.deleteId
     axios.delete(url)
     .then(console.log("deleted"))
     .catch(function (error) {
@@ -75,32 +115,109 @@ export default class AdminOwner extends React.Component {
   }
 
   handlefindById(){
-    let url='http://localhost:8080/api/customer/'+this.state.findById
+    var self = this;
+    let url='http://localhost:8080/api/owner/'+this.state.findById
     axios.get(url)
-    .then(function (response){
-      console.log(response)})
+    .then(function (res){
+      const owner = res.data;
+      self.setState({owner});
+      self.setState({
+        singlecard:true
+      }
+      )
+      console.log(res)})
     .catch(function (error) {
     console.log(error);
   });
   }
   handleFindAll(){
-    let url='http://localhost:8080/api/customers'
+    var self = this;
+    let url='http://localhost:8080/api/owner'
     axios.get(url)
-    .then(function (response){
-      console.log(response)})
+    .then(function (res){
+        const owner = res.data;
+        self.setState({owner});
+        self.setState({
+          showcard:true
+        }
+        )
+        // owner:response.data,
+        // showcard:true
+      console.log(self);
+      console.log(res)})
     .catch(function (error) {
     console.log(error);
   });
   }
-  handleFindByUsername(){
-
+  handleFindOwnerByName(){
+    var self = this;
+    let url='http://localhost:8080/api/owner'
+    axios.get(url,{
+        params:{
+          username:this.state.FindByUsername
+        }
+    })
+    .then(function (res){
+      const owner = res.data;
+      self.setState({owner});
+      self.setState({
+        showcard:true
+      }
+      )
+      console.log(res)})
+    .catch(function (error) {
+    console.log(error);
+    });
   }
   handleFindByCredentials(){
-
+    var self = this;
+    let url='http://localhost:8080/api/owner'
+    axios.get(url,{
+        params:{
+          username:this.state.findByCredentials,
+          password:this.state.findByCredentialspass
+        }
+    })
+    .then(function (res){
+      const owner = res.data;
+      self.setState({owner});
+      self.setState({
+        showcard:true
+      }
+      )
+      console.log(res)})
+    .catch(function (error) {
+    console.log(error);
+    });
   }
 
-  render(){
-    return(
+handleUpdatebutton(e){
+  e.preventDefault();
+  console.log("Success from updatePage!")
+  let url='http://localhost:8080/api/owner/'+this.state.idupdated
+  fetch(url ,{
+      method: 'PUT',
+      headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+          firstName: this.state.newfirstName,
+          lastName: this.state.newlastName,
+          username:  this.state.newusername,
+          password:  this.state.newpassword,
+          email:  this.state.newemail,
+          dob: this.state.newdateOfBirth,
+          ownerKey: ""
+      })
+  }).then(console.log("update in the db"));
+
+}
+render(){
+  if(!this.state.showcard){
+    if(!this.state.singlecard){
+  return(
+
 
         <div className="container">
           <p className="head">RESTAURANT OWNER PANEL</p>
@@ -113,7 +230,7 @@ export default class AdminOwner extends React.Component {
                       <form>
                           <div className={'form-group'}>
                               <input
-                                  ref="newId"
+                                  ref="Id"
                                   type="text"
                                   className="form-control"
                                   id="Id"
@@ -178,6 +295,16 @@ export default class AdminOwner extends React.Component {
                                   className="form-control"
                                   id="DateOfBith"
                                   placeholder="Date Of Birth"
+                                  onChange={this.update.bind(this)}
+                              />
+                          </div>
+                          <div className="form-group">
+                              <input
+                                  ref="typeofperson"
+                                  type="text"
+                                  className="form-control"
+                                  id="type"
+                                  placeholder="Type"
                                   onChange={this.update.bind(this)}
                               />
                           </div>
@@ -215,7 +342,7 @@ export default class AdminOwner extends React.Component {
                           </div>
                           <div className="form-group">
                               <input
-                                  ref="FirstName"
+                                  ref="newFirstName"
                                   type="text"
                                   className="form-control"
                                   id="FirstName"
@@ -225,7 +352,7 @@ export default class AdminOwner extends React.Component {
                           </div>
                           <div className="form-group">
                               <input
-                                  ref="LastName"
+                                  ref="newLastName"
                                   type="text"
                                   className="form-control"
                                   id="LastName"
@@ -235,7 +362,7 @@ export default class AdminOwner extends React.Component {
                           </div>
                           <div className="form-group">
                               <input
-                                  ref="Username"
+                                  ref="newUsername"
                                   type="text"
                                   className="form-control"
                                   id="Username"
@@ -245,7 +372,7 @@ export default class AdminOwner extends React.Component {
                           </div>
                           <div className="form-group">
                               <input
-                                  ref="Email"
+                                  ref="newEmail"
                                   type="email"
                                   className="form-control"
                                   id="Email"
@@ -255,7 +382,7 @@ export default class AdminOwner extends React.Component {
                           </div>
                           <div className="form-group">
                               <input
-                                  ref="Password"
+                                  ref="newPassword"
                                   type="password"
                                   className="form-control"
                                   id="Password"
@@ -265,11 +392,21 @@ export default class AdminOwner extends React.Component {
                           </div>
                           <div className="form-group">
                               <input
-                                  ref="dateOfBirth"
+                                  ref="newdateOfBirth"
                                   type="text"
                                   className="form-control"
                                   id="DateOfBith"
                                   placeholder="Date Of Birth"
+                                  onChange={this.update.bind(this)}
+                              />
+                          </div>
+                          <div className="form-group">
+                              <input
+                                  ref="newtypeofperson"
+                                  type="text"
+                                  className="form-control"
+                                  id="type"
+                                  placeholder="Type"
                                   onChange={this.update.bind(this)}
                               />
                           </div>
@@ -279,7 +416,7 @@ export default class AdminOwner extends React.Component {
                               <button
                                   type="submit"
                                   className="btn btn-primary m-5"
-                                  onClick={this.handleClick.bind(this)}
+                                  onClick={this.handleUpdatebutton.bind(this)}
                               >SUBMIT
                               </button>
                           </div>
@@ -334,10 +471,10 @@ export default class AdminOwner extends React.Component {
 <div className="row">
 
           <div className="col-4 container-fluid float-right registerClass2">
-              <h3 className={'text-center'}>Delete Owner by Username</h3>
+              <h3 className={'text-center'}>Find Owner by Username</h3>
               <div className="form-group">
                   <input
-                      ref="deleteByname"
+                      ref="FindByUsername"
                       type="text"
                       className="form-control"
                       id="Id"
@@ -347,8 +484,8 @@ export default class AdminOwner extends React.Component {
                   <button
                       type="submit"
                       className="btn btn-primary m-2"
-                      onClick={this.handleDeleteByName.bind(this)}
-                  >DELETE
+                      onClick={this.handleFindOwnerByName.bind(this)}
+                  >SUBMIT
                   </button>
               </div>
           </div>
@@ -384,11 +521,22 @@ export default class AdminOwner extends React.Component {
 
 </div>
 
+
 <button type="submit" className="btn btn-primary m-2"
-    onClick={this.handleFindAll.bind(this)} >Find All Owners</button>
+    onClick={this.handleFindAll.bind(this)} >Find All customers</button>
     </div>
-
-
+  )}
+  else if(this.state.singlecard){
+    return(
+      <AdminSingle data={this.state.customer}/>
     )
   }
+}
+  else {
+    return (
+      <customerCard data={this.state.customer}/>
+    )
+  }
+  
+}
 }
