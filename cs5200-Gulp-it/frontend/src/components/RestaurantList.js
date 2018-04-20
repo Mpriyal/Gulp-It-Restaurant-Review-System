@@ -1,5 +1,6 @@
 import React from 'react'
 import MoreinfoCustomer from './MoreinfoCustomer'
+import MoreInfoOwner from './MoreInfoOwner'
 
 export default class RestaurantList extends React.Component {
     constructor(props) {
@@ -19,7 +20,8 @@ export default class RestaurantList extends React.Component {
         this.setState(
             {
                 restId:restid,
-                info:true
+                info:true,
+                role:localStorage.getItem('role')
             }
         )
     }
@@ -51,12 +53,20 @@ export default class RestaurantList extends React.Component {
 
                 </div>
             )
-        }else {
-            return(
-                <div className={"m-t-5"}>
-                <MoreinfoCustomer restid={this.state.restId}/>
-                </div>
-            )
+        }else {if(this.state.role=='customer'){
+          return(
+              <div className={"m-t-5"}>
+              <MoreinfoCustomer restid={this.state.restId}/>
+              </div>
+          )
+        }else{
+          return(
+            <div className={"m-t-5"}>
+            <MoreInfoOwner restid={this.state.restId}/>
+            </div>
+          )
+        }
+
         }
     }
 

@@ -9,7 +9,7 @@ export default class OwnerProfile extends React.Component{
         this.state={
             update:false,
             favRest:[],
-            addnew:true
+            addnew:false
         }
         this.handleUpdate = this.handleUpdate.bind(this);
     }

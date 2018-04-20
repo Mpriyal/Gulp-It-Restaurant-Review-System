@@ -95,8 +95,6 @@ export default class Register extends React.Component{
         if(this.state.successMessage==null){
         return(
             <div>
-
-            <Navbar/>
             <div className={"container-fluid registerClass"}>
                 <div>
                     <h3 className={'text-center'}>Registration</h3>
