@@ -7,6 +7,7 @@ export default class SearchHome extends React.Component{
         super(props);
         this.state = {
             restaurants:[],
+            restaurantsdb:[],
             selectedOption:'name'
         };
         this.submitHandler = this.submitHandler.bind(this);
@@ -30,6 +31,16 @@ export default class SearchHome extends React.Component{
                         const restaurants = res.data.restaurants;
                         this.setState({restaurants});
                     })
+                    axios.get('http://localhost:8080/api/restaurant',{
+                        params:{
+                            name:textValue
+                        }
+                    })
+                        .then(res=>{
+                            console.log(res)
+                            const restaurantsdb = res.data;
+                            this.setState({restaurantsdb});
+                        })
                 break;
             case 'city':
                 axios.get('http://opentable.herokuapp.com/api/restaurants',{
@@ -42,6 +53,16 @@ export default class SearchHome extends React.Component{
                         const restaurants = res.data.restaurants;
                         this.setState({restaurants});
                     })
+                    axios.get('http://localhost:8080/api/restaurant',{
+                        params:{
+                            city:textValue
+                        }
+                    })
+                        .then(res=>{
+                            console.log(res)
+                            const restaurantsdb = res.data;
+                            this.setState({restaurantsdb});
+                        })
                 break;
             case 'zipcode':
                 axios.get('http://opentable.herokuapp.com/api/restaurants',{
@@ -66,6 +87,17 @@ export default class SearchHome extends React.Component{
                         const restaurants = res.data.restaurants;
                         this.setState({restaurants});
                     })
+
+                    axios.get('http://localhost:8080/api/restaurant',{
+                        params:{
+                            country:textValue
+                        }
+                    })
+                        .then(res=>{
+                            console.log(res)
+                            const restaurantsdb = res.data;
+                            this.setState({restaurantsdb});
+                        })
         }
 
     }
@@ -136,9 +168,8 @@ export default class SearchHome extends React.Component{
                     </div>
 
                 </div>
-                <RestaurantList data={this.state.restaurants}/>
+                <RestaurantList data={this.state.restaurants} data2={this.state.restaurantsdb}/>
             </div>
         );
     }
 }
-

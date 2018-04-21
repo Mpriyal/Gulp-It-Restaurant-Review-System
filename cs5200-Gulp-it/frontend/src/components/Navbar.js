@@ -86,8 +86,8 @@ export default class Navbar extends React.Component {
     }
 
     render() {
-        if(this.state.loggedIn===false){
-        if (this.state.register === false) {
+        if(!localStorage.getItem('id')&!this.state.loggedIn){
+        if (!this.state.register) {
             return (
                 <div className={"navbarComponents"}>
                     <nav className="navbar navbar-expand-lg navbar-light bg-light">

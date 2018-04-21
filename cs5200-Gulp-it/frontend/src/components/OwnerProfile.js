@@ -19,18 +19,33 @@ export default class OwnerProfile extends React.Component{
         })
     }
     componentDidMount() {
+      var self = this;
         // give the route to all restaurants of the pwner
-        axios.get('http://opentable.herokuapp.com/api/restaurants', {
-            params: {
-                name: 'boston'
-            }
-        })
+        axios.get('http://localhost:8080/api/owner/31/restaurant',
+        )
             .then(res => {
                 console.log(res);
-                const favRest = res.data.restaurants;
+                const favRest = res.data;
                 this.setState({favRest});
             });
-    }
+
+
+    axios.get('http://localhost:8080/api/owner/31').then(
+
+      function(res){
+        console.log(res);
+        self.setState({
+          firstName:res.data.firstName,
+          lastname: res.data.lastName,
+          email: res.data.email,
+          password: res.data.password,
+          id: res.data.id,
+          username: res.data.username,
+          dob:res.data.dateOfBirth,
+        })
+      }
+    )
+}
 
     addNew(){
         this.setState({
@@ -201,20 +216,20 @@ export default class OwnerProfile extends React.Component{
         return(
             <div className={"row"}>
                 <div className="profile col-3">
-                    <h1>{this.state.firstname} {this.state.lastname}</h1>
+                    <h1>{this.state.firstName} {this.state.lastname}</h1>
                     <p>Email: {this.state.email}</p>
                     <p>Username: {this.state.username}</p>
                     <p>Id: {this.state.id}</p>
                     <p>Phone: {this.state.phone}</p>
                     <p>Address: {this.state.address}</p>
                     <p>Date of Birth: {this.state.dob}</p>
-                    <p>Customer Key: {this.state.customerKey}</p>
+                    <p>Owner Key: {this.state.customerKey}</p>
                     <p><button className={"btn btn-primary"} onClick={this.handleUpdate}>Update</button></p>
                 </div>
 
                 <div className="col-9">
 
-                    <p className={"head"}>Your Restaurants</p>
+                    <p className={"head"}>Restaurant Information</p>
                         <div className={" container"}>
                     <button className={"btn btn-primary"} onClick={this.addNew.bind(this)}>Add New Restaurant</button>
 
