@@ -59,18 +59,7 @@ public class RestaurantOwnerService {
 		  dao.updateOwner(id, newOwner);
 	}
 	
-<<<<<<< HEAD
-=======
-	@RequestMapping(value="api/owner", method=RequestMethod.GET)
-	public List<RestaurantOwner> getOwner(@RequestParam(value="username",required=false)String username,
-										 @RequestParam(value="password",required=false)String password) {
-		if(username==null||password==null) {
-			return dao.findAllRestaurantOwners();
-		}
-		else
-		return (List<RestaurantOwner>) dao.findRestaurantOwnerByCredentials(username, password);
-	}
->>>>>>> a37e4bc31f5b4fbc186b6ef1b52930a6dc05851b
+
 	@RequestMapping(value="api/owner/{ownerId}", method=RequestMethod.DELETE)
 	public int deleteOwnerById(@PathVariable (name="ownerId") int ownerId) {
 		int result=dao.deleteOwner(ownerId);

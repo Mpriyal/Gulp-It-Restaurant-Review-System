@@ -8,16 +8,18 @@ export default class MoreinfoCustomer extends React.Component{
         this.state={
             feedbacks:[],
             userid:localStorage.getItem("userid"),
-            btnclass:"btn btn-primary"
+            btnclass:"btn btn-primary",
+            flag:false
         }
 
     }
 
     componentWillMount() {
         let restId = this.props.restid;
+        let testurl="http://localhost:8080/api/restaurant/2";
         let url = "http://localhost:8080/api/restaurant/"+restId;
         let url2="http://opentable.herokuapp.com/api/restaurants/"+restId;
-        axios.get(url)
+        axios.get(testurl)
             .then(res => {
                 console.log(res);
                 if(res.data.length!==0){
@@ -52,8 +54,9 @@ export default class MoreinfoCustomer extends React.Component{
                 })
             })
 
+        let test='http://localhost:8080/api/feedback/1'
         const string2 = 'http://localhost:8080/api/feedback/'+this.props.restid;
-        axios.get(string2)
+        axios.get(test)
             .then(result => {
                 console.log(result)
                 this.setState({
@@ -78,22 +81,23 @@ export default class MoreinfoCustomer extends React.Component{
     }
 
     handlePostComment(e){
-        var self = this;
-        var comment=self.state.newComment;
+        e.preventDefault();
+        if(this.state.userid==null){
+            alert("Please sign in first")
+            return;
+        }
+        else{
+            var self = this;
+            var comment=self.state.newComment;
+            console.log(comment);
+            let testurl="http://localhost:8080/api/feedback/1/8";
+            let url="http://localhost:8080/api/feedback/";
+            // axios.post(testurl+this.state.userid+"/"+this.props.restid,{
+        axios.post(testurl,{
+                comment:comment
+            }).then(this.render());
 
-        console.log(comment);
-        axios.post("http://localhost:8080/api/feedback/"+this.state.userid+"/"+this.props.restid,{
-            comment:comment
-        }).then(
-            this.render()
-        );
-        // self.setState(
-        //     {
-        //         fav:false
-        //     }
-        // );
-
-    }
+        }}
     update(e){
         console.log(this);
         this.setState(
@@ -103,14 +107,16 @@ export default class MoreinfoCustomer extends React.Component{
         )
     }
     favClick(e){
-        let self = this;
-        let userid = localStorage.getItem("userid");
-        let restId = this.props.restid;
+        // if(this.state.userid==null){
+        //     alert("Please sign in first")
+        //     return;
+        // }
+        let testurl="http://localhost:8080/api/feedback/1/8";
         let url = "http://localhost:8080/api/feedback/"+this.state.userid+"/"+this.props.restid;
-        console.log(url);
+        console.log(testurl);
         e.preventDefault();
-        axios.post(url,{
-            fav:true
+        axios.post(testurl,{
+            favourite:true
         });
         this.setState({
             btnclass:"btn btn-success",

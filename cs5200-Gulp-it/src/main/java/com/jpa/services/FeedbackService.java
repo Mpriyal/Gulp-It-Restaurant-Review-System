@@ -26,10 +26,10 @@ public class FeedbackService {
 		return dao.getAllFeedbackForRestaurantByaCustomer(RestaurantId, CustomerId);
 	}
 
-//	@RequestMapping("api/feedback/{restId}")
-//	public List<Feedback> getAllFeedbackForRestaurantId(@PathVariable(name="restId")int RestaurantId){
-//		return dao.getAllFeedbackForRestaurantId(RestaurantId);
-//	}
+	@RequestMapping("api/feedback/{restId}")
+	public List<Feedback> getAllFeedbackForRestaurantId(@PathVariable(name="restId")int RestaurantId){
+		return dao.getAllFeedbackForRestaurantId(RestaurantId);
+	}
 	
 //	@RequestMapping("api/feedback/{restId}")
 //	public List<Feedback> getAllFeedbackForRestaurantId(@QueryParam(value="restId")int RestaurantId){

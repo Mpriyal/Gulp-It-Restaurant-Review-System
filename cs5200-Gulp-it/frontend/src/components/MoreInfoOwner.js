@@ -21,14 +21,18 @@ export default class MoreinfoOwner extends React.Component{
             fname:'',
             fdescription:'',
             fprice:'',
-            veg:''
+            veg:'',
+            ownerId:localStorage.getItem('id')
         }
+
     }
 
     componentDidMount() {
-        const string = 'http://localhost:8080/api/restaurant/2';
+
+        const string = 'http://localhost:8080/api/restaurant/'+this.props.restid;
         axios.get(string)
             .then(res => {
+              console.log("restaurant of Owner");
                 console.log(res);
                 this.setState({
                     id: res.data.id,
@@ -43,7 +47,7 @@ export default class MoreinfoOwner extends React.Component{
                 })
             }).then(console.log(this));
 
-        const string2 = 'http://localhost:8080/api/feedback/1';
+        const string2 = 'http://localhost:8080/api/feedback/'+this.props.restid;
         axios.get(string2)
             .then(result => {
                 console.log(result);

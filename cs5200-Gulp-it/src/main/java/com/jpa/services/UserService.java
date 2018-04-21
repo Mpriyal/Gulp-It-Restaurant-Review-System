@@ -9,16 +9,22 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jpa.dao.CustomerDao;
+import com.jpa.dao.RestaurantOwnerDao;
 import com.jpa.models.Customer;
+import com.jpa.models.User;
 
 @CrossOrigin
 @RestController
 public class UserService {
 	CustomerDao dao = CustomerDao.getInstance();
+	RestaurantOwnerDao rdao = RestaurantOwnerDao.getInstance();
 	@RequestMapping(value="api/user", method=RequestMethod.GET)
-	public Customer getCustomerByCredentials(@RequestParam(value="username",required=false)String username,
+	public User getCustomerByCredentials(@RequestParam(value="username",required=false)String username,
 			@RequestParam(value="password",required=false)String password) {
-		return dao.findCustomerByUsername(username);	
+		if(dao.findCustomerByUsername(username)==null) {
+			return rdao.findOwnerByCredentials(username, password);
+		}	
+		else return dao.findCustomerByCredentials(username, password);
 	}	
 }
 

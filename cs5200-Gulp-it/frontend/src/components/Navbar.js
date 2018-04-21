@@ -1,6 +1,8 @@
 import React from 'react';
 import axios from 'axios'
 import Register from "./Register";
+import { Link } from 'react-router-dom'
+
 
 export default class Navbar extends React.Component {
     constructor(props) {
@@ -14,7 +16,7 @@ export default class Navbar extends React.Component {
             adminlogin: false,
             role: '',
             status: '',
-            register: false
+            register: false,
         };
         this.OnSignin = this.OnSignin.bind(this);
         this.Register = this.Register.bind(this);
@@ -33,6 +35,7 @@ export default class Navbar extends React.Component {
         );
         localStorage.removeItem("userid")
         console.log(this)
+        this.forceUpdate()
     }
 
     update(e) {
@@ -44,22 +47,29 @@ export default class Navbar extends React.Component {
 
     }
 
+
+
     OnSignin(e){
         var self = this;
         e.preventDefault();
-        axios.get('http://localhost:8080/api/customer', {
+        axios.get('http://localhost:8080/api/user', {
             params: {
                 username: this.state.username,
                 password: this.state.password
             }
         }).then(function(response){
             console.log(response);
-            if(response.data.password===self.state.password) {
+            if(response.data.length===0){
+                alert("Sorry Wrong credentials.!! Try Again");
+            }
+            else if(response.data.password===self.state.password) {
                 self.setState({
                     userID: response.data.id,
-                    loggedIn: true
+                    loggedIn: true,
+                    role:response.data.type
                 });
                 localStorage.setItem('userid',response.data.id);
+                localStorage.setItem('role',response.data.type);
                 console.log(self)
             }})
             .catch(function (error) {
@@ -76,8 +86,8 @@ export default class Navbar extends React.Component {
     }
 
     render() {
-        if(this.state.loggedIn===false){
-        if (this.state.register === false) {
+        if(!localStorage.getItem('id')&!this.state.loggedIn){
+        if (!this.state.register) {
             return (
                 <div className={"navbarComponents"}>
                     <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -90,15 +100,14 @@ export default class Navbar extends React.Component {
 
                         <div className="collapse navbar-collapse" id="navbarSupportedContent">
                             <ul className="navbar-nav mr-auto">
-                                <li className="nav-item active">
-                                    <a className="nav-link" href="#">Home <span className="sr-only">(current)</span></a>
-                                </li>
-                                <li className="nav-item">
-                                    <a className="nav-link" href="#">Profile</a>
-                                </li>
-                                <li className="nav-item">
-                                    <a className="nav-link disabled" href="#">Disabled</a>
-                                </li>
+                            <li className="nav-item">
+                            <button className="btn btn-primary btn-sm">
+                                <Link style={{display: 'block', height: '100%',color:'white'}} to='/'>Home</Link>
+                                </button>
+                            </li>  <li className="nav-item">
+                                  <a className="nav-link disabled" href="#">Profile</a>
+                              </li>
+
                             </ul>
                             <form>
                                 <div className="row">
@@ -116,8 +125,8 @@ export default class Navbar extends React.Component {
                                         </button>
                                     </div>
                                     <div className="col">
-                                        <button type="register" className="btn btn-success btn-sm"
-                                                onClick={this.Register}>Register
+                                        <button className="btn btn-success btn-sm">
+                                         <Link style={{display: 'block', height: '100%',color:'white'}} to='/registeration'>Register</Link>
                                         </button>
                                     </div>
                                 </div>
@@ -127,13 +136,17 @@ export default class Navbar extends React.Component {
 
                 </div>
             )
-        }
+
+}
         else {
             return (
                 <Register/>
             )
         }
-        }else{return(
+        }
+        else
+        {if(this.state.role=='customer'){
+          return(
             <div className={"navbarComponents"}>
                 <nav className="navbar navbar-expand-lg navbar-light bg-light">
                     <a className="navbar-brand" href="#">Gulp-It</a>
@@ -145,15 +158,16 @@ export default class Navbar extends React.Component {
 
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul className="navbar-nav mr-auto">
-                            <li className="nav-item active">
-                                <a className="nav-link" href="#">Home <span className="sr-only">(current)</span></a>
-                            </li>
-                            <li className="nav-item">
-                                <a className="nav-link" href="#">Profile</a>
-                            </li>
-                            <li className="nav-item">
-                                <a className="nav-link disabled" href="#">Disabled</a>
-                            </li>
+                        <li className="nav-item active">
+                      <button className="btn btn-primary btn-sm">
+                      <Link style={{display: 'block', height: '100%',color:'white'}} to='/'>Home</Link>
+                      </button>
+                        </li>
+                        <li className="nav-item">
+                  <button className="btn btn-primary btn-sm">
+                  <Link style={{display: 'block', height: '100%',color:'white'}} to='/profile'>Profile </Link>
+                  </button>
+                        </li>
                         </ul>
                         <form>
                             <div className="row">
@@ -170,7 +184,47 @@ export default class Navbar extends React.Component {
                 </nav>
 
             </div>
+          )}
+          else{
+            return(
+              <div className={"navbarComponents"}>
+                  <nav className="navbar navbar-expand-lg navbar-light bg-light">
+                      <a className="navbar-brand" href="#">Gulp-It</a>
+                      <button className="navbar-toggler" type="button" data-toggle="collapse"
+                              data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                              aria-expanded="false" aria-label="Toggle navigation">
+                          <span className="navbar-toggler-icon"></span>
+                      </button>
+
+                      <div className="collapse navbar-collapse" id="navbarSupportedContent">
+                          <ul className="navbar-nav mr-auto">
+                          <li className="nav-item active">
+                        <button className="btn btn-primary btn-sm"><Link style={{display: 'block', height: '100%',color:'white'}} to='/'>Home</Link></button>
+                          </li>
+                          <li className="nav-item">
+                          <button className="btn btn-primary btn-sm">
+                          <Link style={{display: 'block', height: '100%',color:'white'}} to='/owner'>Profile </Link>
+                          </button>
+                          </li>
+
+                          </ul>
+                          <form>
+                              <div className="row">
+
+                                  <div>
+                                      <button type="submit" className="btn btn-primary btn-sm"
+                                              onClick={this.OnLogout}>Logout
+                                      </button>
+                                  </div>
+
+                              </div>
+                          </form>
+                      </div>
+                  </nav>
+
+              </div>
             )
+          }
         }
     }
 }

@@ -9,20 +9,18 @@ import OwnerProfile from "./components/OwnerProfile";
 import MoreinfoOwner from "./components/MoreInfoOwner";
 import SearchHome from "./components/SearchHome";
 import RestaurantList from "./components/RestaurantList";
+import Main from "./components/Main"
+import AdminCustomer from './components/AdminCustomer'
+import AdminOwner from './components/AdminOwner'
+import OwnerCard from './components/OwnerCard'
+
 
 class App extends Component {
   render() {
     return (
       <div className="App">
-        {/*<Homepage/>*/}
           <Navbar/>
-          <SearchHome/>
-          {/*<Register/>*/}
-          {/*<ProfileCustomer/>*/}
-          {/*<MoreinfoCustomer/>*/}
-          {/*<OwnerProfile/>*/}
-          {/*<MoreinfoOwner/>*/}
-          {/*<RestaurantList/>*/}
+          <Main/>
       </div>
     );
   }
