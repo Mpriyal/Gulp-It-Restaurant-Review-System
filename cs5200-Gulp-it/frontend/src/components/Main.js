@@ -5,14 +5,15 @@ import { render } from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
 import { Switch, Route } from 'react-router-dom'
 import ProfileCustomer from './ProfileCustomer'
+import Register from './Register'
 
 const Main = () => (
   <main>
     <Switch>
       <Route exact  path='/' component={SearchHome}/>
-      <Route path='/profile' component={ProfileCustomer}/>
-      <Route path='/owner' component={OwnerProfile}/>
-
+      <Route exact path='/profile' component={ProfileCustomer}/>
+      <Route exact path='/owner' component={OwnerProfile}/>
+      <Route exact path='/registeration' component={Register}/>
     </Switch>
   </main>
 )

@@ -101,7 +101,9 @@ export default class Navbar extends React.Component {
                         <div className="collapse navbar-collapse" id="navbarSupportedContent">
                             <ul className="navbar-nav mr-auto">
                             <li className="nav-item">
-                                <Link to='/'>Home__</Link>
+                            <button className="btn btn-primary btn-sm">
+                                <Link style={{display: 'block', height: '100%',color:'white'}} to='/'>Home</Link>
+                                </button>
                             </li>  <li className="nav-item">
                                   <a className="nav-link disabled" href="#">Profile</a>
                               </li>
@@ -123,8 +125,8 @@ export default class Navbar extends React.Component {
                                         </button>
                                     </div>
                                     <div className="col">
-                                        <button type="register" className="btn btn-success btn-sm"
-                                                onClick={this.Register}>Register
+                                        <button className="btn btn-success btn-sm">
+                                         <Link style={{display: 'block', height: '100%',color:'white'}} to='/registeration'>Register</Link>
                                         </button>
                                     </div>
                                 </div>
@@ -157,10 +159,14 @@ export default class Navbar extends React.Component {
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul className="navbar-nav mr-auto">
                         <li className="nav-item active">
-                        <Link to='/'>Home__</Link>
+                      <button className="btn btn-primary btn-sm">
+                      <Link style={{display: 'block', height: '100%',color:'white'}} to='/'>Home</Link>
+                      </button>
                         </li>
                         <li className="nav-item">
-                        <Link to='/profile'>Profile </Link>
+                  <button className="btn btn-primary btn-sm">
+                  <Link style={{display: 'block', height: '100%',color:'white'}} to='/profile'>Profile </Link>
+                  </button>
                         </li>
                         </ul>
                         <form>
@@ -193,10 +199,12 @@ export default class Navbar extends React.Component {
                       <div className="collapse navbar-collapse" id="navbarSupportedContent">
                           <ul className="navbar-nav mr-auto">
                           <li className="nav-item active">
-                          <Link to='/'>Home__</Link>
+                        <button className="btn btn-primary btn-sm"><Link style={{display: 'block', height: '100%',color:'white'}} to='/'>Home</Link></button>
                           </li>
                           <li className="nav-item">
-                          <Link to='/owner'>Profile </Link>
+                          <button className="btn btn-primary btn-sm">
+                          <Link style={{display: 'block', height: '100%',color:'white'}} to='/owner'>Profile </Link>
+                          </button>
                           </li>
 
                           </ul>

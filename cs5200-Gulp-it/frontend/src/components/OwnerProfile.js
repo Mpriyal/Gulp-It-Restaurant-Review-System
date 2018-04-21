@@ -234,7 +234,7 @@ export default class OwnerProfile extends React.Component{
                     <button className={"btn btn-primary"} onClick={this.addNew.bind(this)}>Add New Restaurant</button>
 
                     </div>
-                    <RestaurantList data={this.state.favRest}/>
+                    <RestaurantList data2={this.state.favRest}/>
                 </div>
             </div>
         )
