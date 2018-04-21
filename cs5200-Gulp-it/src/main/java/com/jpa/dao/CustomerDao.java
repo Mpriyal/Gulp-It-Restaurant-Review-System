@@ -32,6 +32,8 @@ public class CustomerDao {
 			+ " WHERE Customer.Person = Person.Id AND Person.Id =?";
 	private static final String DELETE_CUSTOMER = "DELETE p.*, c.* FROM Person p LEFT JOIN Customer c ON c.Person = p.id WHERE p.id =?";
 	private static final String FIND_CUSTOMER_ID_BY_USERNAME = "SELECT c.Person FROM Customer c, Person p WHERE c.Person = p.id AND username =?";
+	private static final String FIND_PERSON_ID_BY_CUSTOMER_ID = "SELECT Person FROM Customer WHERE Customer.Id=?";
+	private static final String FIND_CUSTID_BY_PERSON = "SELECT Id FROM Customer WHERE Person=?";
 
 	public static CustomerDao instance = null;
 	
@@ -319,6 +321,64 @@ public class CustomerDao {
 			return result;
 			}
 		
+		public int findPersonIdBycustomerId(int CustId){
+			int person_id = 0;
+			Connection connection = null;
+			PreparedStatement statement = null;
+			ResultSet result = null;
+			try {
+				Class.forName("com.mysql.jdbc.Driver");
+				connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+				statement = connection.prepareStatement(FIND_PERSON_ID_BY_CUSTOMER_ID);
+				statement.setInt(1, CustId);
+				result = statement.executeQuery();
+				if(result.next()) {
+					int Person = result.getInt("Person");
+					person_id = Person;
+				}
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			return person_id;
+			}
+		
+		public int findCustIdByPersonId(int PersonId){
+			int owner_id = 0;
+			Connection connection = null;
+			PreparedStatement statement = null;
+			ResultSet result = null;
+			try {
+				Class.forName("com.mysql.jdbc.Driver");
+				connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+				statement = connection.prepareStatement(FIND_CUSTID_BY_PERSON);
+				statement.setInt(1, PersonId);
+				result = statement.executeQuery();
+				if(result.next()) {
+					int Id = result.getInt("id");
+					owner_id = Id;
+				}
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			return owner_id;
+			}
+		
 		public static void main(String[] args) {
 			
 			CustomerDao cDao = new CustomerDao();
@@ -326,6 +386,7 @@ public class CustomerDao {
 			Customer rubi_new = new Customer("RubiNew","Coffee","rub","rub12","rubi@neu.edu",null,"Customer","rub1234");
 //			cDao.createCustomer(rubi);
 			Customer delete_me = new Customer("Delete","Karo","d","me","delete@neu.edu",null,"Customer","del123");
+			System.out.println(cDao.findCustIdByPersonId(28));
 ////			cDao.createCustomer(delete_me);
 //			System.out.println(cDao.findAllCustomers());
 //			System.out.println(cDao.findCustomerByCredentials(rubi.getUsername(), rubi.getPassword()));

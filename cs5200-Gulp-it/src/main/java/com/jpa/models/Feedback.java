@@ -9,6 +9,20 @@ public class Feedback {
 	private int Restaurant;
 	private int Customer;
 	
+	@Override
+	public String toString() {
+		if(favourite==false) {
+			return comment+"\n";
+		}
+		else if(comment==null) {
+			return favourite+"\n";
+		}
+		else {
+		return comment+" "+favourite+"\n";
+		}
+	}
+	
+	
 	public int getId() {
 		return id;
 	}
@@ -43,11 +57,29 @@ public class Feedback {
 	public Feedback() {
 		super();
 	}
+	
 	public Feedback(String comment, boolean favourite) {
 		super();
 		this.comment = comment;
 		this.favourite = favourite;
 	}
+	
+	public Feedback(int id, String comment, int restaurant, int customer) {
+		super();
+		this.id = id;
+		this.comment = comment;
+		Restaurant = restaurant;
+		Customer = customer;
+	}
+	
+	public Feedback(int id, boolean favourite, int restaurant, int customer) {
+		super();
+		this.id = id;
+		this.favourite = favourite;
+		Restaurant = restaurant;
+		Customer = customer;
+	}
+	
 	public Feedback(String comment, boolean favourite, int restaurant, int customer) {
 		super();
 		this.comment = comment;
