@@ -44,7 +44,7 @@ export default class AdminCustomer extends React.Component {
               password:  this.state.password,
               email:  this.state.email,
               dob: this.state.dateOfBirth,
-              customer_key: this.state.customerKey,
+              customerKey: this.state.customerKey,
               type:'customer'
           })
       }).then(
@@ -215,7 +215,7 @@ handleUpdatebutton(e){
           password:  this.state.newpassword,
           email:  this.state.newemail,
           dob: this.state.newdateOfBirth,
-          // customerKey:
+          customerKey: this.state.key
       })
   }).then(console.log("update in the db"));
 
@@ -228,7 +228,7 @@ handleUpdatebutton(e){
     return(
 
         <div className="container">
-          <p className="head">RESTAURANT CUSTOMER PANEL</p>
+          <p className="head">CUSTOMER PANEL</p>
           <div className="row">
           <div className={"container-fluid float-left registerClass"}>
               <div>
@@ -306,23 +306,14 @@ handleUpdatebutton(e){
                                   onChange={this.update.bind(this)}
                               />
                           </div>
-                          <div className="form-group">
-                              <input
-                                  ref="typeofperson"
-                                  type="text"
-                                  className="form-control"
-                                  id="type"
-                                  placeholder="Type"
-                                  onChange={this.update.bind(this)}
-                              />
-                          </div>
+
                           <div className="form-group">
                               <input
                                   ref="key"
                                   type="text"
                                   className="form-control"
                                   id="type"
-                                  placeholder="OwnerKey"
+                                  placeholder="Key"
                                   onChange={this.update.bind(this)}
                               />
                           </div>
@@ -348,16 +339,7 @@ handleUpdatebutton(e){
                   <div className={'container text-center'} >
 
                       <form>
-                          <div className={'form-group'}>
-                              <input
-                                  ref="newId"
-                                  type="text"
-                                  className="form-control"
-                                  id="Id"
-                                  placeholder={'Id'}
-                                  onChange={this.update.bind(this)}
-                              />
-                          </div>
+                          
                           <div className="form-group">
                               <input
                                   ref="newFirstName"

@@ -213,7 +213,9 @@ export default class Navbar extends React.Component {
 
                                   <div>
                                       <button type="submit" className="btn btn-primary btn-sm"
-                                              onClick={this.OnLogout}>Logout
+                                              onClick={this.OnLogout}>
+                                              <Link style={{display: 'block', height: '100%',color:'white'}} to='/'>Logout</Link>
+
                                       </button>
                                   </div>
 

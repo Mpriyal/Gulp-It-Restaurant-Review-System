@@ -14,6 +14,7 @@ export default class Register extends React.Component{
             dateOfBirth: null,
             role:null,
             successMessage:null,
+            key:null,
             selectedOption:'customer'
         }
 
@@ -30,6 +31,7 @@ export default class Register extends React.Component{
             dateOfBirth: this.refs.dateOfBirth.value,
             customer:e.target.value,
             owner: e.target.value,
+            key:this.refs.key.value
 
         })
 
@@ -59,7 +61,7 @@ export default class Register extends React.Component{
                     password:  this.state.password,
                     email:  this.state.email,
                     dob: this.state.dateOfBirth,
-                    customerKey: "abc"
+                    customerKey: this.state.key
 
                 })
             }).then(console.log("saved to the db"));
@@ -82,7 +84,7 @@ export default class Register extends React.Component{
                     password:  this.state.password,
                     email:  this.state.email,
                     dob: this.state.dateOfBirth,
-                    ownerKey: "abc"
+                    ownerKey:this.state.key
 
                 })
             }).then(console.log("saved to the db"));
@@ -168,6 +170,16 @@ export default class Register extends React.Component{
                                     className="form-control"
                                     id="DateOfBith"
                                     placeholder="Date Of Birth"
+                                    onChange={this.update.bind(this)}
+                                />
+                            </div>
+                            <div className="form-group">
+                                <input
+                                    ref="key"
+                                    type="text"
+                                    className="form-control"
+                                    id="key"
+                                    placeholder="Key"
                                     onChange={this.update.bind(this)}
                                 />
                             </div>

@@ -8,7 +8,9 @@ export default class AddnewRestaurant extends React.Component{
             description:'',
             image_link:'',
             cost_for_two:'',
-            type:''
+            type:'',
+            id:localStorage.getItem('userid')
+
         }
     }
 
@@ -23,9 +25,24 @@ export default class AddnewRestaurant extends React.Component{
                 type: this.refs.type.value,
             });
     }
-save(){
-        // post request
-    // send a post reqest
+save(e){
+  e.preventDefault();
+  var url='http://localhost:8080/api/owner/'+this.state.id +'/restaurant'
+  console.log("Success from posting rest page!")
+  fetch(url, {
+      method: 'POST',
+      headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+            name: this.state.name,
+            description: this.state.description,
+            image_link: this.state.image_link,
+            cost_for_two: this.state.cost_for_two,
+            restaurant_type: this.state.type
+      })
+  }).then(console.log("saved to the db"));
 }
     render(){
         return(
