@@ -13,6 +13,8 @@ import Main from "./components/Main"
 import AdminCustomer from './components/AdminCustomer'
 import AdminOwner from './components/AdminOwner'
 import OwnerCard from './components/OwnerCard'
+import Admin from './components/Admin'
+import AdminRestaurant from './components/AdminRestaurant'
 
 
 class App extends Component {
