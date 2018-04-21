@@ -61,7 +61,8 @@ export default class Register extends React.Component{
                     password:  this.state.password,
                     email:  this.state.email,
                     dob: this.state.dateOfBirth,
-                    customerKey: this.state.key
+                    customerKey: this.state.key,
+                    type:this.state.selectedOption
 
                 })
             }).then(console.log("saved to the db"));
@@ -84,15 +85,13 @@ export default class Register extends React.Component{
                     password:  this.state.password,
                     email:  this.state.email,
                     dob: this.state.dateOfBirth,
-                    ownerKey:this.state.key
-
+                    ownerKey:this.state.key,
+                    type:'Restaurant Owner'
                 })
             }).then(console.log("saved to the db"));
 
         }
     }
-
-
     render(){
         if(this.state.successMessage==null){
         return(

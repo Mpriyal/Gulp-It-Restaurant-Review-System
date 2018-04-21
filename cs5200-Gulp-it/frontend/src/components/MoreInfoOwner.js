@@ -22,7 +22,7 @@ export default class MoreinfoOwner extends React.Component{
             fdescription:'',
             fprice:'',
             veg:'',
-            ownerId:localStorage.getItem('id')
+            ownerId:localStorage.getItem('userid')
         }
 
     }
@@ -91,8 +91,10 @@ export default class MoreinfoOwner extends React.Component{
                 cost_for_two: this.refs.cft.value,
                 restaurant_type: this.refs.type.value,
                 update:false
-
             });
+            
+
+
 
 
         //PUT THE PUR REQUEST TO UPDATE THE RESTAURANT

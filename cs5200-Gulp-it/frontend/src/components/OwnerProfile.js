@@ -7,6 +7,7 @@ export default class OwnerProfile extends React.Component{
     constructor(props){
         super(props);
         this.state={
+            userid:localStorage.getItem('userid'),
             update:false,
             favRest:[],
             addnew:false
@@ -21,7 +22,8 @@ export default class OwnerProfile extends React.Component{
     componentDidMount() {
       var self = this;
         // give the route to all restaurants of the pwner
-        axios.get('http://localhost:8080/api/owner/31/restaurant',
+        var url='http://localhost:8080/api/owner/'+this.state.userid+'/restaurant'
+        axios.get(url,
         )
             .then(res => {
                 console.log(res);
@@ -29,8 +31,8 @@ export default class OwnerProfile extends React.Component{
                 this.setState({favRest});
             });
 
-
-    axios.get('http://localhost:8080/api/owner/31').then(
+          var url2='http://localhost:8080/api/owner/'+this.state.userid
+    axios.get(url2).then(
 
       function(res){
         console.log(res);
@@ -51,8 +53,14 @@ export default class OwnerProfile extends React.Component{
         this.setState({
             addnew:true
         })
+    }
 
-
+    handleDelete(e){
+      var self= this;
+      var url= 'http://localhost:8080/api/owner/'+localStorage.getItem('userid');
+      axios.delete(url).then(
+      console.log("owner deleted"))
+      // self.props.history.push('/')
     }
     update() {
         this.setState(
@@ -70,6 +78,14 @@ export default class OwnerProfile extends React.Component{
                 update: false,
 
             });
+            axios({
+                    method: 'post',
+                    url: '/user/12345',
+                    data: {
+                      firstName: 'Fred',
+                      lastName: 'Flintstone'
+                    }
+                  });
 
 
         //PUT THE PUR REQUEST TO UPDATE THE CUSTOMER
@@ -225,6 +241,7 @@ export default class OwnerProfile extends React.Component{
                     <p>Date of Birth: {this.state.dob}</p>
                     <p>Owner Key: {this.state.customerKey}</p>
                     <p><button className={"btn btn-primary"} onClick={this.handleUpdate}>Update</button></p>
+                    <p><button className={"btn btn-danger"} onClick={this.handleDelete}>Delete</button></p>
                 </div>
 
                 <div className="col-9">

@@ -1,6 +1,8 @@
   import React from 'react'
   import MoreinfoCustomer from './MoreinfoCustomer'
   import MoreInfoOwner from './MoreInfoOwner'
+  import axios from "axios/index";
+
 
   export default class RestaurantList extends React.Component {
     constructor(props) {
@@ -10,13 +12,28 @@
         //role is for owner functionality
         role:'',
         info:false,
-        restId:null
+        restId:null,
+        RestOwner:null,
+        userid:localStorage.getItem('userid')
       }
     }
 
     //add more info funcitionality
-    handleButton(restid){
+    handleButton(restid,owner){
+      var self = this
+      var url='http://localhost:8080/api/restaurant/'+restid+'/owner'
+      axios.get(url).then(
+        function(res){
+          console.log("this is from the call")
+          console.log(res);
+        self.setState({
+          RestOwner:res.data.id
+        })
+      }
+      )
+      console.log("in more info");
       console.log(restid);
+      console.log(owner);
       this.setState(
         {
           restId:restid,
@@ -46,7 +63,7 @@
                       <p className="card-text">Description : {restaurant.description}</p>
                       <p className="card-text">Cost for two:{restaurant.cost_for_two}
                       <button ref={"click"} key={index} className={"btn btn-primary btn-sm"}
-                      data-key={restaurant.id} onClick={this.handleButton.bind(this,restaurant.id)}>More info
+                      data-key={restaurant.id} onClick={this.handleButton.bind(this,restaurant.id,restaurant.restaurant_owner)}>More info
                       </button>
                       </p>
                       </div>
@@ -85,7 +102,7 @@
             return(
               <div className={"container p-5 m-5"}>
                 <div className="row">
-                
+
                   {this.props.data2.map((restaurant,index) =>
 
                     <div className="col-sm-4" key={restaurant.id}>
@@ -142,12 +159,21 @@
               </div>
             )
           }else{
+              if(this.state.RestOwner==this.state.userid){
+
             return(
               <div className={"m-t-5"}>
               <MoreInfoOwner restid={this.state.restId}/>
               </div>
-            )
+            )}
+            else{
+              return(
+                <p className="head">You ahould not be here</p>
+              )
+            }
           }
+
+
 
         }
       }

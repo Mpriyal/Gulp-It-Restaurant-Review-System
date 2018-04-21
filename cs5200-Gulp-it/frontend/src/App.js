@@ -15,6 +15,7 @@ import AdminOwner from './components/AdminOwner'
 import OwnerCard from './components/OwnerCard'
 import Admin from './components/Admin'
 import AdminRestaurant from './components/AdminRestaurant'
+import AdminMenu from './components/AdminMenu'
 
 
 class App extends Component {
@@ -22,7 +23,7 @@ class App extends Component {
     return (
       <div className="App">
           <Navbar/>
-          <Main/>
+      <Main/>
       </div>
     );
   }

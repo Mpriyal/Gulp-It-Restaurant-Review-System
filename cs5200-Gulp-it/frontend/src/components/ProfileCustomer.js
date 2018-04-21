@@ -6,15 +6,16 @@ export default class ProfileCustomer extends React.Component{
     constructor(props){
         super(props);
         this.state={
-            id:'123',
-            firstname:'Aman',
-            lastname:'Rayat',
-            email:'amanrayat32@gmail.com',
-            username:'amanrayat',
-            phone:'8574246016',
-            address:'73 saint alp',
-            dob:'null',
-            customerKey:'aman123',
+            userid:localStorage.getItem('userid'),
+            id:'',
+            firstname:'',
+            lastname:'',
+            email:'',
+            username:'',
+            phone:'',
+            address:'',
+            dob:'',
+            customerKey:'',
             password:'',
             update:false,
             favRest:[],
@@ -28,8 +29,38 @@ export default class ProfileCustomer extends React.Component{
             update:true
         })
     }
+    handleDelete(e){
+      var self= this;
+      var url= 'http://localhost:8080/api/customer/'+localStorage.getItem('userid');
+      axios.delete(url).then(
+      console.log("User deleted"))
+      alert("You have been deleted"); 
+    }
+
+
     //PUT THE API TO GET THE RESTAURANTS OF THE CUSTOMERS WHICH HE HAS COMMENTED OR LIKED
     componentDidMount() {
+      var self = this
+      var url="http://localhost:8080/api/customer/"+this.state.userid
+      axios.get(url).then(
+
+        function(res){
+          console.log("data of the user is")
+          console.log(res);
+          self.setState({
+          id:res.data.id,
+          firstname:res.data.firstName,
+          lastname:res.data.lastName,
+          email:res.data.email,
+          username:res.data.username,
+          phone:res.data.phoneList,
+          address:res.data.addressList,
+          dob:res.data.dob,
+          customerKey:res.data.customerKey
+        }
+          )
+        }
+      )
         axios.get('http://opentable.herokuapp.com/api/restaurants', {
             params: {
                 name: 'boston'
@@ -53,16 +84,6 @@ export default class ProfileCustomer extends React.Component{
             });
 
     }
-    //     const string2 = 'http://localhost:8080/api/feedback/1';
-    //     axios.get(string2)
-    //         .then(result => {
-    //             console.log(result);
-    //             this.setState({
-    //                 commentedRestaurants: result.data
-    //             })
-    //         }).then(console.log(this));
-    // }
-
     update() {
             this.setState(
                   {
@@ -235,6 +256,7 @@ export default class ProfileCustomer extends React.Component{
                 <p>Date of Birth: {this.state.dob}</p>
                 <p>Customer Key: {this.state.customerKey}</p>
                 <p><button className={"btn btn-primary"} onClick={this.handleUpdate}>Update</button></p>
+                <p><button className={"btn btn-danger"} onClick={this.handleDelete}>Delete</button></p>
             </div>
                 <div className="col-9">
                     <p className={"head"}>Your Favourite Restaurant</p>
