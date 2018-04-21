@@ -21,7 +21,8 @@ export default class AdminOwner extends React.Component {
       FindByUsername:null,
       owner:[],
       showcard:false,
-      singlecard:false
+      singlecard:false,
+      ownerKey:""
     }
   }
 
@@ -30,7 +31,7 @@ export default class AdminOwner extends React.Component {
   handleClick(e) {
       e.preventDefault();
       console.log("Success from RegisterPage!")
-      fetch('http://localhost:8080/api/customer', {
+      fetch('http://localhost:8080/api/owner', {
           method: 'POST',
           headers: {
               'Accept': 'application/json',
@@ -43,7 +44,7 @@ export default class AdminOwner extends React.Component {
               password:  this.state.password,
               email:  this.state.email,
               dob: this.state.dateOfBirth,
-              customerKey: "",
+              owner_key: this.state.ownerKey,
               type:'Restaurant Owner'
           })
       }).then(
@@ -71,7 +72,8 @@ export default class AdminOwner extends React.Component {
           findById:this.refs.findById.value,
           FindByUsername:this.refs.FindByUsername.value,
           findByCredentialspass:this.refs.findByCredentialspass.value,
-          findByCredentials:this.refs.findByCredentials.value
+          findByCredentials:this.refs.findByCredentials.value,
+          ownerKey:this.refs.key.value
       })
 
   }
@@ -92,7 +94,7 @@ export default class AdminOwner extends React.Component {
             password:  this.state.password,
             email:  this.state.email,
             dob: this.state.dateOfBirth,
-            ownerKey: ""
+            ownerKey: this.state.ownerKey
 
         })
     }).then(console.log("saved to the db"));
@@ -131,6 +133,7 @@ export default class AdminOwner extends React.Component {
   });
   }
   handleFindAll(){
+    console.log(this);
     var self = this;
     let url='http://localhost:8080/api/owner'
     axios.get(url)
@@ -208,12 +211,13 @@ handleUpdatebutton(e){
           password:  this.state.newpassword,
           email:  this.state.newemail,
           dob: this.state.newdateOfBirth,
-          ownerKey: ""
+          // ownerKey: ""
       })
   }).then(console.log("update in the db"));
 
 }
 render(){
+  console.log(this);
   if(!this.state.showcard){
     if(!this.state.singlecard){
   return(
@@ -305,6 +309,16 @@ render(){
                                   className="form-control"
                                   id="type"
                                   placeholder="Type"
+                                  onChange={this.update.bind(this)}
+                              />
+                          </div>
+                          <div className="form-group">
+                              <input
+                                  ref="key"
+                                  type="text"
+                                  className="form-control"
+                                  id="type"
+                                  placeholder="OwnerKey"
                                   onChange={this.update.bind(this)}
                               />
                           </div>
@@ -528,15 +542,16 @@ render(){
   )}
   else if(this.state.singlecard){
     return(
-      <AdminSingle data={this.state.customer}/>
+      <AdminSingle data={this.state.owner}/>
     )
   }
+
+
 }
-  else {
-    return (
-      <customerCard data={this.state.customer}/>
-    )
-  }
-  
+else {
+  return (
+    <OwnerCard data={this.state.owner}/>
+  )
+}
 }
 }

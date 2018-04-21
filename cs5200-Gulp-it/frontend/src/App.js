@@ -22,8 +22,7 @@ class App extends Component {
 
           <Navbar/>
 
-      <AdminOwner/>
-
+<AdminCustomer/>
       </div>
     );
   }

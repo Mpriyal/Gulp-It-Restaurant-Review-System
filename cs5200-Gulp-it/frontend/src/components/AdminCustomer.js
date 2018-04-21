@@ -21,7 +21,8 @@ export default class AdminCustomer extends React.Component {
       FindByUsername:null,
       customer:'',
       showcard:false,
-      singlecard:false
+      singlecard:false,
+      customerKey:""
     }
   }
 
@@ -43,8 +44,8 @@ export default class AdminCustomer extends React.Component {
               password:  this.state.password,
               email:  this.state.email,
               dob: this.state.dateOfBirth,
-              customerKey: "",
-              type:'Restaurant customer'
+              customer_key: this.state.customerKey,
+              type:'customer'
           })
       }).then(
         console.log("saved to the db"));
@@ -71,7 +72,8 @@ export default class AdminCustomer extends React.Component {
           findById:this.refs.findById.value,
           FindByUsername:this.refs.FindByUsername.value,
           findByCredentialspass:this.refs.findByCredentialspass.value,
-          findByCredentials:this.refs.findByCredentials.value
+          findByCredentials:this.refs.findByCredentials.value,
+          customerKey:this.refs.key.value
       })
 
   }
@@ -92,7 +94,7 @@ export default class AdminCustomer extends React.Component {
             password:  this.state.password,
             email:  this.state.email,
             dob: this.state.dateOfBirth,
-            customerKey: ""
+            customerKey: this.state.customerKey
 
         })
     }).then(console.log("saved to the db"));
@@ -117,12 +119,13 @@ export default class AdminCustomer extends React.Component {
   handlefindById(){
     var self = this;
     let url='http://localhost:8080/api/customer/'+this.state.findById
-    axios.get(url)
+
+  axios.get(url)
     .then(function (res){
       const owner = res.data;
       self.setState({owner});
       self.setState({
-        showcard:true
+        singlecard:true
       }
       )
       console.log(res)})
@@ -131,17 +134,22 @@ export default class AdminCustomer extends React.Component {
   });
   }
   handleFindAll(){
+    console.log("before findall");
+    console.log(this);
     var self = this;
-    let url='http://localhost:8080/api/customer'
+    let url='http://localhost:8080/api/customers'
     axios.get(url)
     .then(function (res){
+      console.log(res);
         const customer = res.data;
         self.setState({customer});
         self.setState({
-          showcard:true}
+          showcard:true
+        }
         )
         // customer:response.data,
         // showcard:true
+        console.log("after the axios");
       console.log(self);
       console.log(res)})
     .catch(function (error) {
@@ -150,7 +158,6 @@ export default class AdminCustomer extends React.Component {
   }
   handleFindcustomerByName(){
     var self = this;
-
     let url='http://localhost:8080/api/customer'
     axios.get(url,{
         params:{
@@ -161,7 +168,7 @@ export default class AdminCustomer extends React.Component {
       const owner = res.data;
       self.setState({owner});
       self.setState({
-        showcard:true
+        singlecard:true
       }
       )
       console.log(res)})
@@ -171,7 +178,6 @@ export default class AdminCustomer extends React.Component {
   }
   handleFindByCredentials(){
     var self = this;
-
     let url='http://localhost:8080/api/customer'
     axios.get(url,{
         params:{
@@ -183,7 +189,7 @@ export default class AdminCustomer extends React.Component {
       const owner = res.data;
       self.setState({owner});
       self.setState({
-        showcard:true
+        singlecard:true
       }
       )
       console.log(res)})
@@ -209,18 +215,20 @@ handleUpdatebutton(e){
           password:  this.state.newpassword,
           email:  this.state.newemail,
           dob: this.state.newdateOfBirth,
-          customerKey: ""
+          // customerKey:
       })
   }).then(console.log("update in the db"));
 
 }
   render(){
+    console.log("mian");
+    console.log(this);
     if(!this.state.showcard){
       if(!this.state.singlecard){
     return(
 
         <div className="container">
-          <p className="head">RESTAURANT customer PANEL</p>
+          <p className="head">RESTAURANT CUSTOMER PANEL</p>
           <div className="row">
           <div className={"container-fluid float-left registerClass"}>
               <div>
@@ -305,6 +313,16 @@ handleUpdatebutton(e){
                                   className="form-control"
                                   id="type"
                                   placeholder="Type"
+                                  onChange={this.update.bind(this)}
+                              />
+                          </div>
+                          <div className="form-group">
+                              <input
+                                  ref="key"
+                                  type="text"
+                                  className="form-control"
+                                  id="type"
+                                  placeholder="OwnerKey"
                                   onChange={this.update.bind(this)}
                               />
                           </div>
@@ -527,14 +545,15 @@ handleUpdatebutton(e){
   )}
   else if(this.state.singlecard){
     return(
-      <AdminSingle data={this.state.customer}/>
+      <AdminSingle data={this.state.owner}/>
     )
+  }
+
   }
   else {
     return (
-      <customerCard data={this.state.customer}/>
+      <OwnerCard data={this.state.customer}/>
     )
-  }
   }
 }
 }
