@@ -10,21 +10,12 @@ export default class OwnerProfile extends React.Component{
             userid:localStorage.getItem('userid'),
             update:false,
             favRest:[],
-            addnew:false
+            addnew:false,
+
         }
         this.handleUpdate = this.handleUpdate.bind(this);
     }
     handleUpdate(){
-      axios.put("http://localhost:8080/api/customer/"+this.state.userid,{
-
-        firstName: this.state.firstName,
-        lastName:this.state.lastName,
-        username: this.state.username,
-        password: this.state.password,
-        email:this.state.email,
-        dob: this.state.dob,
-        customerKey:this.state.customerKey
-      })
         this.setState({
             update:true
         })
@@ -73,159 +64,131 @@ export default class OwnerProfile extends React.Component{
       console.log("owner deleted"))
       // self.props.history.push('/')
     }
-    update() {
-        this.setState(
-            {
-                firstname: this.refs.newfirstName.value,
-                lastname: this.refs.newlastName.value,
-                email: this.refs.newEmail.value,
-                password: this.refs.newPassword.value,
-                id: this.refs.newId.value,
-                username: this.refs.newusername.value,
-                phone: this.refs.newphone.value,
-                address:this.refs.newaddress.value,
-                dob:this.refs.newdob.value,
-                customerKey:this.refs.newck.value,
-                update: false,
+    update(){
+        console.log(this);
+        this.setState({
+            firstName: this.refs.FirstName.value,
+            lastName: this.refs.LastName.value,
+            username: this.refs.Username.value,
+            email:this.refs.Email.value,
+            password:this.refs.Password.value,
+            dateOfBirth: this.refs.dateOfBirth.value,
+            ownerKey:this.refs.key.value,
 
-            });
+        })
 
-        //PUT THE PUR REQUEST TO UPDATE THE CUSTOMER
-        fetch('http://localhost:8080/api/customer/', {
-            method: 'PUT',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                firstName: this.state.firstName,
-                lastName: this.state.lastName,
-                username:  this.state.username,
-                password:  this.state.password,
-                email:  this.state.email,
-                dob: this.state.dateOfBirth,
-                customerKey: "abc"
-            })
-        }).then(console.log("saved to the db"));
+    }
+
+    handleUpdatebutton(e){
+      e.preventDefault();
+      console.log("Success from updatePage!")
+      let url='http://localhost:8080/api/owner/'+this.state.userid
+      axios.put(url ,({
+              id:this.state.userid,
+              firstName: this.state.firstName,
+              lastName: this.state.lastName,
+              username:  this.state.username,
+              password:  this.state.password,
+              email:  this.state.email,
+              dob: this.state.dateOfBirth,
+              ownerKey:this.state.ownerKey
+
+          }))
+    .then(console.log("update in the db"))
+      this.setState({
+        update:false
+      })
 
     }
     renderUpdate(){
         return (
             <div className={'profile col-3'}>
                 <p className={"head"}>Update Profile</p>
-                <form>
-                    <div className="form-group">
-                        <input
-                            ref="newfirstName"
-                            type="text"
-                            className="form-control"
-                            id="FirstName"
-                            placeholder="Name"
-                            defaultValue={this.state.firstname}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <input
-                            ref="newlastName"
-                            type="text"
-                            className="form-control"
-                            id="LastName"
-                            placeholder="Name"
-                            defaultValue={this.state.lastname}
-                        />
-                    </div>
 
-                    <div className={'form-group'}>
-                        <input
-                            ref="newId"
-                            type="text"
-                            className="form-control"
-                            id="Id"
-                            placeholder={'Id'}
-                            defaultValue={this.state.id}
-                        />
-                    </div>
+                                      <form>
 
-                    <div className="form-group">
-                        <input
-                            ref="newEmail"
-                            type="email"
-                            className="form-control"
-                            id="Email"
-                            placeholder="Email"
-                            defaultValue={this.state.email}
-                        />
-                    </div>
+                                          <div className="form-group">
+                                              <input
+                                                  ref="FirstName"
+                                                  type="text"
+                                                  className="form-control"
+                                                  id="FirstName"
+                                                  placeholder="First Name"
+                                                  onChange={this.update.bind(this)}
+                                              />
+                                          </div>
+                                          <div className="form-group">
+                                              <input
+                                                  ref="LastName"
+                                                  type="text"
+                                                  className="form-control"
+                                                  id="LastName"
+                                                  placeholder="Last Name"
+                                                  onChange={this.update.bind(this)}
+                                              />
+                                          </div>
+                                          <div className="form-group">
+                                              <input
+                                                  ref="Username"
+                                                  type="text"
+                                                  className="form-control"
+                                                  id="Username"
+                                                  placeholder="Username"
+                                                  onChange={this.update.bind(this)}
+                                              />
+                                          </div>
+                                          <div className="form-group">
+                                              <input
+                                                  ref="Email"
+                                                  type="email"
+                                                  className="form-control"
+                                                  id="Email"
+                                                  placeholder="Email"
+                                                  onChange={this.update.bind(this)}
+                                              />
+                                          </div>
+                                          <div className="form-group">
+                                              <input
+                                                  ref="Password"
+                                                  type="password"
+                                                  className="form-control"
+                                                  id="Password"
+                                                  placeholder="Password"
+                                                  onChange={this.update.bind(this)}
+                                              />
+                                          </div>
+                                          <div className="form-group">
+                                              <input
+                                                  ref="dateOfBirth"
+                                                  type="text"
+                                                  className="form-control"
+                                                  id="DateOfBith"
+                                                  placeholder="Date Of Birth"
+                                                  onChange={this.update.bind(this)}
+                                              />
+                                          </div>
+
+                                          <div className="form-group">
+                                              <input
+                                                  ref="key"
+                                                  type="text"
+                                                  className="form-control"
+                                                  id="type"
+                                                  placeholder="OwnerKey"
+                                                  onChange={this.update.bind(this)}
+                                              />
+                                          </div>
 
 
-                    <div className="form-group">
-                        <input
-                            ref="newusername"
-                            type="text"
-                            className="form-control"
-                            id="username"
-                            placeholder="Username"
-                            defaultValue={this.state.username}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <input
-                            ref="newPassword"
-                            type="password"
-                            className="form-control"
-                            id="Password"
-                            placeholder="Password"
-                            defaultValue={this.state.password}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <input
-                            ref="newphone"
-                            type="text"
-                            className="form-control"
-                            id="phone"
-                            placeholder="phone"
-                            defaultValue={this.state.phone}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <input
-                            ref="newaddress"
-                            type="text"
-                            className="form-control"
-                            id="address"
-                            placeholder="address"
-                            defaultValue={this.state.address}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <input
-                            ref="newdob"
-                            type="text"
-                            className="form-control"
-                            id="dob"
-                            placeholder="Date of Birth"
-                            defaultValue={this.state.dob}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <input
-                            ref="newck"
-                            type="text"
-                            className="form-control"
-                            id="customerKey"
-                            placeholder="Customer Key"
-                            defaultValue={this.state.customerKey}
-                        />
-                    </div>
-
-                    <button
-                        onClick={this.update.bind(this)}
-                        type="submit"
-                        className="btn btn-primary"
-                    >Save
-                    </button>
-                </form>
+                                          <div>
+                                              <button
+                                                  type="submit"
+                                                  className="btn btn-primary m-5"
+                                                  onClick={this.handleUpdatebutton.bind(this)}
+                                              >SUBMIT
+                                              </button>
+                                          </div>
+                                      </form>
             </div>
         )
     }

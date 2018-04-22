@@ -2,6 +2,7 @@ import React from 'react'
 import axios from 'axios';
 import OwnerCard from './OwnerCard'
 import AdminSingle from './AdminSingle'
+import RestaurantList from './RestaurantList'
 
 
 export default class AdminRestaurant extends React.Component {
@@ -75,24 +76,14 @@ export default class AdminRestaurant extends React.Component {
   handleCreate(e){
     e.preventDefault();
     console.log("Success from createPage!")
-    fetch('http://localhost:8080/api/owner', {
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            firstName: this.state.firstName,
-            lastName: this.state.lastName,
-            username:  this.state.username,
-            password:  this.state.password,
-            email:  this.state.email,
-            dob: this.state.dateOfBirth,
-            ownerKey: this.state.ownerKey
-
+    axios.post('http://localhost:8080/api/restaurant',{
+        id: this.state.Owner,
+       name:this.state.name,
+       description: this.state.description,
+       image_link: this.state.image_link,
+       cost_for_two: this.state.cost_for_two,
+       restaurant_type: this.state.type
         })
-    }).then(console.log("saved to the db"));
-
   }
 
 
@@ -102,7 +93,7 @@ export default class AdminRestaurant extends React.Component {
   }
 
   handleDeleteById(){
-    let url='http://localhost:8080/api/owner/'+this.state.deleteId
+    let url='http://localhost:8080/api/restaurant/'+this.state.deleteId
     axios.delete(url)
     .then(console.log("deleted"))
     .catch(function (error) {
@@ -112,7 +103,7 @@ export default class AdminRestaurant extends React.Component {
 
   handlefindById(){
     var self = this;
-    let url='http://localhost:8080/api/owner/'+this.state.findById
+    let url='http://localhost:8080/api/restaurant/'+this.state.findById
     axios.get(url)
     .then(function (res){
       const owner = res.data;
@@ -129,7 +120,7 @@ export default class AdminRestaurant extends React.Component {
   handleFindAll(){
     console.log(this);
     var self = this;
-    let url='http://localhost:8080/api/owner'
+    let url='http://localhost:8080/api/restaurant'
     axios.get(url)
     .then(function (res){
         const owner = res.data;
@@ -146,12 +137,12 @@ export default class AdminRestaurant extends React.Component {
     console.log(error);
   });
   }
-  handleFindOwnerByName(){
+  handleFindRestaurantByName(){
     var self = this;
-    let url='http://localhost:8080/api/owner'
+    let url='http://localhost:8080/api/restaurant'
     axios.get(url,{
         params:{
-          username:this.state.FindByUsername
+          name:this.state.FindByUsername
         }
     })
     .then(function (res){
@@ -166,27 +157,7 @@ export default class AdminRestaurant extends React.Component {
     console.log(error);
     });
   }
-  handleFindByCredentials(){
-    var self = this;
-    let url='http://localhost:8080/api/owner'
-    axios.get(url,{
-        params:{
-          username:this.state.findByCredentials,
-          password:this.state.findByCredentialspass
-        }
-    })
-    .then(function (res){
-      const owner = res.data;
-      self.setState({owner});
-      self.setState({
-        showcard:true
-      }
-      )
-      console.log(res)})
-    .catch(function (error) {
-    console.log(error);
-    });
-  }
+
 
   save(e){
     e.preventDefault();
@@ -454,7 +425,7 @@ render(){
                   <button
                       type="submit"
                       className="btn btn-primary m-2"
-                      onClick={this.handleFindOwnerByName.bind(this)}
+                      onClick={this.handleFindRestaurantByName.bind(this)}
                   >SUBMIT
                   </button>
               </div>
@@ -471,7 +442,15 @@ render(){
   )}
   else if(this.state.singlecard){
     return(
-      <AdminSingle data={this.state.owner}/>
+      <div>
+
+        <h1>{this.state.owner.name}</h1>
+        <p>{this.state.owner.description}</p>
+        <p>{this.state.owner.image_link}</p>
+        <p>{this.state.owner.cost_for_two}</p>
+        <p>{this.state.owner.restaurant_type}</p>
+        <p>{}</p>
+      </div>
     )
   }
 
@@ -479,7 +458,7 @@ render(){
 }
 else {
   return (
-    <OwnerCard data={this.state.owner}/>
+    <RestaurantList data2={this.state.owner}/>
   )
 }
 }
