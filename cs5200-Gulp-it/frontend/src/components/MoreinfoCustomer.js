@@ -76,7 +76,6 @@ export default class MoreinfoCustomer extends React.Component{
                 })
             })
 
-        let test='http://localhost:8080/api/feedback/1'
         const string2 = 'http://localhost:8080/api/feedback/'+this.props.restid;
         axios.get(string2)
             .then(result => {
@@ -85,14 +84,10 @@ export default class MoreinfoCustomer extends React.Component{
                     feedbacks:result.data
                 })
             }).then(console.log(this));
-        console.log("after mounting");
-        console.log(this)
-
-
     }
 
         handleDelete(id,index){
-        var testUrl="http://localhost:8080/api/owner/31/restaurant/1/menu/"+id
+        var testUrl="http://localhost:8080/api/owner/"+this.state.ownerId+"/restaurant/1/menu/"+id
           console.log(id)
           axios.delete(testUrl).then(
             console.log("menu deleted")
@@ -157,7 +152,6 @@ export default class MoreinfoCustomer extends React.Component{
             var self = this;
             var comment=self.state.newComment;
             console.log(comment);
-            let testurl="http://localhost:8080/api/feedback/1/8";
             let url="http://localhost:8080/api/feedback/"+this.props.restid+"/"+this.state.custId;
         axios.post(url,{
                 comment:comment
@@ -166,9 +160,7 @@ export default class MoreinfoCustomer extends React.Component{
 }
 }
 handleRefresh(e){
-
             e.preventDefault();
-            let test='http://localhost:8080/api/feedback/1'
             const string2 = 'http://localhost:8080/api/feedback/'+this.props.restid;
             axios.get(string2)
                 .then(result => {
@@ -177,7 +169,6 @@ handleRefresh(e){
                         feedbacks: result.data
                     })
                 })
-
   }
 
     update(e){
@@ -193,8 +184,7 @@ handleRefresh(e){
             alert("Please sign in first")
             return;
         }
-        let testurl="http://localhost:8080/api/feedback/1/8";
-        let url = "http://localhost:8080/api/feedback/"+this.props.restid+"/"+this.state.userid;
+        let url = "http://localhost:8080/api/feedback/"+this.props.restid+"/"+this.state.custId;
         console.log(url);
         e.preventDefault();
         axios.post(url,{

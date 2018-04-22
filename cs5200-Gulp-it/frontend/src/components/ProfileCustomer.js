@@ -19,8 +19,11 @@ export default class ProfileCustomer extends React.Component{
             password:'',
             update:false,
             favRest:[],
-            commentedRestaurants:[]
+            commentedRestaurants:[],
+            custId:''
+
         };
+
         this.handleUpdate = this.handleUpdate.bind(this);
     }
 
@@ -41,6 +44,18 @@ export default class ProfileCustomer extends React.Component{
     //PUT THE API TO GET THE RESTAURANTS OF THE CUSTOMERS WHICH HE HAS COMMENTED OR LIKED
     componentDidMount() {
       var self = this
+
+      var url3='http://localhost:8080/api/user/'+this.state.userid
+        var self=this
+      axios.get(url3).then(
+
+        function(res){
+          self.setState({
+              custId:res.data
+          })
+          console.log(res);
+        }
+      )
       var url="http://localhost:8080/api/customer/"+this.state.userid
       axios.get(url).then(
 
@@ -61,7 +76,22 @@ export default class ProfileCustomer extends React.Component{
           )
         }
       )
-        axios.get('http://localhost:8080/api/customer/28/feedback',{
+      var url3='http://localhost:8080/api/user/'+this.state.userid
+      var self=this
+      axios.get(url3).then(
+        function(res){
+          self.setState({
+              custId:res.data
+          })
+          console.log(res);
+          console.log(self)
+        }
+      )
+
+
+        var url1='http://localhost:8080/api/restaurant/'+this.state.userid+'/feedback'
+        console.log(url1)
+        axios.get(url1,{
           params: {
               favourite:1
           }
@@ -72,7 +102,10 @@ export default class ProfileCustomer extends React.Component{
                 this.setState({favRest});
             }).then(() =>{
 
-              axios.get('http://localhost:8080/api/customer/28/feedback',{
+              var url2='http://localhost:8080/api/customer/'+this.state.userid+'/feedback'
+              console.log(url2)
+
+              axios.get(url2,{
                 params: {
                     comments:1
                 }
@@ -123,7 +156,21 @@ export default class ProfileCustomer extends React.Component{
         }).then(console.log("saved to the db"));
 
     }
+    handleDeleteevent(id,index){
+    var deleteurl="http://localhost:8080/api/customer/"+this.state.custId+"/feedback/"+id
+      console.log(deleteurl)
+      axios.delete(deleteurl).then(
+        console.log("Event deleted")
+      )
+      var array = this.state.commentedRestaurants;
+      array.splice(index, 1);
+      this.setState({
+        events:array
+      })
+    }
+    handleUpdateevent(){
 
+    }
     renderUpdate(){
         return (
             <div className={'profile col-3'}>
@@ -261,10 +308,40 @@ export default class ProfileCustomer extends React.Component{
                 <p><button className={"btn btn-danger"} onClick={this.handleDelete}>Delete</button></p>
             </div>
                 <div className="col-9">
-                    <p className={"head"}>Your Favourite Restaurant</p>
-                    <RestaurantList data2={this.state.favRest}/>
-                    <p className={"head"}>Restaurants where you have commented</p>
-                    <RestaurantList data2={this.state.commentedRestaurants}/>
+
+                            <div className="p-5">
+                            <p className="head">
+                            The Comment List:
+                            </p>
+                            <table className="table table-dark m-t-5">
+                                <thead>
+                                  <tr>
+                                    <th scope="col">Id</th>
+                                    <th scope="col">Comment</th>
+                                    <th scope="col">Favourite</th>
+                                    <th scope="col">Restaurant Id</th>
+
+                                  </tr>
+                                </thead>
+                                <tbody>
+
+                            {
+                              this.state.commentedRestaurants.map((restaurant,index)=>
+                              <tr key={index}>
+                              <th scope="row">{restaurant.id}</th>
+                              <td>{restaurant.comment}</td>
+                              <td>{restaurant.favourite==0?"true":"false"}</td>
+                              <td>{restaurant.restaurant}</td>
+
+                              <td><button className="btn btn-danger btn-sm" onClick={this.handleDeleteevent.bind(this,restaurant.id,index)}> Delete</button></td>
+                              <td><button className="btn btn-success btm-sm"onClick={this.handleUpdateevent.bind(this,restaurant.id,index)}> Update</button></td>
+                              </tr>
+                            )
+                            }
+                                </tbody>
+                              </table>
+                              </div>
+
                 </div>
             </div>
                 )

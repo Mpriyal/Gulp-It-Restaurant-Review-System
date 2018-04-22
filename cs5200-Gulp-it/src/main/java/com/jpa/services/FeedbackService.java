@@ -14,8 +14,8 @@ import com.jpa.dao.FeedbackDao;
 import com.jpa.models.Feedback;
 import com.jpa.models.User;
 
-@RestController
 @CrossOrigin
+@RestController
 public class FeedbackService {
 
 	FeedbackDao dao = FeedbackDao.getInstance();
