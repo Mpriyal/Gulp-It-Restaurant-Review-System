@@ -42,8 +42,7 @@ public class MenuDao {
 			Class.forName(JDBC_DRIVER);
 			conn = DriverManager.getConnection(DB_URL,USER,PASS);
 			String addRestaurant = "INSERT INTO Menu (item_name,item_type,price,description,Restaurant) "
-					+ "VALUES(?,?,?,?,"
-							+ "(SELECT id from Restaurant WHERE id = ? AND restaurant_owner=?))";
+					+ "VALUES(?,?,?,?,(SELECT id from Restaurant WHERE id = ? AND restaurant_owner=?))";
 			statement= conn.prepareStatement(addRestaurant);
 			statement.setString(1, menu.getItem_name());
 			statement.setInt(2, menu.getItem_type());

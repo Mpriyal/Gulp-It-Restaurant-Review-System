@@ -51,23 +51,10 @@ public class FeedbackService {
 												@PathVariable(name="restId")int Restaurant,@PathVariable(name="CustId") int Customer) {
 		return dao.addFeedbackForRestaurantByCustomer(feedback, Restaurant, Customer);
 	}
-	
-	
 
 	@RequestMapping(value="api/feedback/{feedbackid}", method=RequestMethod.DELETE)
 	public int deleteFeedbackById(@PathVariable(name="feedbackid")int FeedbackId) {
 		return dao.deleteFeedbackById(FeedbackId);
 	}
-
-	@RequestMapping(value="api/customer/{customerid}/feedback/{feedbackId}", method=RequestMethod.DELETE)
-	public int deleteFeedbackByIdandCustomerId(@PathVariable(name="feedbackId") int FeedbackId,@PathVariable(name="customerid")int CustomerId) {
-		return dao.deleteFeedbackByIdandCustomerId(FeedbackId, CustomerId);
-	}
-
-	public int updateFeedback(int CustomerId, Feedback feedback){
-		return dao.updateFeedback(CustomerId, feedback);
-	}
 	
-	
-
 }

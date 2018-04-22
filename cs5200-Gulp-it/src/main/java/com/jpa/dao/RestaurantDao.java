@@ -240,8 +240,8 @@ public class RestaurantDao {
 		try {
 			Class.forName(JDBC_DRIVER);
 			conn = DriverManager.getConnection(DB_URL,USER,PASS);
-			String RestaurantByName = "SELECT * FROM Restaurant WHERE id = ?";
-			statement= conn.prepareStatement(RestaurantByName);
+			String RestaurantById = "SELECT * FROM Restaurant WHERE id = ?";
+			statement= conn.prepareStatement(RestaurantById);
 			statement.setInt(1,RestaurantId);
 			resultset = statement.executeQuery();
 			if(resultset.next()){

@@ -13,6 +13,11 @@ import java.util.List;
 import com.jpa.models.Customer;
 import com.jpa.models.User;
 
+/**
+ * 
+ * @author priyalmittal
+ *
+ */
 public class CustomerDao {
 
 	private static final String URL = "jdbc:mysql://cs5200-spring2018-mittal.c9fddtskt253.us-east-2.rds.amazonaws.com/GulpIt";

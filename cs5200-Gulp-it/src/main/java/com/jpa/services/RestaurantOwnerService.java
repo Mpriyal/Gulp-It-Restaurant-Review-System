@@ -39,20 +39,25 @@ public class RestaurantOwnerService {
 	@RequestMapping(value="api/owner", method=RequestMethod.GET)
 	public List<RestaurantOwner> getOwnerByCredentials(@RequestParam(value="username",required=false)String username,
 			@RequestParam(value="password",required=false)String password) {
-			if(username==null&&password==null) {
-				return dao.findAllOwners();
+		
+			if(username!=null&&password!=null) {
+				List<RestaurantOwner> owner_list1 = new ArrayList<>();
+				RestaurantOwner owner1 = dao.findOwnerByCredentials(username, password);
+				owner_list1.add(owner1);
+				return owner_list1;
 			}
-			else if(password==null) {
+			else if(username!=null) {
 				List<RestaurantOwner> owner_list = new ArrayList<>();
 				RestaurantOwner owner = dao.findOwnerByUsername(username);
 				owner_list.add(owner);
 				return owner_list;
 			}
+			else if(password!=null) {
+				List<RestaurantOwner> owner_list3 = new ArrayList<>();
+				return owner_list3;
+			}
 			else {
-				List<RestaurantOwner> owner_list1 = new ArrayList<>();
-				RestaurantOwner owner1 = dao.findOwnerByCredentials(username, password);
-				owner_list1.add(owner1);
-			return owner_list1;
+				return dao.findAllOwners();
 			}
 	}
 	
