@@ -95,6 +95,17 @@ public class CustomerService {
 			feed1 = feedDao.getAllFeedbackByCustomerId(cust_id);
 			return feed1;
 	}
+	
+	@RequestMapping(value="api/customer/{customerid}/feedback/{feedbackId}", method=RequestMethod.DELETE)
+	public int deleteFeedbackByIdandCustomerId(@PathVariable(name="feedbackId") int FeedbackId,@PathVariable(name="customerid")int CustomerId) {
+		FeedbackDao fDao = FeedbackDao.getInstance();
+		return fDao.deleteFeedbackByIdandCustomerId(FeedbackId, CustomerId);
+	}
+
+	public int updateFeedback(int CustomerId, Feedback feedback){
+		FeedbackDao fDao = FeedbackDao.getInstance();
+		return fDao.updateFeedback(CustomerId, feedback);
+	}
 
 }
 
