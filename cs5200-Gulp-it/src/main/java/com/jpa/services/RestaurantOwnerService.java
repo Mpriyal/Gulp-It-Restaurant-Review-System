@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jpa.dao.MenuDao;
 import com.jpa.dao.RestaurantDao;
 import com.jpa.dao.RestaurantOwnerDao;
 import com.jpa.models.Customer;
+import com.jpa.models.Menu;
 import com.jpa.models.Restaurant;
 import com.jpa.models.RestaurantOwner;
 
@@ -80,22 +82,78 @@ public class RestaurantOwnerService {
 		return result;
 	}
 	
+	//to add a new restaurant by the owner, with id as ownerId
 	@RequestMapping(value="api/owner/{ownerId}/restaurant", method=RequestMethod.POST)
 	public void addRestofOwner(@RequestBody Restaurant restaurant,@PathVariable (name="ownerId") int ownerId) {
 		int Owner_id = dao.findOwnerIdByPersonId(ownerId);
 		rDao.addRestaurantForOwner(restaurant, Owner_id);
 	}
 	
+	//to add a new menu for a restaurant by the owner, with id as ownerId
+	@RequestMapping(value="api/owner/{ownerId}/restaurant/{restId}/menu", method=RequestMethod.POST)
+	public void addMenuforRest(@RequestBody Menu menu,@PathVariable (name="ownerId") int ownerId,@PathVariable (name="restId") int restId) {
+		MenuDao mDao = MenuDao.getInstance();
+		int Owner_id = dao.findOwnerIdByPersonId(ownerId);
+		mDao.addMenuForRestaurant(menu, restId, Owner_id);
+	}
+	
+	//to update a restaurant, with id as restaurantId, by owner, with id ownerId
 	@RequestMapping(value="api/owner/{ownerId}/restaurant/{restaurantId}", method=RequestMethod.PUT)
 	public void updateRestofOwner(@RequestBody Restaurant newrestaurant,@PathVariable (name="ownerId") int ownerId,@PathVariable (name="restaurantId") int restId) {
 		int Owner_id = dao.findOwnerIdByPersonId(ownerId);
 		rDao.updateRestaurant(Owner_id, newrestaurant, restId);
 	}
 	
+	//to delete a restaurant, with id as restaurantId, by owner, with id ownerId
 	@RequestMapping(value="api/owner/{ownerId}/restaurant/{restaurantId}", method=RequestMethod.DELETE)
 	public void deleteRestofOwner(@PathVariable (name="ownerId") int ownerId,@PathVariable (name="restaurantId") int restId) {
 		int Owner_id = dao.findOwnerIdByPersonId(ownerId);
 		rDao.deleterestaurant(restId, Owner_id);
+	}
+	
+	//view all menu item of a restaurant by the restaurant id
+	@RequestMapping(value="api/owner/{ownerId}/restaurant/{restId}/menu", method=RequestMethod.GET)
+	public List<Menu> getAllMenuItemsByRestaurantId(@PathVariable(name="restId")int restId,@PathVariable(name="ownerId")int ownerId,
+			@RequestParam(value="itemName",required=false)String itemName) {
+		
+		MenuDao mDao = MenuDao.getInstance();
+		int Owner_id1 = 0;
+		
+		if(itemName!=null) {
+			int Owner_id = dao.findOwnerIdByPersonId(ownerId);
+			return mDao.findMenuItemsByName(itemName,restId,Owner_id);
+		}
+		else
+			Owner_id1 = dao.findOwnerIdByPersonId(ownerId);
+			return mDao.findAllMenuItemsByRestaurantId(restId,Owner_id1);	
+	}
+	
+	//view a menu item with id, menuId, of a restaurant with id, restId
+		@RequestMapping(value="api/owner/{ownerId}/restaurant/{restId}/menu/{menuId}", method=RequestMethod.GET)
+		public Menu getMenuItemByMenuId(@PathVariable(name="restId")int restId,@PathVariable(name="menuId")int menuId,
+				@PathVariable(name="ownerId")int ownerId) {
+			
+			MenuDao mDao = MenuDao.getInstance();
+			int Owner_id = dao.findOwnerIdByPersonId(ownerId);
+			return mDao.findMenuItemByMenuId(menuId,restId,Owner_id);
+		}
+	
+	//to update a menu, with id as menuId, of a restaurant, with id as restaurantId, by owner, with id ownerId
+	@RequestMapping(value="api/owner/{ownerId}/restaurant/{restaurantId}/menu/{menuId}", method=RequestMethod.PUT)
+	public void updateRestMenuItem(@RequestBody Menu newMenu,@PathVariable (name="menuId") int menuId, @PathVariable (name="ownerId") int ownerId
+			,@PathVariable (name="restaurantId") int restId) {
+		int Owner_id = dao.findOwnerIdByPersonId(ownerId);
+		MenuDao mDao = MenuDao.getInstance();
+		mDao.updateMenuItem(menuId, restId, Owner_id, newMenu);
+	}
+	
+	//to delete a menu, with id as menuId, of a restaurant, with id as restaurantId, by owner, with id ownerId
+	@RequestMapping(value="api/owner/{ownerId}/restaurant/{restaurantId}/menu/{menuId}", method=RequestMethod.DELETE)
+	public void deleteRestMenuItem(@PathVariable (name="menuId") int menuId, @PathVariable (name="ownerId") int ownerId,@PathVariable (name="restaurantId") int restId) {
+		int Owner_id = dao.findOwnerIdByPersonId(ownerId);
+		MenuDao mDao = MenuDao.getInstance();
+		mDao.deleteMenuForRestaurant(menuId, Owner_id, restId);
+		
 	}
 	
 	}

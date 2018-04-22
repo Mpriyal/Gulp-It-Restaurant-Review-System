@@ -34,16 +34,51 @@ public class MenuDao {
 		return instance;
 	}
 	private MenuDao() {}
+	
+	public int addMenuForRestaurant(Menu menu,int RestId, int OwnerId) {
+		int result = -1;
+		try {
+
+			Class.forName(JDBC_DRIVER);
+			conn = DriverManager.getConnection(DB_URL,USER,PASS);
+			String addRestaurant = "INSERT INTO Menu (item_name,item_type,price,description,Restaurant) "
+					+ "VALUES(?,?,?,?,"
+							+ "(SELECT id from Restaurant WHERE id = ? AND restaurant_owner=?))";
+			statement= conn.prepareStatement(addRestaurant);
+			statement.setString(1, menu.getItem_name());
+			statement.setInt(2, menu.getItem_type());
+			statement.setFloat(3, menu.getPrice());
+			statement.setString(4,menu.getDescription());
+			statement.setInt(5,RestId);
+			statement.setInt(6,OwnerId);
+			result = statement.executeUpdate();
+			conn.close();
+			statement.close();
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return result;
+	}
 
 	//this function find the details of a menu item, given its id
-	public Menu findMenuItemByMenuId(int MenuId) {
+	public Menu findMenuItemByMenuId(int MenuId, int RestId, int ownerId) {
 		Menu menuItem =null;
 		try {
 			Class.forName(JDBC_DRIVER);
 			conn = DriverManager.getConnection(DB_URL,USER,PASS);
-			String MenuItemById = "SELECT * FROM Menu WHERE id = ?";
+			String MenuItemById = "SELECT * FROM Menu,Restaurant WHERE Menu.Restaurant=Restaurant.id AND Menu.id = ? "
+					+ "AND Restaurant=? AND Restaurant.restaurant_owner=?";
 			statement= conn.prepareStatement(MenuItemById);
 			statement.setInt(1,MenuId);
+			statement.setInt(2,RestId);
+			statement.setInt(3, ownerId);
 			resultset = statement.executeQuery();
 			if(resultset.next()){
 				int id= resultset.getInt("id");
@@ -68,14 +103,17 @@ public class MenuDao {
 	}
 	
 	//this function finds all the items in the menu with the given name
-	public List<Menu> findMenuItemsByName (int menuItemName) {
+	public List<Menu> findMenuItemsByName (String menuItemName, int RestId, int ownerId) {
 		List <Menu> menus = new ArrayList<>();
 		try {
 			Class.forName(JDBC_DRIVER);
 			conn = DriverManager.getConnection(DB_URL,USER,PASS);
-			String AllMenus = "SELECT * FROM Menu WHERE item_name LIKE ?";
+			String AllMenus = "SELECT * FROM Menu,Restaurant WHERE Menu.Restaurant=Restaurant.id AND item_name LIKE ? AND "
+					+ "Restaurant=? AND Restaurant.restaurant_owner=?";
 			statement= conn.prepareStatement(AllMenus);
 			statement.setString(1, "%" + menuItemName + "%");
+			statement.setInt(2, RestId);
+			statement.setInt(3, ownerId);
 			resultset = statement.executeQuery();
 			while(resultset.next()) {
 				int id= resultset.getInt("id");
@@ -101,14 +139,16 @@ public class MenuDao {
 	}
 
 	//this function lists all the items in the menu of the restaurant with the given id
-	public List<Menu> findAllMenuItemsByRestaurantId (int RestaurantId) {
+	public List<Menu> findAllMenuItemsByRestaurantId (int RestaurantId, int ownerId) {
 		List <Menu> menus = new ArrayList<>();
 		try {
 			Class.forName(JDBC_DRIVER);
 			conn = DriverManager.getConnection(DB_URL,USER,PASS);
-			String AllMenusByRestaurant = "SELECT * FROM Menu WHERE Restaurant=?";
+			String AllMenusByRestaurant = "SELECT * FROM Menu,Restaurant WHERE Menu.Restaurant=Restaurant.id AND Restaurant=? "
+					+ "AND Restaurant.restaurant_owner=?";
 			statement= conn.prepareStatement(AllMenusByRestaurant);
 			statement.setInt(1, RestaurantId);
+			statement.setInt(2, ownerId);
 			resultset = statement.executeQuery();
 			while(resultset.next()) {
 				int id= resultset.getInt("id");
@@ -167,14 +207,16 @@ public class MenuDao {
 		return result;
 		}
 	
-	public int deleteMenuForRestaurant(int id) {
+	public int deleteMenuForRestaurant(int id,int ownerId, int restId) {
 		int result = -1;
 		try {
 			Class.forName(JDBC_DRIVER);
 			conn = DriverManager.getConnection(DB_URL,USER,PASS);
-			String deleteMenu = "DELETE FROM Menu where id = ?";
+			String deleteMenu = "DELETE m FROM Menu m INNER JOIN Restaurant r ON m.Restaurant = r.id WHERE m.Restaurant=? AND m.id = ? AND r.restaurant_owner = ?";
 			statement=conn.prepareStatement(deleteMenu);
-			statement.setInt(1,id);
+			statement.setInt(1,restId);
+			statement.setInt(2,id);
+			statement.setInt(3,ownerId);
 			result=statement.executeUpdate();
 			conn.close();
 
