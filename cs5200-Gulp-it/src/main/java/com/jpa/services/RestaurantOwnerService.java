@@ -27,7 +27,6 @@ public class RestaurantOwnerService {
 	
 	@RequestMapping(value="api/owner", method=RequestMethod.POST)
 	public void addNewRestOwner(@RequestBody RestaurantOwner restaurantOwner) {
-		
 		dao.createOwner(restaurantOwner);
 	}
 	

@@ -35,7 +35,9 @@ public class EventProviderDao {
 			+ ",event_key=? WHERE event_provider.Person = Person.Id AND Person.Id =?";
 	private static final String DELETE_EVENT_PROVIDER = "DELETE p.*, e.* FROM Person p LEFT JOIN event_provider e ON e.Person = p.id WHERE p.id =?";
 	private static final String ADD_EVENT_RESTAURANT = "INSERT INTO Event2Restaurant(Event,Restaurant) VALUES((SELECT id from Event WHERE id = ? AND event_provider=?),?);";
-
+	private static final String FIND_EVENTPROVIDER_EVENT_ID = "SELECT event_provider FROM Event WHERE id=?";
+	private static final String DELETE_EVENT_RESTAURANT = "DELETE FROM Event2Restaurant WHERE (SELECT id from Event WHERE id = ? AND event_provider=?) "
+			+ "AND Restaurant=?";
 	public static EventProviderDao instance = null;
 	public static EventProviderDao getInstance() {
 		if (instance == null) {
@@ -410,6 +412,61 @@ public class EventProviderDao {
 				}
 			}
 			return result;
+			}
+		
+		public int deleteEventFromRestaurant(int eventId, int restId, int providerId){
+			Connection connection = null;
+			PreparedStatement statement = null;
+			int result = 0;
+			try {
+				Class.forName("com.mysql.jdbc.Driver");
+				connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+				statement = connection.prepareStatement(DELETE_EVENT_RESTAURANT);
+				statement.setInt(1, eventId);
+				statement.setInt(2, providerId);
+				statement.setInt(3, restId);
+				result = statement.executeUpdate();
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			return result;
+			}
+		
+		public int findEventProviderByEventId(int eventId){
+			int provider_id = 0;
+			Connection connection = null;
+			PreparedStatement statement = null;
+			ResultSet result = null;
+			try {
+				Class.forName("com.mysql.jdbc.Driver");
+				connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+				statement = connection.prepareStatement(FIND_EVENTPROVIDER_EVENT_ID);
+				statement.setInt(1, eventId);
+				result = statement.executeQuery();
+				if(result.next()) {
+					int event_provider = result.getInt("event_provider");
+					provider_id = event_provider;
+				}
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			return provider_id;
 			}
 
 }

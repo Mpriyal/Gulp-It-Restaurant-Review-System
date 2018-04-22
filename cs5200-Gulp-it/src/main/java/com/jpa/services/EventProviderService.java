@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.jpa.dao.EventDao;
 import com.jpa.dao.EventProviderDao;
 import com.jpa.dao.MenuDao;
+import com.jpa.dao.RestaurantDao;
 import com.jpa.models.Event;
 import com.jpa.models.EventProvider;
 import com.jpa.models.Menu;
@@ -119,7 +120,50 @@ public class EventProviderService {
 		int Provider_id = eDao.findProvIdByPersonId(providerId);
 		evDao.deleteEvent(eventId, Provider_id);
 	}
-
-
-
+	
+	@RequestMapping(value="api/eventprovider/{providerId}/event/{eventId}/restaurant", method=RequestMethod.GET)
+	public List<Restaurant> findRestaurantByEvent(@PathVariable (name="providerId") int providerId,@PathVariable (name="eventId") int eventId) {
+		RestaurantDao rDao = RestaurantDao.getInstance();
+		List<Restaurant> restaurants = new ArrayList<>();
+		int Provider_id = eDao.findProvIdByPersonId(providerId);
+		restaurants = rDao.findAllRestaurantByEvent(eventId, Provider_id);
+		return restaurants;
+	}
+	
+	@RequestMapping(value="api/eventprovider/{providerId}/event/{eventId}/restaurant/{restId}", method=RequestMethod.GET)
+	public Restaurant findRestaurantByIdAndEvent(@PathVariable (name="restId") int restId, @PathVariable (name="providerId") int providerId,@PathVariable (name="eventId") int eventId) {
+		RestaurantDao rDao = RestaurantDao.getInstance();
+		int Provider_id = eDao.findProvIdByPersonId(providerId);
+		Restaurant restaurant = rDao.findRestaurantByIdAndEvent(restId,eventId, Provider_id);
+		return restaurant;
+	}
+	
+	/**
+	 * this function adds a restaurant with the given restaurant id to an event
+	 * @param restId
+	 * @param providerId
+	 * @param eventId
+	 * @return
+	 */
+	@RequestMapping(value="api/eventprovider/{providerId}/event/{eventId}/restaurant/{restId}", method=RequestMethod.POST)
+	public int addRestaurantToEvent(@PathVariable (name="restId") int restId, @PathVariable (name="providerId") int providerId,@PathVariable (name="eventId") int eventId) {
+		EventProviderDao evDao = EventProviderDao.getInstance();
+		int Provider_id = eDao.findProvIdByPersonId(providerId);
+		return evDao.addEventToRestaurant(eventId, restId, Provider_id);
+	}
+	
+	/**
+	 * this function deletes a given restaurant from a given event
+	 * @param restId
+	 * @param providerId
+	 * @param eventId
+	 * @return
+	 */
+	@RequestMapping(value="api/eventprovider/{providerId}/event/{eventId}/restaurant/{restId}", method=RequestMethod.DELETE)
+	public int deleteRestaurantFromEvent(@PathVariable (name="restId") int restId, @PathVariable (name="providerId") int providerId,@PathVariable (name="eventId") int eventId) {
+		EventProviderDao evDao = EventProviderDao.getInstance();
+		int Provider_id = eDao.findProvIdByPersonId(providerId);
+		return evDao.deleteEventFromRestaurant(eventId, restId, Provider_id);
+	}
+	
 }

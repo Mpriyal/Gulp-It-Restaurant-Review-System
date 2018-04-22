@@ -440,6 +440,76 @@ public class RestaurantDao {
 		return restaurant;
 	}
 	
+	public List<Restaurant> findAllRestaurantByEvent(int eventId, int providerId) {
+		List <Restaurant> restaurants = new ArrayList<>();
+		try {
+			Class.forName(JDBC_DRIVER);
+			conn = DriverManager.getConnection(DB_URL,USER,PASS);
+			String RestaurantFromEvent = "SELECT * FROM Restaurant r,Event2Restaurant er, Event e "
+					+ "WHERE r.id=er.Restaurant AND e.id = er.Event AND e.id = ? AND e.event_provider =?";
+			statement= conn.prepareStatement(RestaurantFromEvent);
+			statement.setInt(1,eventId);
+			statement.setInt(2,providerId);
+			resultset = statement.executeQuery();
+			while(resultset.next()) {
+				int id= resultset.getInt("id");
+				String name = resultset.getString("name");
+				String description = resultset.getString("description");
+				String image_link = resultset.getString("image_link");
+				float cost_for_two = resultset.getFloat("cost_for_two");
+				int restaurant_owner = resultset.getInt("restaurant_owner");
+				int restaurant_type = resultset.getInt("restaurant_type");
+				Restaurant restaurant = new Restaurant(id,name,description,image_link,cost_for_two,restaurant_owner,restaurant_type);
+				restaurants.add(restaurant);
+			}
+			statement.close();
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return restaurants;
+	}
+	
+	public Restaurant findRestaurantByIdAndEvent(int restId, int eventId, int providerId) {
+		Restaurant restaurant = null;
+		try {
+			Class.forName(JDBC_DRIVER);
+			conn = DriverManager.getConnection(DB_URL,USER,PASS);
+			String RestaurantFromEvent = "SELECT * FROM Restaurant r,Event2Restaurant er, Event e "
+					+ "WHERE r.id=er.Restaurant AND e.id = er.Event AND r.id=? AND e.id = ? AND e.event_provider =?";
+			statement= conn.prepareStatement(RestaurantFromEvent);
+			statement.setInt(1,restId);
+			statement.setInt(2,eventId);
+			statement.setInt(3,providerId);
+			resultset = statement.executeQuery();
+			while(resultset.next()) {
+				int id= resultset.getInt("id");
+				String name = resultset.getString("name");
+				String description = resultset.getString("description");
+				String image_link = resultset.getString("image_link");
+				float cost_for_two = resultset.getFloat("cost_for_two");
+				int restaurant_owner = resultset.getInt("restaurant_owner");
+				int restaurant_type = resultset.getInt("restaurant_type");
+				restaurant = new Restaurant(id,name,description,image_link,cost_for_two,restaurant_owner,restaurant_type);
+			}
+			statement.close();
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return restaurant;
+	}
+	
 	public static void main(String[] args) {
 		RestaurantDao rDao = new RestaurantDao();
 		Restaurant shawarma = new Restaurant("boston shawarma","It serves good mexican food","abcdef",10.80f,1);

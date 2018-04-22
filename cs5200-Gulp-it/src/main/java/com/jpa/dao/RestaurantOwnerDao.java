@@ -418,6 +418,8 @@ public class RestaurantOwnerDao {
 			return owner_id;
 			}
 		
+		//find all events for the restaurant
+		
 		public static void main(String[] args) {
 			
 			RestaurantOwnerDao rDao = new RestaurantOwnerDao();
