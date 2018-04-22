@@ -34,7 +34,7 @@ export default class ProfileCustomer extends React.Component{
       var url= 'http://localhost:8080/api/customer/'+localStorage.getItem('userid');
       axios.delete(url).then(
       console.log("User deleted"))
-      alert("You have been deleted"); 
+      alert("You have been deleted");
     }
 
 
@@ -61,27 +61,29 @@ export default class ProfileCustomer extends React.Component{
           )
         }
       )
-        axios.get('http://opentable.herokuapp.com/api/restaurants', {
-            params: {
-                name: 'boston'
-            }
-        })
-            .then(res => {
+        axios.get('http://localhost:8080/api/customer/28/feedback',{
+          params: {
+              favourite:1
+          }
+        }).then(res => {
+          console.log("fav data");
                 console.log(res);
-                const favRest = res.data.restaurants;
+                const favRest = res.data;
                 this.setState({favRest});
-            });
+            }).then(() =>{
 
-        axios.get('http://opentable.herokuapp.com/api/restaurants', {
-            params: {
-                name: 'boston'
-            }
-        })
-            .then(res => {
-                console.log(res);
-                const commentedRestaurants = res.data.restaurants;
-                this.setState({commentedRestaurants});
-            });
+              axios.get('http://localhost:8080/api/customer/28/feedback',{
+                params: {
+                    comments:1
+                }
+              }).then(res => {
+                console.log("commment data");
+                      console.log(res);
+                      const commentedRestaurants = res.data;
+                      this.setState({commentedRestaurants});
+                  })
+            })
+
 
     }
     update() {
@@ -260,9 +262,9 @@ export default class ProfileCustomer extends React.Component{
             </div>
                 <div className="col-9">
                     <p className={"head"}>Your Favourite Restaurant</p>
-                    <RestaurantList data={this.state.commentedRestaurants}/>
+                    <RestaurantList data2={this.state.favRest}/>
                     <p className={"head"}>Restaurants where you have commented</p>
-                    <RestaurantList data={this.state.favRest}/>
+                    <RestaurantList data2={this.state.commentedRestaurants}/>
                 </div>
             </div>
                 )

@@ -99,3 +99,7 @@ h2{
 .menu2{
     background-color: rgba(255, 255, 255, 0.8);
 }
+
+.hidden{
+  display: none;
+}

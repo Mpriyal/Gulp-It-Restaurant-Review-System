@@ -9,7 +9,8 @@ export default class MoreinfoCustomer extends React.Component{
             feedbacks:[],
             userid:localStorage.getItem("userid"),
             btnclass:"btn btn-primary",
-            flag:false
+            flag:false,
+            custId:''
         }
 
     }
@@ -19,7 +20,7 @@ export default class MoreinfoCustomer extends React.Component{
         let testurl="http://localhost:8080/api/restaurant/2";
         let url = "http://localhost:8080/api/restaurant/"+restId;
         let url2="http://opentable.herokuapp.com/api/restaurants/"+restId;
-        axios.get(testurl)
+        axios.get(url)
             .then(res => {
                 console.log(res);
                 if(res.data.length!==0){
@@ -36,7 +37,17 @@ export default class MoreinfoCustomer extends React.Component{
                     })
                 }
             })
+        var url3='http://localhost:8080/api/user/'+this.state.userid
+          var self=this
+        axios.get(url3).then(
 
+          function(res){
+            self.setState({
+                custId:res.data
+            })
+            console.log(res);
+          }
+        )
         axios.get(url2)
             .then(res => {
                 console.log("api data")
@@ -56,7 +67,7 @@ export default class MoreinfoCustomer extends React.Component{
 
         let test='http://localhost:8080/api/feedback/1'
         const string2 = 'http://localhost:8080/api/feedback/'+this.props.restid;
-        axios.get(test)
+        axios.get(string2)
             .then(result => {
                 console.log(result)
                 this.setState({
@@ -80,6 +91,22 @@ export default class MoreinfoCustomer extends React.Component{
         else return "Bar"
     }
 
+    handleDeletComment(fid,index){
+      console.log(index);
+      console.log(fid);
+      var url="http://localhost:8080/api/customer/"+this.state.custId+"/feedback/"+fid
+       axios.delete(url).then(
+        console.log("deleted feedback")
+         )
+         var array = this.state.feedbacks;
+         array.splice(index, 1);
+         this.setState({
+           feedbacks:array
+         })
+
+
+
+    }
     handlePostComment(e){
         e.preventDefault();
         if(this.state.userid==null){
@@ -91,13 +118,28 @@ export default class MoreinfoCustomer extends React.Component{
             var comment=self.state.newComment;
             console.log(comment);
             let testurl="http://localhost:8080/api/feedback/1/8";
-            let url="http://localhost:8080/api/feedback/";
-            // axios.post(testurl+this.state.userid+"/"+this.props.restid,{
-        axios.post(testurl,{
+            let url="http://localhost:8080/api/feedback/"+this.props.restid+"/"+this.state.custId;
+        axios.post(url,{
                 comment:comment
-            }).then(this.render());
+            })
 
-        }}
+}
+}
+handleRefresh(e){
+
+            e.preventDefault();
+            let test='http://localhost:8080/api/feedback/1'
+            const string2 = 'http://localhost:8080/api/feedback/'+this.props.restid;
+            axios.get(string2)
+                .then(result => {
+                    console.log(result)
+                    this.setState({
+                        feedbacks: result.data
+                    })
+                })
+
+  }
+
     update(e){
         console.log(this);
         this.setState(
@@ -107,15 +149,15 @@ export default class MoreinfoCustomer extends React.Component{
         )
     }
     favClick(e){
-        // if(this.state.userid==null){
-        //     alert("Please sign in first")
-        //     return;
-        // }
+        if(this.state.userid==null){
+            alert("Please sign in first")
+            return;
+        }
         let testurl="http://localhost:8080/api/feedback/1/8";
-        let url = "http://localhost:8080/api/feedback/"+this.state.userid+"/"+this.props.restid;
-        console.log(testurl);
+        let url = "http://localhost:8080/api/feedback/"+this.props.restid+"/"+this.state.userid;
+        console.log(url);
         e.preventDefault();
-        axios.post(testurl,{
+        axios.post(url,{
             favourite:true
         });
         this.setState({
@@ -146,17 +188,28 @@ export default class MoreinfoCustomer extends React.Component{
                     <p className={"head"}>
                         Feedback
                     </p>
-                    {this.state.feedbacks.map((feedback,i)=>
-                        <div key={i} className={"comment m-2 text-left p-2"}>
+                    {this.state.feedbacks.map((feedback,index)=>
+                        <div key={index} className={"comment m-2 text-left p-2"}>
                             <h4>{feedback.comment}</h4>
-                            <p>Favourite: {feedback.favourite==0?"False":"true"}</p>
+                            <p>Favourite: {feedback.favourite==0?"False":"true"}
+
+                            <button onClick={this.handleDeletComment.bind(this,feedback.id,index)} className={feedback.customer==this.state.custId?
+                              "btn btn-danger btn-sm float-right":"btn btn-success float-right hidden"} >
+                               Delete</button>
+                            </p>
+
                         </div>
                     )
                     }
                     <div className="form-group m-1">
                         <form className="form-inline">
-                            <input onChange={this.update.bind(this)} ref="commentBody" type="text" className="form-control col-10" id="comment" placeholder="Add New Comment"/>
+                            <input onChange={this.update.bind(this)}
+                            ref="commentBody" type="text" className="form-control col-9"
+                            id="comment" placeholder="Add New Comment"/>
+                            <p>
                             <button className={"btn btn-primary"} onClick={this.handlePostComment.bind(this)}>Submit</button>
+                            <button className={"btn btn-primary"} onClick={this.handleRefresh.bind(this)}>Refresh</button>
+                            </p>
                         </form>
                     </div>
 

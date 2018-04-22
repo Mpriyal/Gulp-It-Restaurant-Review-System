@@ -70,6 +70,7 @@ export default class Navbar extends React.Component {
                 });
                 localStorage.setItem('userid',response.data.id);
                 localStorage.setItem('role',response.data.type);
+
                 console.log(self)
             }})
             .catch(function (error) {
@@ -87,7 +88,6 @@ export default class Navbar extends React.Component {
 
     render() {
         if(!localStorage.getItem('id')&!this.state.loggedIn){
-        if (!this.state.register) {
             return (
                 <div className={"navbarComponents"}>
                     <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -136,16 +136,10 @@ export default class Navbar extends React.Component {
 
                 </div>
             )
-
-}
-        else {
-            return (
-                <Register/>
-            )
-        }
         }
         else
-        {if(this.state.role=='customer'){
+        {
+          if(this.state.role=='customer'){
           return(
             <div className={"navbarComponents"}>
                 <nav className="navbar navbar-expand-lg navbar-light bg-light">
