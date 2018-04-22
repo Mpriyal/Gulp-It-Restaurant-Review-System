@@ -14,7 +14,7 @@ import AdminCustomer from './components/AdminCustomer'
 import AdminOwner from './components/AdminOwner'
 import OwnerCard from './components/OwnerCard'
 import Admin from './components/Admin'
-import AdminRestaurant from './components/AdminRestaurant'
+import MoreInfoOwner from './components/MoreInfoOwner'
 import AdminMenu from './components/AdminMenu'
 
 

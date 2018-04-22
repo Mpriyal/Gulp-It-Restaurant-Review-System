@@ -252,13 +252,10 @@ export default class OwnerProfile extends React.Component{
 
                     </div>
                     <RestaurantList data2={this.state.favRest}/>
-                </div>
+                    </div>
             </div>
         )
-
     }
-
-
     render(){
         if(this.state.addnew===true){
             return (
