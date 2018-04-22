@@ -206,6 +206,30 @@ public class MenuDao {
 		return result;
 		}
 	
+	
+	public int deleteMenuById(int menuId) {
+		int result=0;
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			conn = DriverManager.getConnection(DB_URL,USER,PASS);
+			String addFeedBack ="DELETE FROM Menu WHERE id =?";
+			statement= conn.prepareStatement(addFeedBack);
+			statement.setInt(1, menuId);
+
+			result = statement.executeUpdate();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
 	public List<Menu> getMenuFromRestId(int RestId) {
 		List <Menu> menus = new ArrayList<>();
 		try {

@@ -2,7 +2,7 @@ import React from 'react'
 import RestaurantList from './RestaurantList'
 import axios from "axios/index";
 
-export default class ProfileCustomer extends React.Component{
+export default class EventProviderHome extends React.Component{
     constructor(props){
         super(props);
         this.state={
@@ -18,12 +18,12 @@ export default class ProfileCustomer extends React.Component{
             customerKey:'',
             password:'',
             update:false,
-            favRest:[],
-            commentedRestaurants:[],
-            custId:''
+            events:[
+              {
 
+              }
+            ]
         };
-
         this.handleUpdate = this.handleUpdate.bind(this);
     }
 
@@ -34,7 +34,7 @@ export default class ProfileCustomer extends React.Component{
     }
     handleDelete(e){
       var self= this;
-      var url= 'http://localhost:8080/api/customer/'+localStorage.getItem('userid');
+      var url= 'http://localhost:8080/api/eventprovider/'+localStorage.getItem('userid');
       axios.delete(url).then(
       console.log("User deleted"))
       alert("You have been deleted");
@@ -44,21 +44,8 @@ export default class ProfileCustomer extends React.Component{
     //PUT THE API TO GET THE RESTAURANTS OF THE CUSTOMERS WHICH HE HAS COMMENTED OR LIKED
     componentDidMount() {
       var self = this
-
-      var url3='http://localhost:8080/api/user/'+this.state.userid
-        var self=this
-      axios.get(url3).then(
-
-        function(res){
-          self.setState({
-              custId:res.data
-          })
-          console.log(res);
-        }
-      )
-      var url="http://localhost:8080/api/customer/"+this.state.userid
+      var url="http://localhost:8080/api/eventprovider/"+this.state.userid
       axios.get(url).then(
-
         function(res){
           console.log("data of the user is")
           console.log(res);
@@ -71,54 +58,36 @@ export default class ProfileCustomer extends React.Component{
           phone:res.data.phoneList,
           address:res.data.addressList,
           dob:res.data.dob,
-          customerKey:res.data.customerKey
+          customerKey:res.data.event_key
         }
           )
         }
       )
-      var url3='http://localhost:8080/api/user/'+this.state.userid
-      var self=this
-      axios.get(url3).then(
+      var url1="http://localhost:8080/api/eventprovider/"+this.state.userid+"/event"
+      axios.get(url1).then(
+
         function(res){
-          self.setState({
-              custId:res.data
+          console.log(res)
+          const events = res.data;
+            self.setState({events});
           })
-          console.log(res);
-          console.log(self)
         }
-      )
 
+        handleDeleteevent(id,index){
+        var deleteurl="http://localhost:8080/api/eventprovider/"+localStorage.getItem('userid')+"/event/"+id
+          console.log(id)
+          axios.delete(deleteurl).then(
+            console.log("Event deleted")
+          )
+          var array = this.state.events;
+          array.splice(index, 1);
+          this.setState({
+            events:array
+          })
+        }
+        handleUpdateevent(){
 
-        var url1='http://localhost:8080/api/restaurant/'+this.state.userid+'/feedback'
-        console.log(url1)
-        axios.get(url1,{
-          params: {
-              favourite:1
-          }
-        }).then(res => {
-          console.log("fav data");
-                console.log(res);
-                const favRest = res.data;
-                this.setState({favRest});
-            }).then(() =>{
-
-              var url2='http://localhost:8080/api/customer/'+this.state.userid+'/feedback'
-              console.log(url2)
-
-              axios.get(url2,{
-                params: {
-                    comments:1
-                }
-              }).then(res => {
-                console.log("commment data");
-                      console.log(res);
-                      const commentedRestaurants = res.data;
-                      this.setState({commentedRestaurants});
-                  })
-            })
-
-
-    }
+        }
     update() {
             this.setState(
                   {
@@ -138,7 +107,7 @@ export default class ProfileCustomer extends React.Component{
 
 
         //PUT THE PUR REQUEST TO UPDATE THE CUSTOMER
-        fetch('http://localhost:8080/api/customer/', {
+        fetch('http://localhost:8080/api/eventprovider/', {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
@@ -156,21 +125,7 @@ export default class ProfileCustomer extends React.Component{
         }).then(console.log("saved to the db"));
 
     }
-    handleDeleteevent(id,index){
-    var deleteurl="http://localhost:8080/api/customer/"+this.state.custId+"/feedback/"+id
-      console.log(deleteurl)
-      axios.delete(deleteurl).then(
-        console.log("Event deleted")
-      )
-      var array = this.state.commentedRestaurants;
-      array.splice(index, 1);
-      this.setState({
-        events:array
-      })
-    }
-    handleUpdateevent(){
 
-    }
     renderUpdate(){
         return (
             <div className={'profile col-3'}>
@@ -307,42 +262,38 @@ export default class ProfileCustomer extends React.Component{
                 <p><button className={"btn btn-primary"} onClick={this.handleUpdate}>Update</button></p>
                 <p><button className={"btn btn-danger"} onClick={this.handleDelete}>Delete</button></p>
             </div>
-                <div className="col-9">
 
-                            <div className="p-5">
-                            <p className="head">
-                            The Comment List:
-                            </p>
-                            <table className="table table-dark m-t-5">
-                                <thead>
-                                  <tr>
-                                    <th scope="col">Id</th>
-                                    <th scope="col">Comment</th>
-                                    <th scope="col">Favourite</th>
-                                    <th scope="col">Restaurant Id</th>
+            <div className="p-5">
+            <p className="head">
+            The Event List:
+            </p>
+            <table className="table table-dark m-t-5">
+                <thead>
+                  <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Description</th>
 
-                                  </tr>
-                                </thead>
-                                <tbody>
+                  </tr>
+                </thead>
+                <tbody>
 
-                            {
-                              this.state.commentedRestaurants.map((restaurant,index)=>
-                              <tr key={index}>
-                              <th scope="row">{restaurant.id}</th>
-                              <td>{restaurant.comment}</td>
-                              <td>{restaurant.favourite==0?"true":"false"}</td>
-                              <td>{restaurant.restaurant}</td>
-
-                              <td><button className="btn btn-danger btn-sm" onClick={this.handleDeleteevent.bind(this,restaurant.id,index)}> Delete</button></td>
-                              <td><button className="btn btn-success btm-sm"onClick={this.handleUpdateevent.bind(this,restaurant.id,index)}> Update</button></td>
-                              </tr>
-                            )
-                            }
-                                </tbody>
-                              </table>
-                              </div>
-
-                </div>
+            {
+              this.state.events.map((event,index)=>
+              <tr key={index}>
+              <th scope="row">{event.id}</th>
+              <td>{event.event_name}</td>
+              <td>{event.date}</td>
+              <td>{event.description}</td>
+              <td><button className="btn btn-danger btn-sm" onClick={this.handleDeleteevent.bind(this,event.id,index)}> Delete</button></td>
+              <td><button className="btn btn-success btm-sm"onClick={this.handleUpdateevent.bind(this,event.id,index)}> Update</button></td>
+              </tr>
+            )
+            }
+                </tbody>
+              </table>
+              </div>
             </div>
                 )
 

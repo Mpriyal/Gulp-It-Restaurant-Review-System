@@ -38,8 +38,10 @@ public class AdminDao {
 		List <User> users = new ArrayList<User>();
 		CustomerDao custumer = CustomerDao.getInstance();
 		RestaurantOwnerDao restaurantOwner = RestaurantOwnerDao.getInstance();
+		EventProviderDao eDao = EventProviderDao.getInstance();
 		users.addAll(custumer.findAllCustomers());
 		users.addAll(restaurantOwner.findAllOwners());
+		users.addAll(eDao.findAllEventProviders());
 		return users;
 	
 	}

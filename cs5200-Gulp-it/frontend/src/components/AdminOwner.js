@@ -44,7 +44,7 @@ export default class AdminOwner extends React.Component {
               password:  this.state.password,
               email:  this.state.email,
               dob: this.state.dateOfBirth,
-              owner_key: this.state.ownerKey,
+              ownerKey: this.state.ownerKey,
               type:'Restaurant Owner'
           })
       }).then(
@@ -54,7 +54,7 @@ export default class AdminOwner extends React.Component {
   update(){
       console.log(this);
       this.setState({
-          id:this.refs.Id.value,
+
           idupdated:this.refs.newId.value,
           firstName: this.refs.FirstName.value,
           lastName: this.refs.LastName.value,
@@ -73,39 +73,12 @@ export default class AdminOwner extends React.Component {
           FindByUsername:this.refs.FindByUsername.value,
           findByCredentialspass:this.refs.findByCredentialspass.value,
           findByCredentials:this.refs.findByCredentials.value,
-          ownerKey:this.refs.key.value
+          ownerKey:this.refs.key.value,
+          newOwnerKey:this.refs.newKey.value
       })
 
   }
 
-  handleCreate(e){
-    e.preventDefault();
-    console.log("Success from createPage!")
-    fetch('http://localhost:8080/api/owner', {
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            firstName: this.state.firstName,
-            lastName: this.state.lastName,
-            username:  this.state.username,
-            password:  this.state.password,
-            email:  this.state.email,
-            dob: this.state.dateOfBirth,
-            ownerKey: this.state.ownerKey
-
-        })
-    }).then(console.log("saved to the db"));
-
-  }
-
-
-  //api not available
-  handleDeleteByName(){
-
-  }
 
   handleDeleteById(){
     let url='http://localhost:8080/api/owner/'+this.state.deleteId
@@ -198,22 +171,17 @@ handleUpdatebutton(e){
   e.preventDefault();
   console.log("Success from updatePage!")
   let url='http://localhost:8080/api/owner/'+this.state.idupdated
-  fetch(url ,{
-      method: 'PUT',
-      headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
+  axios.put(url ,({
           firstName: this.state.newfirstName,
           lastName: this.state.newlastName,
           username:  this.state.newusername,
           password:  this.state.newpassword,
           email:  this.state.newemail,
           dob: this.state.newdateOfBirth,
-          // ownerKey: ""
-      })
-  }).then(console.log("update in the db"));
+          ownerKey:this.state.newOwnerKey
+
+      }))
+.then(console.log("update in the db"))
 
 }
 render(){
@@ -232,16 +200,7 @@ render(){
                   <div className={'container text-center'} >
 
                       <form>
-                          <div className={'form-group'}>
-                              <input
-                                  ref="Id"
-                                  type="text"
-                                  className="form-control"
-                                  id="Id"
-                                  placeholder={'Id'}
-                                  onChange={this.update.bind(this)}
-                              />
-                          </div>
+
                           <div className="form-group">
                               <input
                                   ref="FirstName"
@@ -302,16 +261,7 @@ render(){
                                   onChange={this.update.bind(this)}
                               />
                           </div>
-                          <div className="form-group">
-                              <input
-                                  ref="typeofperson"
-                                  type="text"
-                                  className="form-control"
-                                  id="type"
-                                  placeholder="Type"
-                                  onChange={this.update.bind(this)}
-                              />
-                          </div>
+
                           <div className="form-group">
                               <input
                                   ref="key"
@@ -416,11 +366,11 @@ render(){
                           </div>
                           <div className="form-group">
                               <input
-                                  ref="newtypeofperson"
+                                  ref="newKey"
                                   type="text"
                                   className="form-control"
                                   id="type"
-                                  placeholder="Type"
+                                  placeholder="Key"
                                   onChange={this.update.bind(this)}
                               />
                           </div>
@@ -537,7 +487,7 @@ render(){
 
 
 <button type="submit" className="btn btn-primary m-2"
-    onClick={this.handleFindAll.bind(this)} >Find All customers</button>
+    onClick={this.handleFindAll.bind(this)} >Find All Owners</button>
     </div>
   )}
   else if(this.state.singlecard){

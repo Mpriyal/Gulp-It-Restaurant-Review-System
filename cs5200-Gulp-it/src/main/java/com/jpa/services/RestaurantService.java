@@ -10,20 +10,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.jpa.dao.FeedbackDao;
-import com.jpa.dao.MenuDao;
 import com.jpa.dao.RestaurantDao;
 import com.jpa.dao.RestaurantOwnerDao;
-import com.jpa.models.Customer;
-import com.jpa.models.Feedback;
-import com.jpa.models.Menu;
 import com.jpa.models.Restaurant;
 import com.jpa.models.RestaurantOwner;
 
 /**
  * 
- * @author priyalmittal
+ * @author amanrayat
  *
  */
 
@@ -93,45 +87,5 @@ public class RestaurantService {
 		return rDao.findOwnerById(person_id);
 	}
 	
-	//view all comments of a restaurant by the customers
-	@RequestMapping(value="api/restaurant/{restId}/feedback", method=RequestMethod.GET)
-	public List<Feedback> getFeedbackByRestaurantId(@PathVariable(name="restId")int id,@RequestParam(value="comments",required=false)String comments,
-			@RequestParam(value="favourite",required=false)Boolean favourite) {
-		
-		FeedbackDao feedDao = FeedbackDao.getInstance();
-		List<Feedback> feed1 = new ArrayList<>();
-		if(favourite!=null) {
-			List<Feedback> feed = feedDao.getAllFavouritesByRestaurantId(id);
-			return feed;
-		}
-		else if(comments!=null) {
-			List<Feedback> feed2 = feedDao.getAllCommentsByRestaurantId(id);
-			return feed2;
-		}
-		else
-			feed1 = feedDao.getAllFeedbackByRestaurantId(id);
-			return feed1;
-	}
-	
-//	//view all menu item of a restaurant by the restaurant id
-//	@RequestMapping(value="api/restaurant/{restId}/menu", method=RequestMethod.GET)
-//	public List<Menu> getAllMenuItemsByRestaurantId(@PathVariable(name="restId")int id,
-//			@RequestParam(value="itemName",required=false)String itemName) {
-//		
-//		MenuDao mDao = MenuDao.getInstance();
-//		if(itemName!=null) {
-//			return mDao.findMenuItemsByName(itemName,id);
-//		}
-//		else
-//			return mDao.findAllMenuItemsByRestaurantId(id);	
-//	}
-//	
-//	//view a menu item with id, menuId, of a restaurant with id, restId
-//		@RequestMapping(value="api/restaurant/{restId}/menu/{menuId}", method=RequestMethod.GET)
-//		public Menu getMenuItemByMenuId(@PathVariable(name="restId")int restId,@PathVariable(name="menuId")int menuId) {
-//			
-//			MenuDao mDao = MenuDao.getInstance();
-//			return mDao.findMenuItemByMenuId(menuId,restId);
-//		}
-	
+
 }

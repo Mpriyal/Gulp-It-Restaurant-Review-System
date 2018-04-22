@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jpa.dao.CustomerDao;
+import com.jpa.dao.EventProviderDao;
 import com.jpa.dao.RestaurantOwnerDao;
 import com.jpa.models.Customer;
 import com.jpa.models.User;
@@ -19,13 +20,17 @@ import com.jpa.models.User;
 public class UserService {
 	CustomerDao dao = CustomerDao.getInstance();
 	RestaurantOwnerDao rdao = RestaurantOwnerDao.getInstance();
+	EventProviderDao eDao = EventProviderDao.getInstance();
 	
 	@RequestMapping(value="api/user", method=RequestMethod.GET)
 	public User getCustomerByCredentials(@RequestParam(value="username",required=false)String username,
 			@RequestParam(value="password",required=false)String password) {
-		if(dao.findCustomerByUsername(username)==null) {
+		if((dao.findCustomerByUsername(username)==null)&&(eDao.findEventProviderByUsername(username)==null)){
 			return rdao.findOwnerByCredentials(username, password);
 		}	
+		else if((dao.findCustomerByUsername(username)==null)&&(rdao.findOwnerByUsername(username)==null)){
+			return eDao.findEventProviderByCredentials(username, password);
+		}
 		else return dao.findCustomerByCredentials(username, password);
 	}	
 	

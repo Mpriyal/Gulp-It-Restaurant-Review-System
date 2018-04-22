@@ -216,7 +216,7 @@ export default class MoreinfoOwner extends React.Component{
     }
 
     handleDelete(id,index){
-    var testUrl="http://localhost:8080/api/owner/31/restaurant/1/menu/"+id
+    var testUrl="http://localhost:8080/api/owner/"+this.state.ownerId+"/restaurant/"+this.props.restid+"/menu/"+id
       console.log(id)
       axios.delete(testUrl).then(
         console.log("menu deleted")

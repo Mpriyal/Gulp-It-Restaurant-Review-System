@@ -2,6 +2,7 @@ package com.jpa.services;
 
 import java.util.List;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,11 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.jpa.dao.AdminDao;
 import com.jpa.dao.CustomerDao;
+import com.jpa.dao.MenuDao;
 import com.jpa.dao.RestaurantOwnerDao;
 import com.jpa.models.Customer;
 import com.jpa.models.User;
 
-
+@CrossOrigin
 @RestController
 public class AdminService {
 	AdminDao admindao = AdminDao.getInstance();
@@ -42,6 +44,13 @@ public class AdminService {
 		return 
 				ODao.findOwnerById(UserId);
 
+	}
+	
+	@RequestMapping(value="api/admin/menu/{menuId}", method=RequestMethod.DELETE)
+	public int deleteMenuById(@PathVariable(name="menuId")int menuId) {
+		MenuDao mDao = MenuDao.getInstance();
+		int result=mDao.deleteMenuById(menuId);
+		return result;
 	}
 
 }

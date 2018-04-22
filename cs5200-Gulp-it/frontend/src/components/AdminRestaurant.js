@@ -67,6 +67,7 @@ export default class AdminRestaurant extends React.Component {
           deleteId:this.refs.deleteId.value,
           findById:this.refs.findById.value,
           FindByUsername:this.refs.FindByUsername.value,
+          Owner:this.refs.Owner.value
       })
 
   }
@@ -189,7 +190,7 @@ export default class AdminRestaurant extends React.Component {
 
   save(e){
     e.preventDefault();
-    var url='http://localhost:8080/api/owner/'+this.state.id +'/restaurant'
+    var url='http://localhost:8080/api/owner/'+this.state.Owner +'/restaurant'
     console.log("Success from posting rest page!")
     fetch(url, {
         method: 'POST',
@@ -245,6 +246,16 @@ render(){
                   <div className={'container text-center'} >
 
                   <form>
+                  <div className="form-group">
+                      <input
+                          ref="Owner"
+                          type="text"
+                          className="form-control"
+                          id="id"
+                          placeholder="Owner"
+                          onChange={this.update.bind(this)}
+                      />
+                  </div>
                       <div className="form-group">
                           <input
                               ref="name"
