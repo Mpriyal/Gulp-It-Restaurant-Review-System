@@ -28,8 +28,8 @@ public class CustomerDao {
 			+ "Person.username =?";
 	private static final String FIND_CUSTOMER_CREDENTIALS = "SELECT * FROM Customer, Person WHERE Customer.Person = Person.Id AND"
 			+ " Person.username =? AND Person.password =?";
-	private static final String UPDATE_CUSTOMER = "UPDATE Person, Customer SET firstName =?, lastName =?, password =?,dob =?"
-			+ " WHERE Customer.Person = Person.Id AND Person.Id =?";
+	private static final String UPDATE_CUSTOMER = "UPDATE Person, Customer SET firstName =?, lastName =?,username=?, password =?,dob =?,email=?"
+			+ ",customer_key=? WHERE Customer.Person = Person.Id AND Person.Id =?";
 	private static final String DELETE_CUSTOMER = "DELETE p.*, c.* FROM Person p LEFT JOIN Customer c ON c.Person = p.id WHERE p.id =?";
 	private static final String FIND_CUSTOMER_ID_BY_USERNAME = "SELECT c.Person FROM Customer c, Person p WHERE c.Person = p.id AND username =?";
 	private static final String FIND_PERSON_ID_BY_CUSTOMER_ID = "SELECT Person FROM Customer WHERE Customer.Id=?";
@@ -277,9 +277,12 @@ public class CustomerDao {
 				statement = connection.prepareStatement(UPDATE_CUSTOMER);
 				statement.setString(1, customer.getFirstName());
 				statement.setString(2, customer.getLastName());
-				statement.setString(3, customer.getPassword());
-				statement.setDate(4, customer.getDOB());
-				statement.setInt(5, customerId);
+				statement.setString(3, customer.getUsername());
+				statement.setString(4, customer.getPassword());
+				statement.setDate(5, customer.getDOB());
+				statement.setString(6, customer.getEmail());
+				statement.setString(7, customer.getCustomerKey());
+				statement.setInt(8, customerId);
 				result = statement.executeUpdate();
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();

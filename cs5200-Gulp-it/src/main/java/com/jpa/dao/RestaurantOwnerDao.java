@@ -29,8 +29,8 @@ public class RestaurantOwnerDao {
 			+ "Person.username =?";
 	private static final String FIND_OWNER_CREDENTIALS = "SELECT * FROM restaurant_owner, Person WHERE restaurant_owner.Person = Person.Id AND"
 			+ " Person.username =? AND Person.password =?";
-	private static final String UPDATE_OWNER = "UPDATE Person, restaurant_owner SET firstName =?, lastName =?, password =?,dob =?"
-			+ " WHERE restaurant_owner.Person = Person.Id AND restaurant_owner.Person =?";
+	private static final String UPDATE_OWNER = "UPDATE Person, restaurant_owner SET firstName =?, lastName =?,username=?, password =?,dob =?, email=?"
+			+ " ,owner_key=? WHERE restaurant_owner.Person = Person.Id AND restaurant_owner.Person =?";
 	private static final String DELETE_OWNER = "DELETE p.*, r.* FROM Person p LEFT JOIN restaurant_owner r ON r.Person = p.id WHERE r.Person =?";
 	private static final String FIND_OWNER_ID_BY_USERNAME = "SELECT r.Person FROM restaurant_owner r, Person p WHERE r.Person = p.id AND username =?";
 	private static final String FIND_OWNERID_BY_PERSON = "SELECT Id FROM restaurant_owner WHERE Person=?";
@@ -278,9 +278,12 @@ public class RestaurantOwnerDao {
 				statement = connection.prepareStatement(UPDATE_OWNER);
 				statement.setString(1, owner.getFirstName());
 				statement.setString(2, owner.getLastName());
-				statement.setString(3, owner.getPassword());
-				statement.setDate(4, owner.getDOB());
-				statement.setInt(5, ownerId);
+				statement.setString(3, owner.getUsername());
+				statement.setString(4, owner.getPassword());
+				statement.setDate(5, owner.getDOB());
+				statement.setString(6, owner.getEmail());
+				statement.setString(7, owner.getOwnerKey());
+				statement.setInt(8, ownerId);
 				result = statement.executeUpdate();
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();

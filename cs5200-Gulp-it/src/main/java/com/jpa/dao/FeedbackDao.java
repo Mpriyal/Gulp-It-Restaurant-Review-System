@@ -140,6 +140,37 @@ public class FeedbackDao {
 		return feedbacks;
 	}
 	
+	public List<Feedback> getAllFeedbackByRestaurantId(int RestaurantId) {
+		List<Feedback> feedbacks = new ArrayList<Feedback>();
+		try {
+			Class.forName(JDBC_DRIVER);
+			conn = DriverManager.getConnection(DB_URL,USER,PASS);
+			String feedbackByRestaurant = "SELECT * FROM Feedback WHERE Feedback.Restaurant=?";
+			statement= conn.prepareStatement(feedbackByRestaurant);
+			statement.setInt(1,RestaurantId);
+			resultset = statement.executeQuery();
+			while(resultset.next()){
+				int id= resultset.getInt("id");
+				String comment = resultset.getString("comments");
+				Boolean favourite = resultset.getBoolean("favourite");
+				int Restaurant = resultset.getInt("Restaurant");
+				int customer = resultset.getInt("Customer");
+				Feedback feedback = new Feedback(id,comment,favourite,Restaurant,customer);
+				feedbacks.add(feedback);
+			}
+			statement.close();
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return feedbacks;
+	}
+	
 	public int addFeedbackForRestaurantByCustomer(Feedback feedback, int Restaurant, int Customer) {
 		int result = -1;
 		try {
@@ -304,30 +335,71 @@ public class FeedbackDao {
 		return feedbacks;
 	}
 	
-	public List<Feedback> getFeedbackByCustomerId(int id,String comments,Boolean favourite) {
-		CustomerDao cDao = CustomerDao.getInstance();
-		FeedbackDao feedDao = FeedbackDao.getInstance();
-		List<Feedback> feed1 = new ArrayList<>();
-		int cust_id = cDao.findCustIdByPersonId(id);
-		if(favourite!=null) {
-			List<Feedback> feed = feedDao.getAllFavouritesByCustomerId(cust_id);
-			return feed;
+	public List<Feedback> getAllCommentsByRestaurantId(int RestaurantId) {
+		List<Feedback> feedbacks = new ArrayList<Feedback>();
+		try {
+			Class.forName(JDBC_DRIVER);
+			conn = DriverManager.getConnection(DB_URL,USER,PASS);
+			String commentsByRestaurant = "SELECT id,comments,Customer,Restaurant FROM Feedback WHERE comments IS NOT NULL AND Restaurant=?";
+			statement= conn.prepareStatement(commentsByRestaurant);
+			statement.setInt(1,RestaurantId);
+			resultset = statement.executeQuery();
+			while(resultset.next()){
+				int id= resultset.getInt("id");
+				String comments = resultset.getString("comments");
+				int Restaurant = resultset.getInt("Restaurant");
+				int customer = resultset.getInt("Customer");
+				Feedback feedback = new Feedback(id,comments,Restaurant,customer);
+				feedbacks.add(feedback);
+			}
+			statement.close();
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
-		else if(comments!=null) {
-			List<Feedback> feed2 = feedDao.getAllCommentsByCustomerId(cust_id);
-			return feed2;
+		return feedbacks;
+	}
+	
+	public List<Feedback> getAllFavouritesByRestaurantId(int RestaurantId) {
+		List<Feedback> feedbacks = new ArrayList<Feedback>();
+		try {
+			Class.forName(JDBC_DRIVER);
+			conn = DriverManager.getConnection(DB_URL,USER,PASS);
+			String favouritesByRestaurant = "SELECT id,favourite,Customer,Restaurant FROM Feedback WHERE favourite <>0 AND Restaurant=?";
+			statement= conn.prepareStatement(favouritesByRestaurant);
+			statement.setInt(1,RestaurantId);
+			resultset = statement.executeQuery();
+			while(resultset.next()){
+				int id= resultset.getInt("id");
+				Boolean favourite = resultset.getBoolean("favourite");
+				int Restaurant = resultset.getInt("Restaurant");
+				int customer = resultset.getInt("Customer");
+				Feedback feedback = new Feedback(id,favourite,Restaurant,customer);
+				feedbacks.add(feedback);
+			}
+			statement.close();
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
-		else
-			feed1 = feedDao.getAllFeedbackByCustomerId(cust_id);
-			return feed1;
+		return feedbacks;
 	}
 	
 	public static void main(String[] args) {
 		FeedbackDao dao = FeedbackDao.getInstance();
 //		System.out.println(dao.getAllFeedbackForRestaurantByaCustomer(1, 8));
-//		System.out.println(dao.getAllCommentsByCustomerId(8));
-		System.out.println(dao.getFeedbackByCustomerId(28, "abc", null));
-//		System.out.println(dao.getAllFavouritesByCustomerId(8));
+//		System.out.println(dao.getAllCommentsByRestaurantId(1));
+//		System.out.println(dao.getAllFavouritesByRestaurantId(1));
 		
 	}
 }
