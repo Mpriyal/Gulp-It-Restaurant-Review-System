@@ -127,7 +127,12 @@ public class RestaurantOwnerService {
 			Owner_id1 = dao.findOwnerIdByPersonId(ownerId);
 			return mDao.findAllMenuItemsByRestaurantId(restId,Owner_id1);	
 	}
-	
+	//view a menu item with id, menuId, of a restaurant with id, restId
+			@RequestMapping(value="api/restaurant/{restId}/menu", method=RequestMethod.GET)
+			public List<Menu> getMenuFromRestId(@PathVariable(name="restId")int restId) {
+				MenuDao mDao = MenuDao.getInstance();
+				return mDao.getMenuFromRestId(restId);
+			}
 	//view a menu item with id, menuId, of a restaurant with id, restId
 		@RequestMapping(value="api/owner/{ownerId}/restaurant/{restId}/menu/{menuId}", method=RequestMethod.GET)
 		public Menu getMenuItemByMenuId(@PathVariable(name="restId")int restId,@PathVariable(name="menuId")int menuId,

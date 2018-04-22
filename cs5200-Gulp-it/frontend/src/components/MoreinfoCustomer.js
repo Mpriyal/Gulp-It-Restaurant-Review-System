@@ -10,12 +10,11 @@ export default class MoreinfoCustomer extends React.Component{
             userid:localStorage.getItem("userid"),
             btnclass:"btn btn-primary",
             flag:false,
-            custId:''
+            custId:'',
+            menu:[]
         }
-
     }
-
-    componentWillMount() {
+    componentDidMount() {
         let restId = this.props.restid;
         let testurl="http://localhost:8080/api/restaurant/2";
         let url = "http://localhost:8080/api/restaurant/"+restId;
@@ -33,7 +32,8 @@ export default class MoreinfoCustomer extends React.Component{
                         restaurant_owner: res.data.restaurant_owner,
                         restaurant_type: res.data.restaurant_type,
                         newComment:'',
-                        fav:false
+                        fav:false,
+                        menu:[]
                     })
                 }
             })
@@ -46,6 +46,17 @@ export default class MoreinfoCustomer extends React.Component{
                 custId:res.data
             })
             console.log(res);
+          }
+        )
+        var self = this
+        let menuUrl="http://localhost:8080/api/restaurant/"+this.props.restid+"/menu";
+        axios.get(menuUrl).then(
+          function(res){
+            console.log("problem is here")
+            console.log(res)
+            self.setState({
+              menu:res.data
+            })
           }
         )
         axios.get(url2)
@@ -71,13 +82,42 @@ export default class MoreinfoCustomer extends React.Component{
             .then(result => {
                 console.log(result)
                 this.setState({
-                    feedbacks: result.data
+                    feedbacks:result.data
                 })
             }).then(console.log(this));
         console.log("after mounting");
         console.log(this)
+
+
     }
 
+        handleDelete(id,index){
+        var testUrl="http://localhost:8080/api/owner/31/restaurant/1/menu/"+id
+          console.log(id)
+          axios.delete(testUrl).then(
+            console.log("menu deleted")
+          )
+          var array = this.state.menu;
+          array.splice(index, 1);
+          this.setState({
+            menu:array
+          })
+        }
+        handleUpdate(){
+
+        }
+        refresh(){
+          var self=this
+          let menuUrl="http://localhost:8080/api/owner/"+this.state.ownerId+"/restaurant/"+this.props.restid+"/menu";
+          axios.get(menuUrl).then(
+            function(res){
+              console.log(res)
+              self.setState({
+                menu:res.data
+              })
+            }
+          )
+        }
     restaurantType(){
         if(this.state.restaurant_type===1){
             return "Fast Food"
@@ -212,6 +252,35 @@ handleRefresh(e){
                             </p>
                         </form>
                     </div>
+
+                    <p className="head">
+                    The Menu:
+                    </p>
+                    <table className="table table-dark m-t-5">
+                        <thead>
+                          <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Description</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+
+                    {
+                      this.state.menu.map((menuitem,index)=>
+                      <tr key={index}>
+                      <th scope="row">{menuitem.id}</th>
+                      <td>{menuitem.item_name}</td>
+                      <td>{menuitem.item_type}</td>
+                      <td>{menuitem.price}</td>
+                      <td>{menuitem.description}</td>
+                      </tr>
+                    )
+                    }
+                        </tbody>
+                      </table>
 
                 </div>
 

@@ -5,8 +5,14 @@ import axios from 'axios';
 export default class Menu extends React.Component {
   constructor(props) {
     super(props);
+    this.props={
+      menu:[]
+    }
 
-
+  }
+  componentDidMount(){
+    this.se
+    this.state.menu
   }
   handleDelete(id,index){
   var testUrl="http://localhost:8080/api/owner/31/restaurant/1/menu/"+id
@@ -42,7 +48,7 @@ export default class Menu extends React.Component {
           <tbody>
 
       {
-        this.props.menu.map((menuitem,index)=>
+        this.state.menu.map((menuitem,index)=>
         <tr key={index}>
         <th scope="row">{menuitem.id}</th>
         <td>{menuitem.item_name}</td>

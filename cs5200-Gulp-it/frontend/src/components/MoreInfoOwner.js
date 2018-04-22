@@ -118,26 +118,27 @@ export default class MoreinfoOwner extends React.Component{
         e.preventDefault();
         console.log("Success from FoodPage!");
 
-        fetch('http://localhost:8080/api/owner/31/restaurant/2/food', {
+        fetch('http://localhost:8080/api/owner/'+this.state.ownerId+'/restaurant/'+this.props.restid+'/menu', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                item_name:this.state.name,
-                price:this.state.price,
-                description:this.state.description,
-                item_type:this.state.type
+              item_name: this.state.name,
+              item_type: this.state.type,
+              price: this.state.price,
+              description: this.state.description,
+              restaurant: this.props.restid
 
             })
-        }).then(console.log("saved to the db"));
+        }).then(console.log("saved menu to the db "));
 
         this.forceUpdate();
     }
   menuUpdate(){
         this.setState({
-            name:this.refs.name.value,
+            name:this.refs.menuName.value,
             description:this.refs.des.value,
             price:this.refs.price.value,
             type:this.refs.types.value
@@ -214,21 +215,33 @@ export default class MoreinfoOwner extends React.Component{
         )
     }
 
-handleDelete(id,index){
-var testUrl="http://localhost:8080/api/owner/31/restaurant/1/menu/"+id
-  console.log(id)
-  axios.delete(testUrl).then(
-    console.log("menu deleted")
-  )
-  var array = this.state.menu;
-  array.splice(index, 1);
-  this.setState({
-    menu:array
-  })
-}
-handleUpdate(){
+    handleDelete(id,index){
+    var testUrl="http://localhost:8080/api/owner/31/restaurant/1/menu/"+id
+      console.log(id)
+      axios.delete(testUrl).then(
+        console.log("menu deleted")
+      )
+      var array = this.state.menu;
+      array.splice(index, 1);
+      this.setState({
+        menu:array
+      })
+    }
+    handleUpdate(){
 
-}
+    }
+    refresh(){
+      var self=this
+      let menuUrl="http://localhost:8080/api/owner/"+this.state.ownerId+"/restaurant/"+this.props.restid+"/menu";
+      axios.get(menuUrl).then(
+        function(res){
+          console.log(res)
+          self.setState({
+            menu:res.data
+          })
+        }
+      )
+    }
     renderNormal(){
         return(
             <div className={"row m-t-2"}>
@@ -267,7 +280,36 @@ handleUpdate(){
                     {this.state.feedbacks.length}
                     </h2>
 
-                    <Menu menu={this.state.menu}/>
+                    <p className="head">
+                    The Menu:
+                    </p>
+                    <table className="table table-dark m-t-5">
+                        <thead>
+                          <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Description</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+
+                    {
+                      this.state.menu.map((menuitem,index)=>
+                      <tr key={index}>
+                      <th scope="row">{menuitem.id}</th>
+                      <td>{menuitem.item_name}</td>
+                      <td>{menuitem.item_type}</td>
+                      <td>{menuitem.price}</td>
+                      <td>{menuitem.description}</td>
+                      <td><button className="btn btn-danger btn-sm" onClick={this.handleDelete.bind(this,menuitem.id,index)}> Delete</button></td>
+                      <td><button className="btn btn-success btm-sm"onClick={this.handleUpdate.bind(this,menuitem.id,index)}> Update</button></td>
+                      </tr>
+                    )
+                    }
+                        </tbody>
+                      </table>
 
                     <div className={"row menu2 m-5 p-4" }>
                         <div className={"col-10 text-center"}>
@@ -275,7 +317,7 @@ handleUpdate(){
                                <div className={"card-header menu"}>Add Menu</div>
                                 <div className="form-group">
                                     <input
-                                        ref="name"
+                                        ref="menuName"
                                         type="text"
                                         className="form-control"
                                         id="id"
@@ -285,7 +327,7 @@ handleUpdate(){
                                 </div>
                                 <div className="form-group">
                                     <input
-                                        ref="fdes"
+                                        ref="des"
                                         type="text"
                                         className="form-control"
                                         id="description"
@@ -316,8 +358,14 @@ handleUpdate(){
                                 <button
                                     onClick={this.saveMenu.bind(this)}
                                     type="submit"
-                                    className="btn btn-primary"
+                                    className="btn btn-primary btn-sm"
                                 >Save Menu
+                                </button>
+                                <button
+                                    onClick={this.refresh.bind(this)}
+                                    type="submit"
+                                    className="btn btn-primary btn-sm"
+                                >Refresh
                                 </button>
                             </form>
                         </div>
