@@ -15,6 +15,16 @@ export default class OwnerProfile extends React.Component{
         this.handleUpdate = this.handleUpdate.bind(this);
     }
     handleUpdate(){
+      axios.put("http://localhost:8080/api/customer/"+this.state.userid,{
+
+        firstName: this.state.firstName,
+        lastName:this.state.lastName,
+        username: this.state.username,
+        password: this.state.password,
+        email:this.state.email,
+        dob: this.state.dob,
+        customerKey:this.state.customerKey
+      })
         this.setState({
             update:true
         })
@@ -44,6 +54,7 @@ export default class OwnerProfile extends React.Component{
           id: res.data.id,
           username: res.data.username,
           dob:res.data.dateOfBirth,
+          customerKey:res.data.customerKey
         })
       }
     )
@@ -78,15 +89,6 @@ export default class OwnerProfile extends React.Component{
                 update: false,
 
             });
-            axios({
-                    method: 'post',
-                    url: '/user/12345',
-                    data: {
-                      firstName: 'Fred',
-                      lastName: 'Flintstone'
-                    }
-                  });
-
 
         //PUT THE PUR REQUEST TO UPDATE THE CUSTOMER
         fetch('http://localhost:8080/api/customer/', {

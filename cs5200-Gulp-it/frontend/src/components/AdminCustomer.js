@@ -73,7 +73,8 @@ export default class AdminCustomer extends React.Component {
           FindByUsername:this.refs.FindByUsername.value,
           findByCredentialspass:this.refs.findByCredentialspass.value,
           findByCredentials:this.refs.findByCredentials.value,
-          customerKey:this.refs.key.value
+          customerKey:this.refs.key.value,
+          newKey:this.refs.newKey.value
       })
 
   }
@@ -202,22 +203,16 @@ handleUpdatebutton(e){
   e.preventDefault();
   console.log("Success from updatePage!")
   let url='http://localhost:8080/api/customer/'+this.state.idupdated
-  fetch(url ,{
-      method: 'PUT',
-      headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
+  axios.put(url ,{
           firstName: this.state.newfirstName,
           lastName: this.state.newlastName,
           username:  this.state.newusername,
           password:  this.state.newpassword,
           email:  this.state.newemail,
           dob: this.state.newdateOfBirth,
-          customerKey: this.state.key
+          customerKey: this.state.newKey
       })
-  }).then(console.log("update in the db"));
+.then(console.log("update in the db"));
 
 }
   render(){
@@ -411,11 +406,11 @@ handleUpdatebutton(e){
                           </div>
                           <div className="form-group">
                               <input
-                                  ref="newtypeofperson"
+                                  ref="newKey"
                                   type="text"
                                   className="form-control"
                                   id="type"
-                                  placeholder="Type"
+                                  placeholder="Customer Key"
                                   onChange={this.update.bind(this)}
                               />
                           </div>
