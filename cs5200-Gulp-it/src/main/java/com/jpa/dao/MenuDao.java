@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.jpa.models.Menu;
+import com.jpa.models.Restaurant;
 
 /**
  * 
@@ -34,22 +35,24 @@ public class MenuDao {
 	}
 	private MenuDao() {}
 
-	public Menu findMenuById(int MenuId) {
-		Menu menu =null;
+	//this function find the details of a menu item, given its id
+	public Menu findMenuItemByMenuId(int MenuId) {
+		Menu menuItem =null;
 		try {
 			Class.forName(JDBC_DRIVER);
 			conn = DriverManager.getConnection(DB_URL,USER,PASS);
-			String MenuById = "SELECT * FROM Menu WHERE id = ?";
-			statement= conn.prepareStatement(MenuById);
+			String MenuItemById = "SELECT * FROM Menu WHERE id = ?";
+			statement= conn.prepareStatement(MenuItemById);
 			statement.setInt(1,MenuId);
 			resultset = statement.executeQuery();
 			if(resultset.next()){
 				int id= resultset.getInt("id");
-				String name = resultset.getString("name");
+				String item_name = resultset.getString("item_name");
+				int item_type = resultset.getInt("item_type");
 				int price = resultset.getInt("price");
 				String description = resultset.getString("description");
 				int restaurant1 = resultset.getInt("Restaurant");
-				menu = new Menu(id,name,price,description,restaurant1);
+				menuItem = new Menu(id,item_name,item_type,price,description,restaurant1);
 			}
 			statement.close();
 		} catch (SQLException | ClassNotFoundException e) {
@@ -61,24 +64,27 @@ public class MenuDao {
 				e.printStackTrace();
 			}
 		}
-		return menu;
+		return menuItem;
 	}
-	public List<Menu> findAllMenuByName (int menuName) {
+	
+	//this function finds all the items in the menu with the given name
+	public List<Menu> findMenuItemsByName (int menuItemName) {
 		List <Menu> menus = new ArrayList<>();
 		try {
 			Class.forName(JDBC_DRIVER);
 			conn = DriverManager.getConnection(DB_URL,USER,PASS);
-			String AllMenus = "SELECT * FROM Menu WHERE name=?";
+			String AllMenus = "SELECT * FROM Menu WHERE item_name LIKE ?";
 			statement= conn.prepareStatement(AllMenus);
-			statement.setInt(1, menuName);
+			statement.setString(1, "%" + menuItemName + "%");
 			resultset = statement.executeQuery();
 			while(resultset.next()) {
 				int id= resultset.getInt("id");
-				String name = resultset.getString("name");
+				String item_name = resultset.getString("item_name");
+				int item_type = resultset.getInt("item_type");
 				int price = resultset.getInt("price");
 				String description = resultset.getString("description");
 				int restaurant1 = resultset.getInt("Restaurant");
-				Menu menu = new Menu(id,name,price,description,restaurant1);
+				Menu menu = new Menu(id,item_name,item_type,price,description,restaurant1);
 				menus.add(menu);
 			}
 			statement.close();
@@ -94,7 +100,8 @@ public class MenuDao {
 		return menus;
 	}
 
-	public List<Menu> findAllMenuByRestaurant (int RestaurantId) {
+	//this function lists all the items in the menu of the restaurant with the given id
+	public List<Menu> findAllMenuItemsByRestaurantId (int RestaurantId) {
 		List <Menu> menus = new ArrayList<>();
 		try {
 			Class.forName(JDBC_DRIVER);
@@ -105,11 +112,12 @@ public class MenuDao {
 			resultset = statement.executeQuery();
 			while(resultset.next()) {
 				int id= resultset.getInt("id");
-				String name = resultset.getString("name");
+				String item_name = resultset.getString("item_name");
+				int item_type = resultset.getInt("item_type");
 				int price = resultset.getInt("price");
 				String description = resultset.getString("description");
 				int restaurant1 = resultset.getInt("Restaurant");
-				Menu menu = new Menu(id,name,price,description,restaurant1);
+				Menu menu = new Menu(id,item_name,item_type,price,description,restaurant1);
 				menus.add(menu);
 			}
 			statement.close();
@@ -124,7 +132,41 @@ public class MenuDao {
 		}
 		return menus;
 	}
+	
+	//this function updates the value of a menu item according to the given values
+	// given the restaurant id and its owner id and the id of the item to be updated
+	public int updateMenuItem (int id,int RestId, int ownerId, Menu menu){
+		int result = 0;
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			conn = DriverManager.getConnection(DB_URL,USER,PASS);
+			String RestaurantUpdate = "UPDATE Menu m INNER JOIN Restaurant r ON m.Restaurant = r.id "
+					+ "SET item_name = ? ,item_type = ? ,price= ? ,m.description = ?  "
+					+ "WHERE m.Restaurant=? AND m.id = ? AND r.restaurant_owner = ?";
+			statement = conn.prepareStatement(RestaurantUpdate);
+			statement.setString(1, menu.getItem_name());
+			statement.setInt(2, menu.getItem_type());
+			statement.setFloat(3, menu.getPrice());
+			statement.setString(4, menu.getDescription());
+			statement.setInt(5, RestId);
+			statement.setInt(6, id);
+			statement.setInt(7, ownerId);
 
+			result = statement.executeUpdate();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+		}
+	
 	public int deleteMenuForRestaurant(int id) {
 		int result = -1;
 		try {

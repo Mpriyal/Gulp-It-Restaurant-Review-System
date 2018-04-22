@@ -11,10 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.jpa.dao.AdminDao;
 import com.jpa.dao.CustomerDao;
-import com.jpa.dao.FoodDao;
 import com.jpa.dao.RestaurantOwnerDao;
 import com.jpa.models.Customer;
-import com.jpa.models.Food;
 import com.jpa.models.User;
 
 

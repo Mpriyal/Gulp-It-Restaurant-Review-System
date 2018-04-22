@@ -2,10 +2,11 @@ package com.jpa.models;
 
 public class Menu {
 	private int id;
-	private String name;
+	private String item_name;
+	private int item_type;
 	private int price;
 	private String description;
-	private int restaurant;
+	private int Restaurant;
 	
 	/**
 	 * @author amanrayat	
@@ -13,11 +14,23 @@ public class Menu {
 	public Menu() {
 		super();
 	}
-	public Menu(String name, int price, String description) {
+	
+	public Menu(String item_name, int item_type, int price, String description) {
 		super();
-		this.name = name;
+		this.item_name = item_name;
+		this.item_type = item_type;
 		this.price = price;
 		this.description = description;
+	}
+	
+	public Menu(int id, String item_name,int item_type, int price, String description, int Restaurant) {
+		super();
+		this.id = id;
+		this.item_name = item_name;
+		this.item_type = item_type;
+		this.price = price;
+		this.description = description;
+		this.Restaurant = Restaurant;
 	}
 	
 	public int getId() {
@@ -26,26 +39,30 @@ public class Menu {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public String getName() {
-		return name;
+
+	public String getItem_name() {
+		return item_name;
 	}
-	public void setName(String name) {
-		this.name = name;
+
+	public void setItem_name(String item_name) {
+		this.item_name = item_name;
 	}
+
+	public int getItem_type() {
+		return item_type;
+	}
+
+	public void setItem_type(int item_type) {
+		this.item_type = item_type;
+	}
+
 	public int getPrice() {
 		return price;
 	}
 	public void setPrice(int price) {
 		this.price = price;
 	}
-	public Menu(int id, String name, int price, String description, int restaurant) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.price = price;
-		this.description = description;
-		this.restaurant = restaurant;
-	}
+
 	public String getDescription() {
 		return description;
 	}
@@ -53,10 +70,10 @@ public class Menu {
 		this.description = description;
 	}
 	public int getRestaurant() {
-		return restaurant;
+		return Restaurant;
 	}
-	public void setRestaurant(int restaurant) {
-		this.restaurant = restaurant;
+	public void setRestaurant(int Restaurant) {
+		this.Restaurant = Restaurant;
 	}
 	
 }

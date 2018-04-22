@@ -6,14 +6,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.jpa.dao.CustomerDao;
-import com.jpa.dao.DrinksDao;
-import com.jpa.dao.FoodDao;
 //import com.jpa.dao.FoodDao;
 import com.jpa.dao.MenuDao;
 import com.jpa.dao.RestaurantDao;
 import com.jpa.dao.RestaurantOwnerDao;
-import com.jpa.models.Drinks;
-import com.jpa.models.Food;
 import com.jpa.models.Menu;
 import com.jpa.models.Restaurant;
 import com.jpa.models.RestaurantOwner;
