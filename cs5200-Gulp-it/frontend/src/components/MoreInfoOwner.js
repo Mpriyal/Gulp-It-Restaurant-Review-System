@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import Menu from './Menu';
 
 
 export default class MoreinfoOwner extends React.Component{
@@ -22,13 +23,14 @@ export default class MoreinfoOwner extends React.Component{
             fdescription:'',
             fprice:'',
             veg:'',
-            ownerId:localStorage.getItem('userid')
+            ownerId:localStorage.getItem('userid'),
+            menu:[]
         }
 
     }
 
     componentDidMount() {
-
+        let self=this
         const string = 'http://localhost:8080/api/restaurant/'+this.props.restid;
         axios.get(string)
             .then(res => {
@@ -51,10 +53,20 @@ export default class MoreinfoOwner extends React.Component{
         axios.get(string2)
             .then(result => {
                 console.log(result);
-                this.setState({
+                self.setState({
                     feedbacks: result.data
                 })
             }).then(console.log(this));
+
+        let menuUrl="http://localhost:8080/api/owner/"+this.state.ownerId+"/restaurant/"+this.props.restid+"/menu";
+        axios.get(menuUrl).then(
+          function(res){
+            console.log(res)
+            self.setState({
+              menu:res.data
+            })
+          }
+        )
     }
 
     restaurantType(){
@@ -92,7 +104,7 @@ export default class MoreinfoOwner extends React.Component{
                 restaurant_type: this.refs.type.value,
                 update:false
             });
-            
+
 
 
 
@@ -102,65 +114,36 @@ export default class MoreinfoOwner extends React.Component{
 
 
     }
-    saveFood(e){
+    saveMenu(e){
         e.preventDefault();
         console.log("Success from FoodPage!");
 
-        fetch('http://localhost:8080/api/owner/31/restaurant/2/food', {
+        fetch('http://localhost:8080/api/owner/'+this.state.ownerId+'/restaurant/'+this.props.restid+'/menu', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                name:this.state.fname,
-                price:this.state.fprice,
-                description:this.state.fdescription,
-                Vegetarian:this.state.veg
+              item_name: this.state.name,
+              item_type: this.state.type,
+              price: this.state.price,
+              description: this.state.description,
+              restaurant: this.props.restid
 
             })
-        }).then(console.log("saved to the db"));
+        }).then(console.log("saved menu to the db "));
 
         this.forceUpdate();
     }
-    saveDrink(e){
-        e.preventDefault();
-        console.log("Success from FoodPage!");
-
-        fetch('http://localhost:8080/api/owner/31/restaurant/2/drinks', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                name:this.state.dname,
-                price:this.state.dprice,
-                description:this.state.ddescription,
-                liquor:this.state.alcoholic
-
-            })
-        }).then(console.log("saved to the db"));
-        this.renderNormal();
-    }
-  foodUpdate(){
+  menuUpdate(){
         this.setState({
-            fname:this.refs.fname.value,
-            fdescription:this.refs.fdes.value,
-            fprice:this.refs.fprice.value,
-            veg:this.refs.veg.value
+            name:this.refs.menuName.value,
+            description:this.refs.des.value,
+            price:this.refs.price.value,
+            type:this.refs.types.value
         })
     }
-
-    drinkUpdate(){
-        this.setState({
-            dname:this.refs.dname.value,
-            ddescription:this.refs.ddes.value,
-            dprice:this.refs.dprice.value,
-            alcoholic:this.refs.alc.value
-        })
-    }
-
     renderUpdate(){
         return (
             <div className={'profile col-3'}>
@@ -232,12 +215,36 @@ export default class MoreinfoOwner extends React.Component{
         )
     }
 
+    handleDelete(id,index){
+    var testUrl="http://localhost:8080/api/owner/31/restaurant/1/menu/"+id
+      console.log(id)
+      axios.delete(testUrl).then(
+        console.log("menu deleted")
+      )
+      var array = this.state.menu;
+      array.splice(index, 1);
+      this.setState({
+        menu:array
+      })
+    }
+    handleUpdate(){
 
+    }
+    refresh(){
+      var self=this
+      let menuUrl="http://localhost:8080/api/owner/"+this.state.ownerId+"/restaurant/"+this.props.restid+"/menu";
+      axios.get(menuUrl).then(
+        function(res){
+          console.log(res)
+          self.setState({
+            menu:res.data
+          })
+        }
+      )
+    }
     renderNormal(){
-
         return(
-
-            <div className={"row m-t-5"}>
+            <div className={"row m-t-2"}>
 
                 <div className="profile col-3">
                     <h1>{this.state.name}</h1>
@@ -253,7 +260,7 @@ export default class MoreinfoOwner extends React.Component{
                     <button className={"btn btn-danger m-1"} onClick={this.delete.bind(this)}>Delete</button><br/>
 
                 </div>
-                <div className="col-6 comment2">
+                <div className="col-7 comment2">
                     <p className={"head"}>
                         Comments
                     </p>
@@ -272,116 +279,98 @@ export default class MoreinfoOwner extends React.Component{
                     <h2>
                     {this.state.feedbacks.length}
                     </h2>
+
+                    <p className="head">
+                    The Menu:
+                    </p>
+                    <table className="table table-dark m-t-5">
+                        <thead>
+                          <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Description</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+
+                    {
+                      this.state.menu.map((menuitem,index)=>
+                      <tr key={index}>
+                      <th scope="row">{menuitem.id}</th>
+                      <td>{menuitem.item_name}</td>
+                      <td>{menuitem.item_type}</td>
+                      <td>{menuitem.price}</td>
+                      <td>{menuitem.description}</td>
+                      <td><button className="btn btn-danger btn-sm" onClick={this.handleDelete.bind(this,menuitem.id,index)}> Delete</button></td>
+                      <td><button className="btn btn-success btm-sm"onClick={this.handleUpdate.bind(this,menuitem.id,index)}> Update</button></td>
+                      </tr>
+                    )
+                    }
+                        </tbody>
+                      </table>
+
                     <div className={"row menu2 m-5 p-4" }>
-                        <div className={"col-6"}>
+                        <div className={"col-10 text-center"}>
                             <form>
-                               <div className={"card-header menu"}>Add Food</div>
+                               <div className={"card-header menu"}>Add Menu</div>
                                 <div className="form-group">
                                     <input
-                                        ref="fname"
+                                        ref="menuName"
                                         type="text"
                                         className="form-control"
                                         id="id"
                                         placeholder="Name"
-                                        onChange={this.foodUpdate.bind(this)}
+                                        onChange={this.menuUpdate.bind(this)}
                                     />
                                 </div>
                                 <div className="form-group">
                                     <input
-                                        ref="fdes"
+                                        ref="des"
                                         type="text"
                                         className="form-control"
-                                        id="LastName"
+                                        id="description"
                                         placeholder="Description"
-                                        onChange={this.foodUpdate.bind(this)}
+                                        onChange={this.menuUpdate.bind(this)}
                                     />
                                 </div>
                                 <div className={'form-group'}>
                                     <input
-                                        ref="fprice"
+                                        ref="price"
                                         type="text"
                                         className="form-control"
                                         id="price"
                                         placeholder={'Price'}
-                                        onChange={this.foodUpdate.bind(this)}
+                                        onChange={this.menuUpdate.bind(this)}
                                     />
                                 </div>
                                 <div className="form-group">
                                     <input
-                                        ref="veg"
+                                        ref="types"
                                         type="text"
                                         className="form-control"
-                                        id="veg"
-                                        placeholder="Vegetarian"
-                                        onChange={this.foodUpdate.bind(this)}
+                                        id="type"
+                                        placeholder="Type"
+                                        onChange={this.menuUpdate.bind(this)}
                                     />
                                 </div>
                                 <button
-                                    onClick={this.saveFood.bind(this)}
+                                    onClick={this.saveMenu.bind(this)}
                                     type="submit"
-                                    className="btn btn-primary"
-                                >Save Food
+                                    className="btn btn-primary btn-sm"
+                                >Save Menu
                                 </button>
-                            </form>
-                        </div>
-                        <div className={"col-6"}>
-                            <form>
-                                <div className={"card-header menu"}>Add Drinks</div>
-                                <div className="form-group">
-                                    <input
-                                        ref="dname"
-                                        type="text"
-                                        className="form-control"
-                                        id="id"
-                                        placeholder="Name"
-                                        onChange={this.drinkUpdate.bind(this)}
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <input
-                                        ref="ddes"
-                                        type="text"
-                                        className="form-control"
-                                        id="LastName"
-                                        placeholder="Description"
-                                        onChange={this.drinkUpdate.bind(this)}
-                                    />
-                                </div>
-
-                                <div className={'form-group'}>
-                                    <input
-                                        ref="dprice"
-                                        type="text"
-                                        className="form-control"
-                                        id="price"
-                                        placeholder={'Price'}
-                                        onChange={this.drinkUpdate.bind(this)}
-                                    />
-                                </div>
-
-                                <div className="form-group">
-                                    <input
-                                        ref="alc"
-                                        type="text"
-                                        className="form-control"
-                                        id="veg"
-                                        placeholder="Alcoholic"
-                                        onChange={this.drinkUpdate.bind(this)}
-                                    />
-                                </div>
                                 <button
-                                    onClick={this.saveDrink.bind(this)}
+                                    onClick={this.refresh.bind(this)}
                                     type="submit"
-                                    className="btn btn-primary"
-                                >Save Drinks
+                                    className="btn btn-primary btn-sm"
+                                >Refresh
                                 </button>
                             </form>
                         </div>
-
                     </div>
                 </div>
-
-
             </div>)
 
     }

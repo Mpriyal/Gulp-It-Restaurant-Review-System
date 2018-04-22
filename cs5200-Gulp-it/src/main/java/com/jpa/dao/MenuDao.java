@@ -206,6 +206,38 @@ public class MenuDao {
 		return result;
 		}
 	
+	public List<Menu> getMenuFromRestId(int RestId) {
+		List <Menu> menus = new ArrayList<>();
+		try {
+			Class.forName(JDBC_DRIVER);
+			conn = DriverManager.getConnection(DB_URL,USER,PASS);
+			String AllMenusByRestaurant = "SELECT * FROM Menu WHERE Restaurant=?";
+			statement= conn.prepareStatement(AllMenusByRestaurant);
+			statement.setInt(1, RestId);
+			resultset = statement.executeQuery();
+			while(resultset.next()) {
+				int id= resultset.getInt("id");
+				String item_name = resultset.getString("item_name");
+				int item_type = resultset.getInt("item_type");
+				int price = resultset.getInt("price");
+				String description = resultset.getString("description");
+				int restaurant1 = resultset.getInt("Restaurant");
+				Menu menu = new Menu(id,item_name,item_type,price,description,restaurant1);
+				menus.add(menu);
+			}
+			statement.close();
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return menus;
+	}
+	
 	public int deleteMenuForRestaurant(int id,int ownerId, int restId) {
 		int result = -1;
 		try {
