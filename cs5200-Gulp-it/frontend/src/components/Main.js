@@ -11,6 +11,7 @@ import Admin from './Admin'
 import AdminOwner from './AdminOwner'
 import AdminRestaurant from './AdminRestaurant'
 import AdminMenu from './AdminMenu'
+import EventProviderHome from './EventProviderHome'
 
 
 
@@ -22,6 +23,7 @@ const Main = () => (
       <Route exact  path='/' component={SearchHome}/>
       <Route exact path='/profile' component={ProfileCustomer}/>
       <Route exact path='/owner' component={OwnerProfile}/>
+      <Route exact path='/eventProvider' component={EventProviderHome}/>
       <Route exact path='/registeration' component={Register}/>
       <Route exact path='/admin' component={Admin}/>
       <Route exact path='/admin/owner' component={AdminOwner}/>
