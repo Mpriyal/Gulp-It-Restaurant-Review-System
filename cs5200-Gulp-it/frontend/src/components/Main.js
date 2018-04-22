@@ -10,6 +10,8 @@ import AdminCustomer from './AdminCustomer'
 import Admin from './Admin'
 import AdminOwner from './AdminOwner'
 import AdminRestaurant from './AdminRestaurant'
+import AdminMenu from './AdminMenu'
+
 
 
 
@@ -25,6 +27,7 @@ const Main = () => (
       <Route exact path='/admin/owner' component={AdminOwner}/>
       <Route exact path='/admin/customer' component={AdminCustomer}/>
       <Route exact path='/admin/restaurant' component={AdminRestaurant}/>
+      <Route exact path='/admin/menu' component={AdminMenu}/>
     </Switch>
   </main>
 )

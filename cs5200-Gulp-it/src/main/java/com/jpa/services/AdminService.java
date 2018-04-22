@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.jpa.dao.AdminDao;
 import com.jpa.dao.CustomerDao;
+import com.jpa.dao.MenuDao;
 import com.jpa.dao.RestaurantOwnerDao;
 import com.jpa.models.Customer;
 import com.jpa.models.User;
@@ -42,6 +43,13 @@ public class AdminService {
 		return 
 				ODao.findOwnerById(UserId);
 
+	}
+	
+	@RequestMapping(value="api/admin/menu/{menuId}", method=RequestMethod.DELETE)
+	public int deleteMenuById(@PathVariable(name="menuId")int menuId) {
+		MenuDao mDao = MenuDao.getInstance();
+		int result=mDao.deleteMenuById(menuId);
+		return result;
 	}
 
 }

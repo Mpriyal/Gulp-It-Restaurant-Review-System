@@ -137,7 +137,7 @@ export default class AdminCustomer extends React.Component {
     console.log("before findall");
     console.log(this);
     var self = this;
-    let url='http://localhost:8080/api/customers'
+    let url='http://localhost:8080/api/customer'
     axios.get(url)
     .then(function (res){
       console.log(res);
@@ -339,7 +339,16 @@ handleUpdatebutton(e){
                   <div className={'container text-center'} >
 
                       <form>
-                           
+                      <div className="form-group">
+                          <input
+                              ref="newId"
+                              type="text"
+                              className="form-control"
+                              id="newId"
+                              placeholder="ID"
+                              onChange={this.update.bind(this)}
+                          />
+                      </div>
                           <div className="form-group">
                               <input
                                   ref="newFirstName"
