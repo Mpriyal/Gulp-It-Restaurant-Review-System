@@ -21,6 +21,7 @@ public class EventDao {
 	final String USER = "Mpriyal";
 	final String PASS = "Priyaldbms94!";
 	private static final String DELETE_EVENT = "DELETE FROM Event WHERE Event.id=? AND event_provider=?";
+	private static final String DELETE_EVENT_RESTAURANT = "DELETE FROM Event2Restaurant WHERE Event=? AND Restaurant = (SELECT id FROM Restaurant WHERE restaurant_owner = ? AND id =?);";
 	static Connection conn = null;
 	static PreparedStatement statement = null;
 	static ResultSet resultset = null;
@@ -214,6 +215,104 @@ public class EventDao {
 		}
 		return events;
 	}
+	
+	/**
+	 * This method is used to find Events by Event Provider
+	 * @param provider
+	 * @return
+	 */
+	public List<Event> findAllEventsByRestaurant(int ownerId, int restId) {
+		List <Event> events = new ArrayList<>();
+		try {
+			Class.forName(JDBC_DRIVER);
+			conn = DriverManager.getConnection(DB_URL,USER,PASS);
+			String AllEvent = "SELECT * FROM Restaurant r, Event2Restaurant er, Event e "
+					+ "WHERE er.Restaurant = r.id AND er.Event = e.id AND r.id = ? AND r.restaurant_owner = ?";
+			statement= conn.prepareStatement(AllEvent);
+			statement.setInt(1, restId);
+			statement.setInt(2, ownerId);
+			resultset = statement.executeQuery();
+			while(resultset.next()) {
+				int id= resultset.getInt("id");
+				String event_name = resultset.getString("event_name");
+				String description = resultset.getString("description");
+				Date date = resultset.getDate("date");
+				int event_provider = resultset.getInt("event_provider");
+
+				Event event = new Event(id,event_name,description,date,event_provider);
+				events.add(event);
+			}
+			statement.close();
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return events;
+	}
+	
+	public Event findEventByIdAndRestaurant(int eventId, int ownerId, int restId) {
+		Event event = null;
+		try {
+			Class.forName(JDBC_DRIVER);
+			conn = DriverManager.getConnection(DB_URL,USER,PASS);
+			String AllEvent = "SELECT * FROM Restaurant r, Event2Restaurant er, Event e "
+					+ "WHERE er.Restaurant = r.id AND er.Event = e.id AND e.id = ? AND r.id = ? AND r.restaurant_owner = ?";
+			statement= conn.prepareStatement(AllEvent);
+			statement.setInt(1, eventId);
+			statement.setInt(2, restId);
+			statement.setInt(3, ownerId);
+			resultset = statement.executeQuery();
+			while(resultset.next()) {
+				int id= resultset.getInt("id");
+				String event_name = resultset.getString("event_name");
+				String description = resultset.getString("description");
+				Date date = resultset.getDate("date");
+				int event_provider = resultset.getInt("event_provider");
+				event = new Event(id,event_name,description,date,event_provider);
+			}
+			statement.close();
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return event;
+	}
+	
+	public int deleteEventforRestaurantByOwner(int eventId, int ownerId, int restId){
+		Connection connection = null;
+		PreparedStatement statement = null;
+		int result = 0;
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			connection = DriverManager.getConnection(DB_URL, USER, PASS);
+			statement = connection.prepareStatement(DELETE_EVENT_RESTAURANT);
+			statement.setInt(1, eventId);
+			statement.setInt(2, ownerId);
+			statement.setInt(3, restId);
+			result = statement.executeUpdate();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+		}
 	
 	/**
 	 * This function is used for updating the information about the event 

@@ -11,10 +11,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jpa.dao.EventDao;
 import com.jpa.dao.MenuDao;
 import com.jpa.dao.RestaurantDao;
 import com.jpa.dao.RestaurantOwnerDao;
 import com.jpa.models.Customer;
+import com.jpa.models.Event;
 import com.jpa.models.Menu;
 import com.jpa.models.Restaurant;
 import com.jpa.models.RestaurantOwner;
@@ -115,6 +117,38 @@ public class RestaurantOwnerService {
 		rDao.deleterestaurant(restId, Owner_id);
 	}
 	
+	//view all events of a restaurant by the restaurant id
+	@RequestMapping(value="api/owner/{ownerId}/restaurant/{restId}/event", method=RequestMethod.GET)
+	public List<Event> getAllEventsByRestaurantId(@PathVariable(name="restId")int restId,@PathVariable(name="ownerId")int ownerId) {
+		
+		List<Event> events = new ArrayList<>();
+		EventDao eDao = EventDao.getInstance();
+		int Owner_id1 = 0;
+		Owner_id1 = dao.findOwnerIdByPersonId(ownerId);
+		events = eDao.findAllEventsByRestaurant(Owner_id1, restId);
+		return events;
+	}
+	
+	//view a event of a restaurant by the restaurant id and event id
+	@RequestMapping(value="api/owner/{ownerId}/restaurant/{restId}/event/{eventId}", method=RequestMethod.GET)
+	public Event getEventByIdAndRestaurantId(@PathVariable(name="eventId")int eventId,@PathVariable(name="restId")int restId,@PathVariable(name="ownerId")int ownerId) {
+		
+		EventDao eDao = EventDao.getInstance();
+		int Owner_id1 = 0;
+		Owner_id1 = dao.findOwnerIdByPersonId(ownerId);
+		return eDao.findEventByIdAndRestaurant(eventId, Owner_id1, restId);
+	}
+	
+	//view a event of a restaurant by the restaurant id and event id
+	@RequestMapping(value="api/owner/{ownerId}/restaurant/{restId}/event/{eventId}", method=RequestMethod.DELETE)
+	public int deleteEventByIdAndRestaurantId(@PathVariable(name="eventId")int eventId,@PathVariable(name="restId")int restId,@PathVariable(name="ownerId")int ownerId) {
+		
+		EventDao eDao = EventDao.getInstance();
+		int Owner_id1 = 0;
+		Owner_id1 = dao.findOwnerIdByPersonId(ownerId);
+		return eDao.deleteEventforRestaurantByOwner(eventId, Owner_id1, restId);
+	}
+	
 	//view all menu item of a restaurant by the restaurant id
 	@RequestMapping(value="api/owner/{ownerId}/restaurant/{restId}/menu", method=RequestMethod.GET)
 	public List<Menu> getAllMenuItemsByRestaurantId(@PathVariable(name="restId")int restId,@PathVariable(name="ownerId")int ownerId,
@@ -161,11 +195,7 @@ public class RestaurantOwnerService {
 	public void deleteRestMenuItem(@PathVariable (name="menuId") int menuId, @PathVariable (name="ownerId") int ownerId,@PathVariable (name="restaurantId") int restId) {
 		int Owner_id = dao.findOwnerIdByPersonId(ownerId);
 		MenuDao mDao = MenuDao.getInstance();
-		mDao.deleteMenuForRestaurant(menuId, Owner_id, restId);
-		
+		mDao.deleteMenuForRestaurant(menuId, Owner_id, restId);	
 	}
-	
-
-	
-	}
+}
 

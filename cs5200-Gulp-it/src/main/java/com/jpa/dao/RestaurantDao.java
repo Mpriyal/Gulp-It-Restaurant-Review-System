@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.jpa.models.Feedback;
 import com.jpa.models.Restaurant;
 /**
  * 
@@ -508,6 +509,108 @@ public class RestaurantDao {
 			}
 		}
 		return restaurant;
+	}
+	
+	public List<Restaurant> findAllRestaurantsOfFeedbackByCustId(int custId) {
+		List<Restaurant> restaurants = new ArrayList<>();
+		try {
+			Class.forName(JDBC_DRIVER);
+			conn = DriverManager.getConnection(DB_URL,USER,PASS);
+			String RestaurantFromEvent = "SELECT * FROM Feedback f, Restaurant r,Customer c "
+					+ "WHERE r.id=f.Restaurant AND c.id=f.Customer AND c.id=?";
+			statement= conn.prepareStatement(RestaurantFromEvent);
+			statement.setInt(1,custId);
+			resultset = statement.executeQuery();
+			while(resultset.next()) {
+				int id= resultset.getInt("id");
+				String name = resultset.getString("name");
+				String description = resultset.getString("description");
+				String image_link = resultset.getString("image_link");
+				float cost_for_two = resultset.getFloat("cost_for_two");
+				int restaurant_owner = resultset.getInt("restaurant_owner");
+				int restaurant_type = resultset.getInt("restaurant_type");
+				Restaurant restaurant = new Restaurant(id,name,description,image_link,cost_for_two,restaurant_owner,restaurant_type);
+				restaurants.add(restaurant);
+			}
+			statement.close();
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return restaurants;
+	}
+	
+	public List<Restaurant> getAllCommentedRestByCustomerId(int CustomerId) {
+		List<Restaurant> restaurants = new ArrayList<>();
+		try {
+			Class.forName(JDBC_DRIVER);
+			conn = DriverManager.getConnection(DB_URL,USER,PASS);
+			String commentsByCustomer = "SELECT * FROM Feedback f, Restaurant r,Customer c "
+					+ "WHERE r.id=f.Restaurant AND c.id=f.Customer AND c.id=? AND comments IS NOT NULL";
+			statement= conn.prepareStatement(commentsByCustomer);
+			statement.setInt(1,CustomerId);
+			resultset = statement.executeQuery();
+			while(resultset.next()){
+				int id= resultset.getInt("id");
+				String name = resultset.getString("name");
+				String description = resultset.getString("description");
+				String image_link = resultset.getString("image_link");
+				float cost_for_two = resultset.getFloat("cost_for_two");
+				int restaurant_owner = resultset.getInt("restaurant_owner");
+				int restaurant_type = resultset.getInt("restaurant_type");
+				Restaurant restaurant = new Restaurant(id,name,description,image_link,cost_for_two,restaurant_owner,restaurant_type);
+				restaurants.add(restaurant);
+			}
+			statement.close();
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return restaurants;
+	}
+	
+	public List<Restaurant> getAllFavouriteRestByCustomerId(int CustomerId) {
+		List<Restaurant> restaurants = new ArrayList<>();
+		try {
+			Class.forName(JDBC_DRIVER);
+			conn = DriverManager.getConnection(DB_URL,USER,PASS);
+			String favouritesByCustomer = "SELECT * FROM Feedback f, Restaurant r,Customer c "
+					+ "WHERE r.id=f.Restaurant AND c.id=f.Customer AND c.id=? AND favourite <>0";
+			statement= conn.prepareStatement(favouritesByCustomer);
+			statement.setInt(1,CustomerId);
+			resultset = statement.executeQuery();
+			while(resultset.next()){
+				int id= resultset.getInt("id");
+				String name = resultset.getString("name");
+				String description = resultset.getString("description");
+				String image_link = resultset.getString("image_link");
+				float cost_for_two = resultset.getFloat("cost_for_two");
+				int restaurant_owner = resultset.getInt("restaurant_owner");
+				int restaurant_type = resultset.getInt("restaurant_type");
+				Restaurant restaurant = new Restaurant(id,name,description,image_link,cost_for_two,restaurant_owner,restaurant_type);
+				restaurants.add(restaurant);
+			}
+			statement.close();
+		} catch (SQLException | ClassNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return restaurants;
 	}
 	
 	public static void main(String[] args) {

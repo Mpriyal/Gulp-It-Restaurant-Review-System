@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.jpa.dao.CustomerDao;
 import com.jpa.dao.FeedbackDao;
+import com.jpa.dao.RestaurantDao;
 import com.jpa.models.Customer;
 import com.jpa.models.Feedback;
+import com.jpa.models.Restaurant;
 import com.jpa.models.RestaurantOwner;
 
 @CrossOrigin
@@ -105,6 +107,27 @@ public class CustomerService {
 	public int updateFeedback(int CustomerId, Feedback feedback){
 		FeedbackDao fDao = FeedbackDao.getInstance();
 		return fDao.updateFeedback(CustomerId, feedback);
+	}
+	
+	//view all restaurants where a customer has commented/marked favourite
+	@RequestMapping(value="api/customer/{custId}/feedback/restaurant", method=RequestMethod.GET)
+	public List<Restaurant> getRestaurantWithFeedbackByCustomerId(@PathVariable(name="custId")int id,@RequestParam(value="comments",required=false)String comments,
+			@RequestParam(value="favourite",required=false)Boolean favourite) {
+		
+		RestaurantDao rDao = RestaurantDao.getInstance();
+		List<Restaurant> restaurants = new ArrayList<>();
+		int cust_id = dao.findCustIdByPersonId(id);
+		if(favourite!=null) {
+			List<Restaurant> rest = rDao.getAllFavouriteRestByCustomerId(cust_id);
+			return rest;
+		}
+		else if(comments!=null) {
+			List<Restaurant> rest2 = rDao.getAllCommentedRestByCustomerId(cust_id);
+			return rest2;
+		}
+		else
+			restaurants = rDao.findAllRestaurantsOfFeedbackByCustId(cust_id);
+			return restaurants;
 	}
 
 }
