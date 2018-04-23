@@ -11,7 +11,9 @@ export default class MoreinfoCustomer extends React.Component{
             btnclass:"btn btn-primary",
             flag:false,
             custId:'',
-            menu:[]
+            menu:[],
+            restaurant_owner:'',
+            events:[]
         }
     }
     componentDidMount() {
@@ -33,10 +35,21 @@ export default class MoreinfoCustomer extends React.Component{
                         restaurant_type: res.data.restaurant_type,
                         newComment:'',
                         fav:false,
-                        menu:[]
+                        menu:[],
+                        events:[]
                     })
                 }
             })
+
+        var self = this
+        var ownerId='http://localhost:8080/api/restaurant/'+this.props.restid+'/owner'
+        axios.get(ownerId)
+              .then(function(res){
+                self.setState({
+                  ownerIdnew:res.data.id
+                })
+              })
+
         var url3='http://localhost:8080/api/user/'+this.state.userid
           var self=this
         axios.get(url3).then(
@@ -52,8 +65,6 @@ export default class MoreinfoCustomer extends React.Component{
         let menuUrl="http://localhost:8080/api/restaurant/"+this.props.restid+"/menu";
         axios.get(menuUrl).then(
           function(res){
-            console.log("problem is here")
-            console.log(res)
             self.setState({
               menu:res.data
             })
@@ -61,16 +72,12 @@ export default class MoreinfoCustomer extends React.Component{
         )
         axios.get(url2)
             .then(res => {
-                console.log("api data")
-                console.log(res);
                 this.setState({
                     id: res.data.id,
                     name: res.data.name,
                     description: res.data.description,
                     image_link: res.data.image_url,
                     cost_for_two: res.data.price,
-                    restaurant_owner: "Not Available",
-                    restaurant_type: "Not Available",
                     newComment:'',
                     fav:false
                 })
@@ -84,6 +91,17 @@ export default class MoreinfoCustomer extends React.Component{
                     feedbacks:result.data
                 })
             }).then(console.log(this));
+
+            // var self=this
+            // const string5='http://localhost:8080/api/owner/31/restaurant/1/event'
+            // axios.get(string5)
+            // .then(function(res){
+            //   self.setState({
+            //     events:res.data
+            //   })
+            // })
+
+
     }
 
         handleDelete(id,index){
@@ -159,6 +177,21 @@ export default class MoreinfoCustomer extends React.Component{
 
 }
 }
+
+refreshmenu(e){
+  e.preventDefault();
+  var self = this
+  let menuUrl="http://localhost:8080/api/restaurant/"+this.props.restid+"/menu";
+  axios.get(menuUrl).then(
+    function(res){
+      console.log("problem is here")
+      console.log(res)
+      self.setState({
+        menu:res.data
+      })
+    }
+  )
+}
 handleRefresh(e){
             e.preventDefault();
             const string2 = 'http://localhost:8080/api/feedback/'+this.props.restid;
@@ -178,6 +211,18 @@ handleRefresh(e){
                 newComment:this.refs.commentBody.value
             }
         )
+    }
+
+
+    refreshevents(e){
+      var self=this
+      const string5='http://localhost:8080/api/owner/31/restaurant/'+this.state.id+'/event'
+      axios.get(string5)
+      .then(function(res){
+        self.setState({
+          events:res.data
+        })
+      }).then(console.log(this))
     }
     favClick(e){
         if(this.state.userid==null){
@@ -246,6 +291,7 @@ handleRefresh(e){
                     <p className="head">
                     The Menu:
                     </p>
+                    <button className="btn btn-success btn-sm" onClick={this.refreshmenu.bind(this)}>Refresh in 5 sec</button>
                     <table className="table table-dark m-t-5">
                         <thead>
                           <tr>
@@ -271,8 +317,42 @@ handleRefresh(e){
                     }
                         </tbody>
                       </table>
-
+                    <button className="btn btn-success btn-sm"onClick={this.refreshevents.bind(this)}>Refresh</button>
                 </div>
+
+
+
+
+                <p className="head">
+                My Event List:
+                </p>
+                <table className="table table-dark m-t-5">
+                    <thead>
+                      <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Description</th>
+
+                      </tr>
+                    </thead>
+                    <tbody>
+
+                {
+                  this.state.events.map((event,index)=>
+                  <tr key={index}>
+                  <th scope="row">{event.id}</th>
+                  <td>{event.event_name}</td>
+                  <td>{event.date}</td>
+                  <td>{event.description}</td>
+
+                  </tr>
+                )
+                }
+                    </tbody>
+                  </table>
+
+
 
             </div>)
     }

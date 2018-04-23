@@ -88,37 +88,25 @@ export default class ProfileCustomer extends React.Component{
         }
       )
 
-
-        var url1='http://localhost:8080/api/restaurant/'+this.state.userid+'/feedback'
+        var self = this
+        var url1='http://localhost:8080/api/customer/'+this.state.userid+'/feedback/restaurant'
         console.log(url1)
         axios.get(url1,{
           params: {
-              favourite:1
+              commments:1
           }
-        }).then(res => {
-          console.log("fav data");
-                console.log(res);
-                const favRest = res.data;
-                this.setState({favRest});
-            }).then(() =>{
-
-              var url2='http://localhost:8080/api/customer/'+this.state.userid+'/feedback'
-              console.log(url2)
-
-              axios.get(url2,{
-                params: {
-                    comments:1
-                }
-              }).then(res => {
-                console.log("commment data");
-                      console.log(res);
-                      const commentedRestaurants = res.data;
-                      this.setState({commentedRestaurants});
-                  })
-            })
+    }).then(
+      function(res){
+        console.log("comments")
+        console.log(res);
+      self.setState({
+          commentedRestaurants:res.data
+      })
+    })
 
 
-    }
+
+}
     update() {
             this.setState(
                   {
@@ -311,15 +299,15 @@ export default class ProfileCustomer extends React.Component{
 
                             <div className="p-5">
                             <p className="head">
-                            The Comment List:
+                            The Restaurants Where You Have Commented
                             </p>
                             <table className="table table-dark m-t-5">
                                 <thead>
                                   <tr>
                                     <th scope="col">Id</th>
-                                    <th scope="col">Comment</th>
-                                    <th scope="col">Favourite</th>
-                                    <th scope="col">Restaurant Id</th>
+                                    <th scope="col">Restaurant Name</th>
+                                    <th scope="col">Restaurant Description</th>
+
 
                                   </tr>
                                 </thead>
@@ -329,9 +317,9 @@ export default class ProfileCustomer extends React.Component{
                               this.state.commentedRestaurants.map((restaurant,index)=>
                               <tr key={index}>
                               <th scope="row">{restaurant.id}</th>
-                              <td>{restaurant.comment}</td>
-                              <td>{restaurant.favourite==0?"true":"false"}</td>
-                              <td>{restaurant.restaurant}</td>
+                              <td>{restaurant.name}</td>
+                              <td>{restaurant.description}</td>
+
 
                               <td><button className="btn btn-danger btn-sm" onClick={this.handleDeleteevent.bind(this,restaurant.id,index)}> Delete</button></td>
                               <td><button className="btn btn-success btm-sm"onClick={this.handleUpdateevent.bind(this,restaurant.id,index)}> Update</button></td>
