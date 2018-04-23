@@ -28,7 +28,7 @@ export default class MoreinfoEvent extends React.Component {
             <tbody>
 
         {
-          this.state.events.map((event,index)=>
+          this.props.info.map((restaurant,index)=>
           <tr key={index}>
           <th scope="row">{event.id}</th>
           <td>{event.event_name}</td>
