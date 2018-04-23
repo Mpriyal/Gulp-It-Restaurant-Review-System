@@ -18,6 +18,7 @@ export default class EventProviderHome extends React.Component{
             customerKey:'',
             password:'',
             update:false,
+            info:[],
             events:[
               {
 
@@ -43,6 +44,7 @@ export default class EventProviderHome extends React.Component{
 
     //PUT THE API TO GET THE RESTAURANTS OF THE CUSTOMERS WHICH HE HAS COMMENTED OR LIKED
     componentDidMount() {
+
       var self = this
       var url="http://localhost:8080/api/eventprovider/"+this.state.userid
       axios.get(url).then(
@@ -85,47 +87,54 @@ export default class EventProviderHome extends React.Component{
             events:array
           })
         }
-        handleUpdateevent(){
+handleAddRestToEvent(e){
+    e.preventDefault();
+    var url="http://localhost:8080/api/eventprovider/"+this.state.userid+"/event/"+this.state.eId+"/restaurant/"+this.state.rId;
+    axios.post(url).then(
+      console.log("Added restaunrant to event")
+    )
+}
 
+    handleMoreinfoevent(id){
+      console.log(id);
+      var self = this
+      var url="http://localhost:8080/api/eventprovider/"+this.state.userid+"/event/"+id+"/restaurant"
+      console.log(url);
+      axios.get(url).then(
+        function(res){
+          console.log(res);
+          self.setState({
+            info:res.data
+          })
+          console.log(self)
         }
-    update() {
-            this.setState(
-                  {
-                      firstname: this.refs.newfirstName.value,
-                      lastname: this.refs.newlastName.value,
-                      email: this.refs.newEmail.value,
-                      password: this.refs.newPassword.value,
-                      id: this.refs.newId.value,
-                      username: this.refs.newusername.value,
-                      phone: this.refs.newphone.value,
-                      address:this.refs.newaddress.value,
-                      dob:this.refs.newdob.value,
-                      customerKey:this.refs.newck.value,
-                      update: false,
-
-                  });
-
-
-        //PUT THE PUR REQUEST TO UPDATE THE CUSTOMER
-        fetch('http://localhost:8080/api/eventprovider/', {
-            method: 'PUT',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                firstName: this.state.firstName,
-                lastName: this.state.lastName,
-                username:  this.state.username,
-                password:  this.state.password,
-                email:  this.state.email,
-                dob: this.state.dateOfBirth,
-                customerKey: "abc"
-            })
-        }).then(console.log("saved to the db"));
-
+      )
     }
 
+    update(e){
+
+          console.log(this);
+          this.setState({
+              ename: this.refs.ename.value,
+              edescription: this.refs.edescription.value,
+              edate: this.refs.edate.value,
+              rId:this.refs.rId.value,
+              eId:this.refs.eId.value
+            })
+      }
+
+handleClick(e){
+  e.preventDefault();
+  var url = "http://localhost:8080/api/eventprovider/"+this.state.userid+"/event"
+  axios.post(url,{
+    event_name:this.state.ename,
+    	description:this.state.edescription,
+    	date:this.state.edate
+  }
+).then(
+  console.log("event added")
+)
+}
     renderUpdate(){
         return (
             <div className={'profile col-3'}>
@@ -250,7 +259,7 @@ export default class EventProviderHome extends React.Component{
     renderProfile(){
         return(
             <div className={"row"}>
-            <div className="profile col-3">
+            <div className="profile3 col-3">
                 <h1>{this.state.firstname} {this.state.lastname}</h1>
                 <p>Email: {this.state.email}</p>
                 <p>Username: {this.state.username}</p>
@@ -259,13 +268,15 @@ export default class EventProviderHome extends React.Component{
                 <p>Address: {this.state.address}</p>
                 <p>Date of Birth: {this.state.dob}</p>
                 <p>Customer Key: {this.state.customerKey}</p>
-                <p><button className={"btn btn-primary"} onClick={this.handleUpdate}>Update</button></p>
-                <p><button className={"btn btn-danger"} onClick={this.handleDelete}>Delete</button></p>
+                <p><button className={"btn btn-primary"}
+                onClick={this.handleUpdate}>Update</button></p>
+                <p><button className={"btn btn-danger"}
+                onClick={this.handleDelete}>Delete</button></p>
             </div>
 
-            <div className="p-5">
+            <div className="p-5 col-8">
             <p className="head">
-            The Event List:
+            My Event List:
             </p>
             <table className="table table-dark m-t-5">
                 <thead>
@@ -287,19 +298,93 @@ export default class EventProviderHome extends React.Component{
               <td>{event.date}</td>
               <td>{event.description}</td>
               <td><button className="btn btn-danger btn-sm" onClick={this.handleDeleteevent.bind(this,event.id,index)}> Delete</button></td>
-              <td><button className="btn btn-success btm-sm"onClick={this.handleUpdateevent.bind(this,event.id,index)}> Update</button></td>
+              <td><button className="btn btn-success btm-sm"onClick={this.handleMoreinfoevent.bind(this,event.id,index)}> MoreInfo</button></td>
               </tr>
             )
             }
                 </tbody>
               </table>
               </div>
-            </div>
-                )
+              <div className="container col-4">
+                <p className="head text-center"> Add New Event</p>
+                                        <form className={'m-5'}>
+                                            <div className={'form-group'}>
+                                                <input
+                                                    ref="ename"
+                                                    type="text"
+                                                    className="form-control"
+                                                    id="name"
+                                                    placeholder={'Name'}
+                                                    onChange={this.update.bind(this)}
+                                                />
+                                            </div>
+                                            <div className="form-group">
+                                                <input
+                                                    ref="edescription"
+                                                    type="text"
+                                                    className="form-control"
+                                                    id="description"
+                                                    placeholder="Description"
+                                                    onChange={this.update.bind(this)}
+                                                />
+                                            </div>
+                                            <div className="form-group">
+                                                <input
+                                                    ref="edate"
+                                                    type="text"
+                                                    className="form-control"
+                                                    id="Date"
+                                                    placeholder="Date"
+                                                    onChange={this.update.bind(this)}
+                                                />
+                                            </div>
+                                            <div>
+                                                <button
+                                                    type="submit"
+                                                    className="btn btn-primary m-5"
+                                                    onClick={this.handleClick.bind(this)}
+                                                >SUBMIT
+                                                </button>
+                                            </div>
+                                        </form>
+
+                                          <p className="head text-center"> Add Restaurant to Event</p>
+                                        <form className={'m-5'}>
+                                            <div className={'form-group'}>
+                                                <input
+                                                    ref="rId"
+                                                    type="text"
+                                                    className="form-control"
+                                                    id="name"
+                                                    placeholder={'Restaurant Id'}
+                                                    onChange={this.update.bind(this)}
+                                                />
+                                            </div>
+                                            <div className="form-group">
+                                                <input
+                                                    ref="eId"
+                                                    type="text"
+                                                    className="form-control"
+                                                    id="description"
+                                                    placeholder="Event Id"
+                                                    onChange={this.update.bind(this)}
+                                                />
+                                            </div>
+                                            <div>
+                                                <button
+                                                    type="submit"
+                                                    className="btn btn-primary m-5"
+                                                    onClick={this.handleAddRestToEvent.bind(this)}
+                                                >SUBMIT
+                                                </button>
+                                            </div>
+                                        </form>
+                                        </div>
+                                        <RestaurantList data2={this.state.info}/>
+                                        </div>
+                                      )
 
     }
-
-
     render(){
         if(this.state.update===false){
         return (
